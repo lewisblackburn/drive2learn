@@ -1,51 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { StarIcon } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { cn } from '@/lib/utils';
 
-interface Review {
-  id: number;
-  created_at: string;
-  rating: number;
-  name: string;
-  description: string;
-}
-
-interface ReviewsData {
-  reviews: Review[];
-  totalCount: number;
-}
+import { useReviews } from '@/app/hooks/useReviews';
 
 export default function Reviews() {
-  const [reviewsData, setReviewsData] = useState<ReviewsData | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const { topReviews, getTopReviews, count } = useReviews();
 
   useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const response = await fetch('/api/reviews'); // Adjust the API endpoint as needed
-        if (!response.ok) {
-          throw new Error('Failed to fetch reviews');
-        }
-        const data: ReviewsData = await response.json();
-        setReviewsData(data);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Failed to fetch reviews:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchReviews();
+    getTopReviews();
   }, []);
-
-  if (loading || !reviewsData) {
-    return <div></div>;
-  }
-
-  const { reviews, totalCount } = reviewsData;
 
   return (
     <div className='bg-white'>
@@ -62,7 +29,7 @@ export default function Reviews() {
                   <StarIcon
                     key={rating}
                     className={cn(
-                      reviews.length > 0 && reviews[0].rating > rating
+                      topReviews.length > 0 && topReviews[0].rating > rating
                         ? 'text-yellow-400'
                         : 'text-gray-300',
                       'flex-shrink-0 h-5 w-5 fill-current',
@@ -72,11 +39,12 @@ export default function Reviews() {
                 ))}
               </div>
               <p className='sr-only'>
-                {reviews.length > 0 ? reviews[0].rating : 0} out of 5 stars
+                {topReviews.length > 0 ? topReviews[0].rating : 0} out of 5
+                stars
               </p>
             </div>
             <p className='ml-2 text-sm text-gray-900'>
-              Based on {totalCount} reviews
+              Based on {count} reviews
             </p>
           </div>
 
@@ -85,7 +53,7 @@ export default function Reviews() {
 
             <dl className='space-y-3'>
               {[5, 4, 3, 2, 1].map((rating) => {
-                const count = reviews.filter(
+                const count = topReviews.filter(
                   (review) => review.rating === rating,
                 ).length;
                 return (
@@ -113,7 +81,7 @@ export default function Reviews() {
                             <div
                               className='absolute inset-y-0 bg-yellow-400 border border-yellow-400 rounded-full'
                               style={{
-                                width: `calc(${totalCount} / ${totalCount} * 100%)`,
+                                width: `calc(${count} / ${count} * 100%)`,
                               }}
                             />
                           ) : null}
@@ -121,7 +89,7 @@ export default function Reviews() {
                       </div>
                     </dt>
                     <dd className='ml-3 w-10 text-right tabular-nums text-sm text-gray-900'>
-                      {Math.round((totalCount / totalCount) * 100)}%
+                      {Math.round((count / count) * 100)}%
                     </dd>
                   </div>
                 );
@@ -154,7 +122,7 @@ export default function Reviews() {
 
           <div className='flow-root'>
             <div className='-my-12 divide-y divide-gray-200'>
-              {reviews.map((review) => (
+              {topReviews.map((review) => (
                 <div key={review.id} className='py-12'>
                   <div className='flex items-center'>
                     <div className=''>

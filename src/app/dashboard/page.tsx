@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Area, AreaChart, XAxis, YAxis } from 'recharts';
 
 import {
@@ -16,6 +15,9 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 
+import { Image, useImages } from '@/app/hooks/useImage';
+import { Review, useReviews } from '@/app/hooks/useReviews';
+
 export default function Dashboard() {
   return (
     <div>
@@ -28,15 +30,6 @@ export default function Dashboard() {
       </div>
     </div>
   );
-}
-
-interface Image {
-  image: string;
-  created_at: string;
-}
-
-interface ImagesData {
-  images: Image[];
 }
 
 interface GroupedImages {
@@ -63,34 +56,7 @@ function groupImagesByDate(images: Image[]): GroupedImages[] {
 }
 
 const GalleryInformation = () => {
-  const [imagesData, setImagesData] = useState<ImagesData | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        const response = await fetch('/api/images');
-        if (!response.ok) {
-          throw new Error('Failed to fetch images');
-        }
-        const data: ImagesData = await response.json();
-        setImagesData(data);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Failed to fetch images:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchImages();
-  }, []);
-
-  if (loading || !imagesData) {
-    return <div></div>;
-  }
-
-  const { images } = imagesData;
+  const { images } = useImages();
 
   const groupedImages = groupImagesByDate(images);
 
@@ -172,15 +138,6 @@ const GalleryInformation = () => {
   );
 };
 
-interface Review {
-  review: string;
-  created_at: string;
-}
-
-interface ReviewsData {
-  reviews: Review[];
-}
-
 interface GroupedReviews {
   date: string;
   count: number;
@@ -205,34 +162,7 @@ function groupReviewsByDate(reviews: Review[]): GroupedReviews[] {
 }
 
 const ReviewsInformation = () => {
-  const [reviewsData, setReviewsData] = useState<ReviewsData | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const response = await fetch('/api/reviews/all');
-        if (!response.ok) {
-          throw new Error('Failed to fetch reviews');
-        }
-        const data: ReviewsData = await response.json();
-        setReviewsData(data);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Failed to fetch reviews:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchReviews();
-  }, []);
-
-  if (loading || !reviewsData) {
-    return <div></div>;
-  }
-
-  const { reviews } = reviewsData;
+  const { reviews } = useReviews();
 
   const groupedReviews = groupReviewsByDate(reviews);
 

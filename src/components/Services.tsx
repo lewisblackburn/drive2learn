@@ -2,7 +2,6 @@ import Autoplay from 'embla-carousel-autoplay';
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 
 import { Card } from '@/components/ui/card';
 import {
@@ -12,42 +11,12 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import { toast } from '@/components/ui/use-toast';
+
+import { useServices } from '@/app/hooks/useServices';
 
 export const Services = () => {
-  const [services, setServices] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { loading, services } = useServices();
 
-  useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await fetch('/api/services');
-        if (!response.ok) {
-          throw new Error('Failed to fetch services');
-        }
-        const data = await response.json();
-        setServices(data.services);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchServices();
-  }, []);
-
-  if (error) {
-    toast({
-      title: 'Error',
-      description: error,
-      variant: 'destructive',
-    });
-  }
-
-  // Placeholder cards to render during loading
   const placeholderCards = Array.from({ length: 3 }).map((_, index) => (
     <CarouselItem key={index} className='md:basis-1/2 lg:basis-1/3'>
       <Card className='rounded-lg h-[440px] flex flex-col justify-between bg-gray-200 animate-pulse'>
