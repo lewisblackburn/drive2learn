@@ -15,7 +15,7 @@ export const Gallery: React.FC<GalleryProps> = ({ images, onDelete }) => {
   const { user } = useSupabase();
   const pathname = usePathname();
 
-  const isOnDashboard = pathname === '/dashboard';
+  const isOnDashboard = pathname === '/dashboard/gallery';
 
   const canDelete = user && isOnDashboard;
 
