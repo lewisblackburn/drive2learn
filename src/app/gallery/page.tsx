@@ -55,7 +55,8 @@ export default function GalleryPage() {
         />
 
         <div className='relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8'>
-          <Gallery images={images} />
+          {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
+          <Gallery images={images} onDelete={() => {}} />
         </div>
       </section>
       <Footer />
