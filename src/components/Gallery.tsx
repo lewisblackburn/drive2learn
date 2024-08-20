@@ -1,5 +1,6 @@
 import { Trash2 } from 'lucide-react';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import React from 'react';
 
 import { Image as ImageType } from '@/app/hooks/useImage';
@@ -12,8 +13,9 @@ interface GalleryProps {
 
 export const Gallery: React.FC<GalleryProps> = ({ images, onDelete }) => {
   const { user } = useSupabase();
+  const pathname = usePathname();
 
-  const isOnDashboard = window.location.pathname.includes('/dashboard');
+  const isOnDashboard = pathname === '/dashboard';
 
   const canDelete = user && isOnDashboard;
 
