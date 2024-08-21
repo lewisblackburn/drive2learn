@@ -1,6 +1,7 @@
 'use client';
+
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState, useTransition } from 'react';
+import { Suspense, useEffect, useState, useTransition } from 'react';
 
 import Spinner from '@/components/Spinner';
 import { Button } from '@/components/ui/button';
@@ -10,28 +11,26 @@ import { toast } from '@/components/ui/use-toast';
 
 import { login } from '@/app/login/actions';
 
-export default function LoginPage() {
+function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const [errorState, setErrorState] = useState<string | null>(null);
 
   const router = useRouter();
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
 
   useEffect(() => {
-    setErrorState(error);
+    if (error) {
+      toast({
+        title: 'Error',
+        description: error,
+        variant: 'destructive',
+      });
 
-    toast({
-      title: 'Error',
-      description: errorState,
-      variant: 'destructive',
-    });
-
-    setIsLoading(false);
-    router.replace('/login', undefined);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error]);
+      setIsLoading(false);
+      router.replace('/login', undefined);
+    }
+  }, [error, router]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -42,6 +41,34 @@ export default function LoginPage() {
   };
 
   return (
+    <form className='grid gap-4' onSubmit={handleSubmit}>
+      <div className='grid gap-2'>
+        <label htmlFor='email'>Email</label>
+        <Input
+          id='email'
+          name='email'
+          type='email'
+          placeholder='m@example.com'
+          required
+        />
+      </div>
+      <div className='grid gap-2'>
+        <Label htmlFor='password'>Password:</Label>
+        <Input id='password' name='password' type='password' required />
+      </div>
+      <Button
+        type='submit'
+        className='w-full'
+        disabled={isLoading || isPending}
+      >
+        {isLoading || isPending ? <Spinner /> : 'Login'}
+      </Button>
+    </form>
+  );
+}
+
+export default function LoginPage() {
+  return (
     <div className='w-full min-h-screen'>
       <div className='flex items-center justify-center py-12 min-h-screen'>
         <div className='mx-auto grid w-[350px] gap-6'>
@@ -51,29 +78,9 @@ export default function LoginPage() {
               Enter your email below to login to your account
             </p>
           </div>
-          <form className='grid gap-4' onSubmit={handleSubmit}>
-            <div className='grid gap-2'>
-              <label htmlFor='email'>Email</label>
-              <Input
-                id='email'
-                name='email'
-                type='email'
-                placeholder='m@example.com'
-                required
-              />
-            </div>
-            <div className='grid gap-2'>
-              <Label htmlFor='password'>Password:</Label>
-              <Input id='password' name='password' type='password' required />
-            </div>
-            <Button
-              type='submit'
-              className='w-full'
-              disabled={isLoading || isPending}
-            >
-              {isLoading || isPending ? <Spinner /> : 'Login'}
-            </Button>
-          </form>
+          <Suspense fallback={<Spinner />}>
+            <LoginForm />
+          </Suspense>
         </div>
       </div>
     </div>
