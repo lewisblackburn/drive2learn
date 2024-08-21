@@ -180,7 +180,7 @@ export default async function DashboardLayout({
                   Reviews
                 </a>
                 <a
-                  href='/dashboard/reviews'
+                  href='/dashboard/services'
                   className='flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground'
                 >
                   <WorkflowIcon className='h-5 w-5' />

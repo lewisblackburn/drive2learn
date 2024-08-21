@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
-import { Image as ImageType } from '@/app/hooks/useImage';
+import { Image as ImageType } from '@/app/hooks/useImages';
 import { useSupabase } from '@/app/hooks/useSupabase';
 
 interface GalleryProps {

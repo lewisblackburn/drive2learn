@@ -12,7 +12,7 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 
-import { useServices } from '@/app/hooks/useServices';
+import { Service, useServices } from '@/app/hooks/useServices';
 
 export const Services = () => {
   const { loading, services } = useServices();
@@ -69,44 +69,53 @@ export const Services = () => {
           {loading
             ? placeholderCards
             : // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              services.map((service: any, index) => (
-                <CarouselItem key={index} className='md:basis-1/2 lg:basis-1/3'>
-                  <Link href={`/book?course=${service.title}`}>
-                    <Card className='rounded-lg h-[440px] flex flex-col justify-between'>
-                      <Image
-                        src={service.image}
-                        className='rounded-t-lg object-cover object-center'
-                        width={0}
-                        height={180}
-                        sizes='100vw'
-                        style={{ width: '100%', height: '180px' }}
-                        alt={service.title}
-                      />
-                      <div className='p-5 flex-grow'>
-                        <h1 className='font-bold text-lg'>{service.title}</h1>
-                        <h2 className='font-semibold text-md my-2'>
-                          {service.hours} - {service.price}
-                        </h2>
-                        <p className='text-secondary-foreground/60 font-medium mb-4'>
-                          {service.description}
-                        </p>
-                      </div>
-                      <div className='p-5 mt-auto flex justify-between items-center'>
-                        <p className='text-secondary-foreground/60 font-medium'>
-                          Deposit: {service.deposit}
-                        </p>
-                        <Link
-                          href={`/book?course=${service.title}`}
-                          className='text-primary font-medium flex items-center'
-                        >
-                          Find Out More
-                          <ArrowRight className='ml-1 h-4 w-4' />
-                        </Link>
-                      </div>
-                    </Card>
-                  </Link>
-                </CarouselItem>
-              ))}
+              services.map((service: Service, index) => {
+                const filepath = process.env.NEXT_PUBLIC_STORAGE_URL
+                  ? process.env.NEXT_PUBLIC_STORAGE_URL + service.image
+                  : '';
+
+                return (
+                  <CarouselItem
+                    key={index}
+                    className='md:basis-1/2 lg:basis-1/3'
+                  >
+                    <Link href={`/book?course=${service.title}`}>
+                      <Card className='rounded-lg h-[440px] flex flex-col justify-between'>
+                        <Image
+                          src={filepath}
+                          className='rounded-t-lg object-cover object-center'
+                          width={0}
+                          height={180}
+                          sizes='100vw'
+                          style={{ width: '100%', height: '180px' }}
+                          alt={service.title}
+                        />
+                        <div className='p-5 flex-grow'>
+                          <h1 className='font-bold text-lg'>{service.title}</h1>
+                          <h2 className='font-semibold text-md my-2'>
+                            {service.hours} - {service.price}
+                          </h2>
+                          <p className='text-secondary-foreground/60 font-medium mb-4'>
+                            {service.description}
+                          </p>
+                        </div>
+                        <div className='p-5 mt-auto flex justify-between items-center'>
+                          <p className='text-secondary-foreground/60 font-medium'>
+                            Deposit: {service.deposit}
+                          </p>
+                          <Link
+                            href={`/book?course=${service.title}`}
+                            className='text-primary font-medium flex items-center'
+                          >
+                            Find Out More
+                            <ArrowRight className='ml-1 h-4 w-4' />
+                          </Link>
+                        </div>
+                      </Card>
+                    </Link>
+                  </CarouselItem>
+                );
+              })}
         </CarouselContent>
         <CarouselPrevious className='top-[480px] left-10 sm:-left-12 sm:top-1/2' />
         <CarouselNext className='top-[480px] right-10 sm:-right-12 sm:top-1/2' />

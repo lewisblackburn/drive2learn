@@ -16,14 +16,21 @@ export interface NewImage {
   image: string;
 }
 
-export const useImages = () => {
+export const ImageTypes = {
+  GALLERY: 'gallery',
+  SERVICE: 'service',
+  TEAM: 'team',
+};
+export type ImageType = (typeof ImageTypes)[keyof typeof ImageTypes];
+
+export const useImages = (type: ImageType) => {
   const supabase = createClient();
 
   const [images, setImages] = useState<Image[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const getImages = async () => {
+  const getImages = async (type: ImageType) => {
     setLoading(true);
     setError(null);
 
@@ -31,6 +38,7 @@ export const useImages = () => {
       const { data, error: fetchError } = await supabase
         .from('images')
         .select('*')
+        .eq('type', type ?? 'gallery')
         .gte('created_at', oneMonthAgoISOString)
         .order('created_at', { ascending: false });
 
@@ -51,7 +59,7 @@ export const useImages = () => {
     }
   };
 
-  const uploadImage = async (file: File | null) => {
+  const uploadImage = async (file: File | null, type: ImageType) => {
     if (!supabase.auth.getUser()) {
       return;
     }
@@ -76,13 +84,13 @@ export const useImages = () => {
 
       const { error: insertError } = await supabase
         .from('images')
-        .insert([{ image: filename }]);
+        .insert([{ image: filename, type: type }]);
 
       if (uploadError || insertError) {
         throw uploadError;
       }
 
-      await getImages();
+      await getImages(type);
       toast({
         title: 'Success',
         description: 'Image uploaded successfully!',
@@ -121,7 +129,7 @@ export const useImages = () => {
         throw deleteError;
       }
 
-      await getImages();
+      await getImages(type);
       toast({
         title: 'Success',
         description: 'Image deleted successfully!',
@@ -139,7 +147,7 @@ export const useImages = () => {
   };
 
   useEffect(() => {
-    getImages();
+    getImages(type);
   }, []);
 
   return {

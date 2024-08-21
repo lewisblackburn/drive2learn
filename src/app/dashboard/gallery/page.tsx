@@ -5,7 +5,7 @@ import React, { ChangeEvent } from 'react';
 import { Gallery } from '@/components/Gallery';
 import Spinner from '@/components/Spinner';
 
-import { useImages } from '@/app/hooks/useImage';
+import { useImages } from '@/app/hooks/useImages';
 
 export default function DashboardGalleryPage() {
   return (
@@ -17,11 +17,11 @@ export default function DashboardGalleryPage() {
 }
 
 function UploadImage() {
-  const { loading, images, uploadImage, deleteImage } = useImages();
+  const { loading, images, uploadImage, deleteImage } = useImages('gallery');
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
-    uploadImage(file);
+    uploadImage(file, 'gallery');
     e.target.value = ''; // Reset file input after upload
   };
 

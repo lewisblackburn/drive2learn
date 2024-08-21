@@ -18,18 +18,18 @@ import { useEffect } from 'react';
 import Spinner from '@/components/Spinner';
 import { Button } from '@/components/ui/button';
 import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
+import {
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetTitle,
+} from '@/components/ui/sheet';
 import {
   Table,
   TableBody,
@@ -127,12 +127,9 @@ export function DataTable() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <Dialog
-        open={isAddReviewModalOpen}
-        onOpenChange={setIsAddReviewModalOpen}
-      >
-        <DialogContent>
-          <DialogTitle>Add Review</DialogTitle>
+      <Sheet open={isAddReviewModalOpen} onOpenChange={setIsAddReviewModalOpen}>
+        <SheetContent>
+          <SheetTitle>Add Review</SheetTitle>
           <div className='mt-4'>
             <Input
               placeholder='Name'
@@ -150,7 +147,7 @@ export function DataTable() {
               }
               className='mb-4'
             />
-            <DialogFooter>
+            <SheetFooter>
               <Button
                 variant='outline'
                 onClick={() => setIsAddReviewModalOpen(false)}
@@ -161,14 +158,15 @@ export function DataTable() {
                 onClick={() => {
                   addReview(newReview);
                   setIsAddReviewModalOpen(false);
+                  setNewReview({ name: '', description: '' });
                 }}
               >
                 Add
               </Button>
-            </DialogFooter>
+            </SheetFooter>
           </div>
-        </DialogContent>
-      </Dialog>
+        </SheetContent>
+      </Sheet>
       <div className='rounded-md border'>
         <Table>
           <TableHeader>

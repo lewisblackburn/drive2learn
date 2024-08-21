@@ -3,42 +3,16 @@
 import * as React from 'react';
 import '@/lib/env';
 
-import { createClient } from '@/lib/supabase/client';
-
 import Banner from '@/components/Banner';
 import Footer from '@/components/Footer';
 import { Gallery } from '@/components/Gallery';
 import Navbar from '@/components/Navbar';
 import PageHeader from '@/components/PageHeader';
-import { toast } from '@/components/ui/use-toast';
+
+import { useImages } from '@/app/hooks/useImages';
 
 export default function GalleryPage() {
-  const supabase = createClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [images, setImages] = React.useState<any[]>([]);
-
-  // Function to fetch images from Supabase
-  const fetchImages = async () => {
-    const { data, error } = await supabase
-      .from('images')
-      .select('*')
-      .order('created_at', { ascending: false });
-    if (error) {
-      toast({
-        title: 'Error',
-        description: error.message,
-        variant: 'destructive',
-      });
-    } else {
-      setImages(data || []);
-    }
-  };
-
-  // Fetch images on component mount
-  React.useEffect(() => {
-    fetchImages();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [supabase]);
+  const { images } = useImages('gallery');
 
   return (
     <main className='flex flex-col h-screen justify-between'>

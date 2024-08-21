@@ -15,7 +15,7 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 
-import { Image, useImages } from '@/app/hooks/useImage';
+import { Image, useImages } from '@/app/hooks/useImages';
 import { Review, useReviews } from '@/app/hooks/useReviews';
 
 export default function Dashboard() {
@@ -56,7 +56,7 @@ function groupImagesByDate(images: Image[]): GroupedImages[] {
 }
 
 const GalleryInformation = () => {
-  const { images } = useImages();
+  const { images } = useImages('gallery');
 
   const groupedImages = groupImagesByDate(images);
 
