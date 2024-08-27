@@ -34,7 +34,7 @@ export function LogoCloud2() {
             We are proud to be members of the following associations.
           </h2>
           <div className='flow-root self-center mt-12'>
-            <div className='-mt-4 -ml-8 flex flex-wrap space-x-0 md:space-x-24 justify-center'>
+            <div className='-mt-4 -ml-8 flex flex-wrap gap-24 justify-center'>
               <Link
                 href='https://www.driving.org/'
                 className='mt-4 ml-8 flex flex-grow flex-shrink-0 justify-center lg:flex-grow-0 lg:ml-4'
@@ -42,10 +42,22 @@ export function LogoCloud2() {
                 <img className='h-12' src='/images/dia.png' alt='DIA' />
               </Link>
               <Link
-                href='http://sddia.co.uk/'
+                href='https://sddia.co.uk/'
                 className='mt-4 ml-8 flex flex-grow flex-shrink-0 justify-center lg:flex-grow-0 lg:ml-4'
               >
                 <img className='h-12' src='/images/sddia.png' alt='SDDIA' />
+              </Link>
+              <Link
+                href='https://n-a-s-p.co.uk/'
+                className='mt-4 ml-8 flex flex-grow flex-shrink-0 justify-center lg:flex-grow-0 lg:ml-4'
+              >
+                <img className='h-12' src='/images/nasp.png' alt='NASP' />
+              </Link>
+              <Link
+                href='https://msagb.com/'
+                className='mt-4 ml-8 flex flex-grow flex-shrink-0 justify-center lg:flex-grow-0 lg:ml-4'
+              >
+                <img className='h-12' src='/images/msagb.png' alt='MSAGB' />
               </Link>
             </div>
           </div>

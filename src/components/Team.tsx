@@ -15,12 +15,7 @@ const SkeletonLoader = () => (
 
 import { useEffect, useState } from 'react';
 
-interface TeamMember {
-  name: string;
-  job_type: string;
-  image: string;
-  quote: string;
-}
+import { TeamMember } from '@/app/hooks/useTeam';
 
 export const Team = () => {
   const [members, setMembers] = useState<TeamMember[]>([]);
@@ -69,24 +64,30 @@ export const Team = () => {
   return (
     <div className='px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-32'>
       <div className='grid gap-10 mx-auto sm:grid-cols-2 grid-cols-1 lg:max-w-screen-xl'>
-        {members.map((member) => (
-          <div key={member.name} className='text-center'>
-            <div className='relative pb-56 mb-4 rounded lg:pb-64'>
-              <img
-                className='absolute object-contain object-center w-full h-full rounded'
-                src={member.image}
-                alt={member.name}
-              />
+        {members.map((member) => {
+          const filepath = process.env.NEXT_PUBLIC_STORAGE_URL
+            ? process.env.NEXT_PUBLIC_STORAGE_URL + member.image
+            : '';
+
+          return (
+            <div key={member.name} className='text-center'>
+              <div className='relative pb-56 mb-4 rounded lg:pb-64'>
+                <img
+                  className='absolute object-contain object-center w-full h-full rounded'
+                  src={filepath}
+                  alt={member.name}
+                />
+              </div>
+              <div className='flex flex-col'>
+                <p className='text-lg font-bold'>{member.name}</p>
+                <p className='mb-2 text-xs text-gray-800'>{member.job_type}</p>
+                <blockquote className='text-sm text-gray-600 italic'>
+                  "{member.quote}"
+                </blockquote>
+              </div>
             </div>
-            <div className='flex flex-col'>
-              <p className='text-lg font-bold'>{member.name}</p>
-              <p className='mb-2 text-xs text-gray-800'>{member.job_type}</p>
-              <blockquote className='text-sm text-gray-600 italic'>
-                "{member.quote}"
-              </blockquote>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

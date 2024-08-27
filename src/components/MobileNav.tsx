@@ -29,6 +29,9 @@ export const MobileNav = () => {
           <Link href='/gallery'>
             <Button variant='ghost'>Gallery</Button>
           </Link>
+          <Link href='/products'>
+            <Button variant='ghost'>Products</Button>
+          </Link>
         </div>
       </SheetContent>
     </Sheet>
