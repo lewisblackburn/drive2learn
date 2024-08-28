@@ -12,34 +12,14 @@ import PageHeader from '@/components/PageHeader';
 import Spinner from '@/components/Spinner';
 import { toast } from '@/components/ui/use-toast';
 
+import { useServices } from '@/app/hooks/useServices';
+
 const SelectFormClient = dynamic(() => import('@/components/CourseSelection'), {
   suspense: true,
 });
 
 export default function BookPage() {
-  const [services, setServices] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState(null);
-
-  React.useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await fetch('/api/services');
-        if (!response.ok) {
-          throw new Error('Failed to fetch services');
-        }
-        const data = await response.json();
-        setServices(data.services);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchServices();
-  }, []);
+  const { loading, error, services } = useServices();
 
   if (loading)
     return (

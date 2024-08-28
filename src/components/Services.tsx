@@ -19,7 +19,7 @@ export const Services = () => {
 
   const placeholderCards = Array.from({ length: 3 }).map((_, index) => (
     <CarouselItem key={index} className='md:basis-1/2 lg:basis-1/3'>
-      <Card className='rounded-lg h-[440px] flex flex-col justify-between bg-gray-200 animate-pulse'>
+      <Card className='rounded-lg h-[470px] flex flex-col justify-between bg-gray-200 animate-pulse'>
         <div className='rounded-t-lg bg-gray-300 w-full h-[180px]' />
         <div className='p-5 flex-grow'>
           <div className='bg-gray-300 h-6 w-1/2 mb-4' />
@@ -80,7 +80,7 @@ export const Services = () => {
                     className='md:basis-1/2 lg:basis-1/3'
                   >
                     <Link href={`/book?course=${service.title}`}>
-                      <Card className='rounded-lg h-[440px] flex flex-col justify-between'>
+                      <Card className='rounded-lg h-[470px] flex flex-col justify-between'>
                         <Image
                           src={filepath}
                           className='rounded-t-lg object-cover object-center'

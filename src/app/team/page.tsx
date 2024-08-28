@@ -11,7 +11,7 @@ import PageHeader from '@/components/PageHeader';
 import { Recruitment } from '@/components/Recruitment';
 import { Team } from '@/components/Team';
 
-export default function InsturctorsPage() {
+export default function TeamPage() {
   return (
     <main className='flex flex-col h-screen justify-between'>
       <header>
