@@ -6,7 +6,7 @@ import { Suspense } from 'react';
 import '@/lib/env';
 
 import Banner from '@/components/Banner';
-import { Content, defaultContent } from '@/components/Content';
+import { defaultContent } from '@/components/Content';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import PageHeader from '@/components/PageHeader';
@@ -18,6 +18,10 @@ import { useServices } from '@/app/hooks/useServices';
 
 const SelectFormClient = dynamic(() => import('@/components/CourseSelection'), {
   suspense: true,
+});
+
+const Content = dynamic(() => import('@/components/Content'), {
+  ssr: false, // Ensures Content component is only rendered on the client side
 });
 
 export default function BookPage() {

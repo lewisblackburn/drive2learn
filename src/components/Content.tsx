@@ -26,7 +26,7 @@ export const defaultContent: any = {
   version: '2.22.2',
 };
 
-export function Content({ title, content }: ContentProps) {
+export default function Content({ title, content }: ContentProps) {
   const editorRef = useRef<EditorJS | null>(null);
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const [isMounted, setIsMounted] = React.useState<boolean>(false);
