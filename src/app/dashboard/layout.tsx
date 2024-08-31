@@ -1,14 +1,4 @@
-import {
-  Car,
-  Home,
-  Image,
-  LogOut,
-  PanelLeft,
-  Star,
-  Users2,
-  Workflow,
-  WorkflowIcon,
-} from 'lucide-react';
+import { Car, LogOut, PanelLeft } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
@@ -24,6 +14,7 @@ import {
 } from '@/components/ui/tooltip';
 
 import { logout } from '@/app/login/actions';
+import { siteConfig } from '@/constant/config';
 
 export default async function DashboardLayout({
   children,
@@ -48,77 +39,22 @@ export default async function DashboardLayout({
             <Car className='h-4 w-4 transition-all group-hover:scale-110' />
             <span className='sr-only'>Drive 2 Learn</span>
           </Link>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href='/dashboard'
-                  className='flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8'
-                >
-                  <Home className='h-5 w-5' />
-                  <span className='sr-only'>Dashboard</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side='right'>Dashboard</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href='/dashboard/gallery'
-                  className='flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8'
-                >
-                  {/* eslint-disable-next-line jsx-a11y/alt-text */}
-                  <Image className='h-5 w-5' />
-                  <span className='sr-only'>Gallery</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side='right'>Gallery</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href='/dashboard/reviews'
-                  className='flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8'
-                >
-                  <Star className='h-5 w-5' />
-                  <span className='sr-only'>Reviews</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side='right'>Reviews</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href='/dashboard/services'
-                  className='flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8'
-                >
-                  <Workflow className='h-5 w-5' />
-                  <span className='sr-only'>Services</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side='right'>Services</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href='/dashboard/team'
-                  className='flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8'
-                >
-                  <Users2 className='h-5 w-5' />
-                  <span className='sr-only'>Team</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side='right'>Team</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          {siteConfig.dashboardNavigationLinks.map((item) => (
+            <TooltipProvider key={item.name}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    href={item.href}
+                    className='flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8'
+                  >
+                    <item.icon className='h-5 w-5' />
+                    <span className='sr-only'>{item.name}</span>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side='right'>{item.name}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ))}
         </nav>
         <nav className='mt-auto flex flex-col items-center gap-4 px-2 sm:py-5'>
           <TooltipProvider>
@@ -155,44 +91,18 @@ export default async function DashboardLayout({
                   className='group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base'
                 >
                   <Car className='h-5 w-5 transition-all group-hover:scale-110' />
-                  <span className='sr-only'>Acme Inc</span>
+                  <span className='sr-only'>Drive 2 Learn</span>
                 </Link>
-                <a
-                  href='/dashboard'
-                  className='flex items-center gap-4 px-2.5 text-foreground'
-                >
-                  <Home className='h-5 w-5' />
-                  Dashboard
-                </a>
-                <a
-                  href='/dashboard/gallery'
-                  className='flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground'
-                >
-                  {/* eslint-disable-next-line jsx-a11y/alt-text */}
-                  <Image className='h-5 w-5' />
-                  Gallery
-                </a>
-                <a
-                  href='/dashboard/reviews'
-                  className='flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground'
-                >
-                  <Star className='h-5 w-5' />
-                  Reviews
-                </a>
-                <a
-                  href='/dashboard/services'
-                  className='flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground'
-                >
-                  <WorkflowIcon className='h-5 w-5' />
-                  Services
-                </a>
-                <a
-                  href='/dashboard/team'
-                  className='flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground'
-                >
-                  <Users2 className='h-5 w-5' />
-                  Team
-                </a>
+                {siteConfig.dashboardNavigationLinks.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className='flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground'
+                  >
+                    <item.icon className='h-5 w-5' />
+                    {item.name}
+                  </Link>
+                ))}
                 <form action={logout}>
                   <button
                     type='submit'
@@ -206,7 +116,7 @@ export default async function DashboardLayout({
             </SheetContent>
           </Sheet>
         </header>
-        <main className=' p-4 px-6 sm:py-0'>{children}</main>
+        <main className='p-4 px-6 sm:py-0'>{children}</main>
       </div>
     </div>
   );

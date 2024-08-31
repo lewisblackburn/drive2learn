@@ -7,6 +7,7 @@ import Banner from '@/components/Banner';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import PageHeader from '@/components/PageHeader';
+import Products from '@/components/Products';
 
 export default function ProductsPage() {
   return (
@@ -22,6 +23,7 @@ export default function ProductsPage() {
           description='The best products for your car.'
           image='/images/headers/1.jpg'
         />
+        <Products />
       </section>
       <Footer />
     </main>

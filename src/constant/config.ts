@@ -1,3 +1,13 @@
+import {
+  Home,
+  Image,
+  Pencil,
+  ShoppingBag,
+  Star,
+  Users2,
+  Workflow,
+} from 'lucide-react';
+
 export const siteConfig = {
   title: 'Drive 2 Learn',
   description:
@@ -34,6 +44,43 @@ export const siteConfig = {
     {
       title: 'Products',
       href: '/products',
+    },
+  ],
+  dashboardNavigationLinks: [
+    {
+      name: 'Dashboard',
+      href: '/dashboard',
+      icon: Home,
+    },
+    {
+      name: 'Gallery',
+      href: '/dashboard/gallery',
+      icon: Image,
+    },
+    {
+      name: 'Reviews',
+      href: '/dashboard/reviews',
+      icon: Star,
+    },
+    {
+      name: 'Services',
+      href: '/dashboard/services',
+      icon: Workflow,
+    },
+    {
+      name: 'Team',
+      href: '/dashboard/team',
+      icon: Users2,
+    },
+    {
+      title: 'Products',
+      href: '/dashboard/products',
+      icon: ShoppingBag,
+    },
+    {
+      title: 'Editor',
+      href: '/dashboard/editor',
+      icon: Pencil,
     },
   ],
 };

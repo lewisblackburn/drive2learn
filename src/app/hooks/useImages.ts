@@ -20,6 +20,7 @@ export const ImageTypes = {
   GALLERY: 'gallery',
   SERVICE: 'service',
   TEAM: 'team',
+  PRODUCT: 'product',
 };
 export type ImageType = (typeof ImageTypes)[keyof typeof ImageTypes];
 
