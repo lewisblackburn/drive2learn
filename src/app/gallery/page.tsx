@@ -8,11 +8,16 @@ import Footer from '@/components/Footer';
 import { Gallery } from '@/components/Gallery';
 import Navbar from '@/components/Navbar';
 import PageHeader from '@/components/PageHeader';
+import PageLoader from '@/components/PageLoader';
 
 import { useImages } from '@/app/hooks/useImages';
 
 export default function GalleryPage() {
-  const { images } = useImages('gallery');
+  const { loading, images } = useImages('gallery');
+
+  if (loading) {
+    return <PageLoader />;
+  }
 
   return (
     <main className='flex flex-col h-screen justify-between'>

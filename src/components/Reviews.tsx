@@ -5,14 +5,20 @@ import { useEffect } from 'react';
 
 import { cn } from '@/lib/utils';
 
+import PageLoader from '@/components/PageLoader';
+
 import { useReviews } from '@/app/hooks/useReviews';
 
 export default function Reviews() {
-  const { topReviews, getTopReviews, count } = useReviews();
+  const { loading, topReviews, getTopReviews, count } = useReviews();
 
   useEffect(() => {
     getTopReviews();
   }, []);
+
+  if (loading) {
+    return <PageLoader />;
+  }
 
   return (
     <div className='bg-white'>

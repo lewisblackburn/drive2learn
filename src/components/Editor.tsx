@@ -9,10 +9,9 @@ import * as z from 'zod';
 import '@/styles/editor.css';
 
 import { createClient } from '@/lib/supabase/client';
-import { cn } from '@/lib/utils';
 
 import Spinner from '@/components/Spinner';
-import { buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 
 import { Data } from '@/app/hooks/useData';
 
@@ -157,10 +156,17 @@ export function Editor({ data }: EditorProps) {
     <form onSubmit={handleSubmit(onSubmit)} className='w-full'>
       <div className='grid w-full gap-10'>
         <div className='flex w-full items-center justify-between'>
-          <button type='submit' className={cn(buttonVariants())}>
+          <Button
+            type='button'
+            variant='secondary'
+            onClick={() => window.history.back()}
+          >
+            <span>Back</span>
+          </Button>
+          <Button type='submit'>
             {isSaving && <Spinner />}
             <span>Save</span>
-          </button>
+          </Button>
         </div>
         <div className='w-full mx-auto'>
           <input

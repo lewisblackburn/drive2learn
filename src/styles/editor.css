@@ -1,3 +1,7 @@
+.codex-editor__redactor {
+  padding: 0 !important;
+}
+
 .ce-block__content,
 .ce-toolbar__content {
   margin: 0;
@@ -10,31 +14,44 @@
 }
 
 h1 {
-  font-size: 2.5em;
-  margin: 0.67em 0;
+  @apply text-3xl font-bold mb-4;
 }
 
-h2 {
-  font-size: 2em;
-  margin: 0.83em 0;
+.ce-block p {
+  @apply text-base mb-4;
 }
 
-h3 {
-  font-size: 1.5em;
-  margin: 1em 0;
+.ce-block ul {
+  @apply list-disc list-inside mb-4;
 }
 
-h4 {
-  font-size: 1.17em;
-  margin: 1.33em 0;
+.ce-block h1 {
+  @apply text-3xl font-bold mb-4;
 }
 
-h5 {
-  font-size: 1em;
-  margin: 1.67em 0;
+.ce-block h2 {
+  @apply text-2xl font-bold mb-2;
 }
 
-h6 {
-  font-size: 0.83em;
-  margin: 2.33em 0;
+.ce-block h3 {
+  @apply text-xl font-bold mb-2;
+}
+
+.ce-block h4 {
+  @apply text-lg font-bold mb-2;
+}
+
+.ce-block h5 {
+  @apply text-base font-bold mb-2;
+}
+
+.ce-block h6 {
+  @apply text-sm font-bold mb-2;
+}
+
+.ce-block__content,
+.ce-toolbar__content {
+  padding: 0;
+  margin: 0;
+  @apply max-w-full;
 }

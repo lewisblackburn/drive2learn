@@ -1,5 +1,6 @@
 import Image from 'next/image';
 
+import Spinner from '@/components/Spinner';
 import { Button } from '@/components/ui/button';
 
 import { Product, useProducts } from '@/app/hooks/useProducts';
@@ -37,7 +38,15 @@ function ProductCard({ product }: { product: Product }) {
 }
 
 export default function Products() {
-  const { products } = useProducts();
+  const { loading, products } = useProducts();
+
+  if (loading) {
+    return (
+      <div className='flex w-screen h-96 items-center justify-center'>
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className='relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8'>
