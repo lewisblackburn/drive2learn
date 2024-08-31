@@ -6,7 +6,6 @@ import { Suspense } from 'react';
 import '@/lib/env';
 
 import Banner from '@/components/Banner';
-import { defaultContent } from '@/components/Content';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import PageHeader from '@/components/PageHeader';
@@ -19,9 +18,8 @@ import { useServices } from '@/app/hooks/useServices';
 const SelectFormClient = dynamic(() => import('@/components/CourseSelection'), {
   suspense: true,
 });
-
 const Content = dynamic(() => import('@/components/Content'), {
-  ssr: false, // Ensures Content component is only rendered on the client side
+  ssr: false,
 });
 
 export default function BookPage() {
@@ -60,7 +58,8 @@ export default function BookPage() {
 
             <Content
               title={data?.title ?? 'No Title'}
-              content={data?.content ?? defaultContent}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              content={data?.content ?? ({ blocks: [] } as any)}
             />
           </div>
         </div>

@@ -1,7 +1,9 @@
-/* eslint-disable no-console */
+'use client';
+
 import EditorJS, { OutputData } from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import List from '@editorjs/list';
+import dynamic from 'next/dynamic';
 import React, { useEffect, useRef } from 'react';
 
 import '@/styles/editor.css';
@@ -11,8 +13,8 @@ interface ContentProps {
   content: OutputData;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const defaultContent: any = {
+// Default content in case no data is passed
+export const defaultContent: OutputData = {
   blocks: [
     {
       type: 'header',
@@ -26,19 +28,13 @@ export const defaultContent: any = {
   version: '2.22.2',
 };
 
-export default function Content({ title, content }: ContentProps) {
+const Content = ({ title, content }: ContentProps) => {
   const editorRef = useRef<EditorJS | null>(null);
   const editorContainerRef = useRef<HTMLDivElement>(null);
-  const [isMounted, setIsMounted] = React.useState<boolean>(false);
 
-  // Initialize EditorJS instance
-  const initializeEditor = React.useCallback(() => {
-    if (!editorContainerRef.current) {
-      console.error('Editor container is missing.');
-      return;
-    }
-
-    if (!editorRef.current) {
+  // Ensure this code runs only on the client-side
+  useEffect(() => {
+    if (typeof window !== 'undefined' && editorContainerRef.current) {
       editorRef.current = new EditorJS({
         holder: editorContainerRef.current,
         placeholder: 'Type here to edit your content...',
@@ -50,19 +46,7 @@ export default function Content({ title, content }: ContentProps) {
         },
         readOnly: true, // Make the editor read-only
       });
-    }
-  }, [content]);
 
-  // Handle component mount and unmount
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setIsMounted(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isMounted) {
-      initializeEditor();
       return () => {
         if (
           editorRef.current &&
@@ -73,7 +57,7 @@ export default function Content({ title, content }: ContentProps) {
         }
       };
     }
-  }, [isMounted, initializeEditor]);
+  }, [content]);
 
   return (
     <div>
@@ -81,4 +65,7 @@ export default function Content({ title, content }: ContentProps) {
       <div ref={editorContainerRef} className='editor-container' />
     </div>
   );
-}
+};
+
+// Export dynamically with no SSR
+export default dynamic(() => Promise.resolve(Content), { ssr: false });
