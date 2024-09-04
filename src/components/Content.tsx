@@ -9,30 +9,14 @@ import React, { useEffect, useRef } from 'react';
 import '@/styles/editor.css';
 
 interface ContentProps {
-  title: string;
-  content: OutputData;
+  title?: string;
+  content?: OutputData | undefined;
 }
-
-// Default content in case no data is passed
-export const defaultContent: OutputData = {
-  blocks: [
-    {
-      type: 'header',
-      data: {
-        text: 'No Content',
-        level: 1,
-      },
-    },
-  ],
-  time: 0,
-  version: '2.22.2',
-};
 
 const Content = ({ title, content }: ContentProps) => {
   const editorRef = useRef<EditorJS | null>(null);
   const editorContainerRef = useRef<HTMLDivElement>(null);
 
-  // Ensure this code runs only on the client-side
   useEffect(() => {
     if (typeof window !== 'undefined' && editorContainerRef.current) {
       editorRef.current = new EditorJS({
@@ -44,7 +28,7 @@ const Content = ({ title, content }: ContentProps) => {
           header: Header,
           list: List,
         },
-        readOnly: true, // Make the editor read-only
+        readOnly: true,
       });
 
       return () => {
@@ -59,6 +43,10 @@ const Content = ({ title, content }: ContentProps) => {
     }
   }, [content]);
 
+  if (!content || !title) {
+    return null;
+  }
+
   return (
     <div>
       <h1>{title}</h1>
@@ -67,5 +55,4 @@ const Content = ({ title, content }: ContentProps) => {
   );
 };
 
-// Export dynamically with no SSR
 export default dynamic(() => Promise.resolve(Content), { ssr: false });
