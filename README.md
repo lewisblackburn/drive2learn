@@ -32,17 +32,20 @@ Welcome to the Drive2Learn repository! This project is a fully-featured car driv
 To run this project locally, follow these steps:
 
 1. **Clone the repository**:
+
    ```bash
    git clone https://github.com/yourusername/drive2learn.git
    cd drive2learn
    ```
 
 2. **Install dependencies**:
+
    ```bash
    npm install
    ```
 
 3. **Environment Variables: Create a .env.local file in the root of your project and add your environment variables**:
+
    ```bash
    NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
@@ -58,6 +61,7 @@ To run this project locally, follow these steps:
 The application should now be running on http://localhost:3000.
 
 ## Usage
+
 - Navigate to the homepage to view available driving courses.
 - Sign up or log in to your account to book a course.
 - - Follow the payment process via Stripe to confirm your booking.
