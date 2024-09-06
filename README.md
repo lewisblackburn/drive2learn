@@ -19,7 +19,6 @@ Welcome to the Drive2Learn repository! This project is a fully-featured car driv
 - **Course Booking**: Users can browse available driving courses, select, and book them directly on the website.
 - **Payment Processing**: Integrated Stripe for secure payment transactions.
 - **Email Notifications**: Automated email notifications and communication using Resend.
-- **Real-time Updates**: Leveraging Supabase's real-time capabilities to provide up-to-date course availability and notifications.
 
 ## Technologies Used
 
