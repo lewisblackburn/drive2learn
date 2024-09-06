@@ -28,7 +28,7 @@ export function Hours() {
           ))}
         </div>
 
-        <div className='mt-16'>
+        {/* <div className='mt-16'>
           <div className='flex items-center'>
             <h2 className='text-2xl font-semibold text-gray-900'>
               Out of Hours
@@ -37,7 +37,7 @@ export function Hours() {
           <p className='mt-4 text-lg text-gray-800'>
             <b>Phone</b>: <span className='font-medium'>07988 298 635</span>
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

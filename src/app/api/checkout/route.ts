@@ -1,4 +1,3 @@
-// price_1PkrmyK6MO17rZJ2rq5s7gpf
 import { NextRequest, NextResponse } from 'next/server';
 import { parse } from 'querystring';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -10,7 +9,8 @@ export async function POST(req: NextRequest) {
 
     const body = await req.text();
     const parsedBody = parse(body);
-    const priceId = parsedBody.priceId;
+    const priceId = parsedBody.priceId as string;
+    const intensive = parsedBody.intensive === 'on';
 
     // Validate the priceId
     if (!priceId) {
@@ -22,16 +22,19 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Create the checkout session
+    // Create the checkout session with a custom description
     const session = await stripe.checkout.sessions.create({
       line_items: [
         {
-          price: priceId as string, // Use the priceId passed in the request body
+          price: priceId, // Use the priceId passed in the request body
           quantity: 1,
         },
       ],
       mode: 'payment',
-      success_url: `${origin}/book/result?success=true`,
+      payment_intent_data: {
+        description: `Course Payment - Intensive: ${intensive ? 'Yes' : 'No'}`, // Custom description for the PaymentIntent
+      },
+      success_url: `${origin}/book/success?success=true`,
       cancel_url: `${origin}/book/error?canceled=true`,
     });
 

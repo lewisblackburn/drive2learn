@@ -29,7 +29,7 @@ function ProductCard({ product }: { product: Product }) {
         </p>
         <a href={product.link} target='_blank' rel='noopener noreferrer'>
           <Button className='mt-4 inline-block w-full text-center py-2 px-4'>
-            Buy Now
+            Find Out More
           </Button>
         </a>
       </div>

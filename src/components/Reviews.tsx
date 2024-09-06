@@ -95,7 +95,7 @@ export default function Reviews() {
                       </div>
                     </dt>
                     <dd className='ml-3 w-10 text-right tabular-nums text-sm text-gray-900'>
-                      {Math.round((count / count) * 100)}%
+                      {count === 0 ? '0' : Math.round((count / count) * 100)}%
                     </dd>
                   </div>
                 );

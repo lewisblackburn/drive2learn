@@ -28,6 +28,7 @@ const FormSchema = z.object({
   course: z.string({
     required_error: 'Please select a course.',
   }),
+  intensive: z.boolean(),
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -87,6 +88,26 @@ export default function CourseSelection({ services }: { services: any[] }) {
             </FormItem>
           )}
         />
+        {/* A checkbox field to check whether they want the course to be intensive or not */}
+        <div className='items-top flex space-x-2'>
+          <input
+            type='checkbox'
+            id='intensive'
+            name='intensive'
+            className='peer h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded'
+          />
+          <div className='grid gap-1.5 leading-none'>
+            <label
+              htmlFor='terms1'
+              className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
+            >
+              Intensive Course
+            </label>
+            <p className='text-sm text-muted-foreground'>
+              Select this option to book an intensive course.
+            </p>
+          </div>
+        </div>
         <p>
           {
             services.find((service) => service.title === selectedCourse)
