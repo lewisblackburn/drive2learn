@@ -45,7 +45,7 @@ export const useServices = () => {
         .from('services')
         .select('*')
         .gte('created_at', oneMonthAgoISOString)
-        .order('created_at', { ascending: false });
+        .order('id', { ascending: true });
 
       if (fetchError) {
         throw fetchError;

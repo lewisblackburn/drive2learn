@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import * as React from 'react';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import '@/lib/env';
 
 import Banner from '@/components/Banner';
@@ -26,6 +26,15 @@ export default function BookPage() {
   const { loading: dataLoading, getDataById } = useData();
   const data = getDataById(1);
   const { loading, error, services } = useServices();
+
+  useEffect(() => {
+    setTimeout(() => {
+      const termsElement = document.getElementById('terms');
+      if (termsElement && window.location.hash === '#terms') {
+        termsElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 500);
+  }, [dataLoading]); // Ensure data is loaded before attempting to scroll
 
   if (loading || dataLoading) return <PageLoader />;
 
@@ -56,11 +65,13 @@ export default function BookPage() {
               </Suspense>
             </div>
 
-            <Content
-              title={data?.title ?? 'No Title'}
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              content={data?.content ?? ({ blocks: [] } as any)}
-            />
+            <div id='terms'>
+              <Content
+                title={data?.title ?? 'No Title'}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                content={data?.content ?? ({ blocks: [] } as any)}
+              />
+            </div>
           </div>
         </div>
       </section>
