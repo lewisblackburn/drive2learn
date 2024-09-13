@@ -67,8 +67,4 @@ The application should now be running on http://localhost:3000.
 - Follow the payment process via Stripe to confirm your booking.
 - Check your email for a confirmation message and further instructions.
 
-# Contact
-
-For any inquiries or feedback, please reach out to me via email at your-email@example.com.
-
 Thank you for checking out Drive2Learn!
