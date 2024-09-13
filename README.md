@@ -64,7 +64,7 @@ The application should now be running on http://localhost:3000.
 
 - Navigate to the homepage to view available driving courses.
 - Sign up or log in to your account to book a course.
-- - Follow the payment process via Stripe to confirm your booking.
+- Follow the payment process via Stripe to confirm your booking.
 - Check your email for a confirmation message and further instructions.
 
 # Contact
