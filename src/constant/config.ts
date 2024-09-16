@@ -73,12 +73,12 @@ export const siteConfig = {
       icon: Users2,
     },
     {
-      title: 'Products',
+      name: 'Products',
       href: '/dashboard/products',
       icon: ShoppingBag,
     },
     {
-      title: 'Editor',
+      name: 'Editor',
       href: '/dashboard/editor',
       icon: Pencil,
     },
