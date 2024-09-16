@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { createClient } from '@/lib/supabase/client';
-import { oneMonthAgoISOString } from '@/lib/utils';
 
 import { toast } from '@/components/ui/use-toast';
 
@@ -40,7 +39,6 @@ export const useImages = (type: ImageType) => {
         .from('images')
         .select('*')
         .eq('type', type ?? 'gallery')
-        .gte('created_at', oneMonthAgoISOString)
         .order('created_at', { ascending: false });
 
       if (fetchError) {

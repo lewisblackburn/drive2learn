@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 
 import { createClient } from '@/lib/supabase/client';
-import { oneMonthAgoISOString } from '@/lib/utils';
 
 import { toast } from '@/components/ui/use-toast';
 
@@ -35,7 +34,6 @@ export const useReviews = () => {
       const { data, error: fetchError } = await supabase
         .from('reviews')
         .select('*')
-        .gte('created_at', oneMonthAgoISOString)
         .order('created_at', { ascending: false })
         .limit(3);
 
@@ -69,7 +67,6 @@ export const useReviews = () => {
       const { data, error: fetchError } = await supabase
         .from('reviews')
         .select('*')
-        .gte('created_at', oneMonthAgoISOString)
         .order('created_at', { ascending: false });
 
       if (fetchError) {

@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { createClient } from '@/lib/supabase/client';
-import { oneMonthAgoISOString } from '@/lib/utils';
 
 import { toast } from '@/components/ui/use-toast';
 
@@ -44,7 +43,6 @@ export const useServices = () => {
       const { data, error: fetchError } = await supabase
         .from('services')
         .select('*')
-        .gte('created_at', oneMonthAgoISOString)
         .order('id', { ascending: true });
 
       if (fetchError) {
