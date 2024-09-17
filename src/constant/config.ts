@@ -22,16 +22,34 @@ export const siteConfig = {
     'https://www.google.com/maps/place/Drive+2+Learn+with+Alex/@53.6398854,-1.3486284,15z/data=!4m5!3m4!1s0x0:0x2b5a6ab71f7937b4!8m2!3d53.6398854!4d-1.3486284?sa=X&ved=2ahUKEwjP97qR39H8AhVJe8AKHYLCC3AQ_BJ6BAhdEAk&coh=164777&entry=tt&shorturl=1',
   navigationLinks: [
     {
-      title: 'Home',
-      href: '/',
-    },
-    {
       title: 'About',
       href: '/about',
+      links: [
+        {
+          title: 'About',
+          href: '/about',
+          description: 'Learn more about Drive 2 Learn',
+        },
+        {
+          title: 'Locations',
+          href: '/locations',
+          description: 'Find out where we operate',
+        },
+        {
+          title: 'Terms and Conditions',
+          href: '/about#terms-and-conditions',
+          description: 'Read our terms and conditions',
+        },
+        {
+          title: 'Reviews',
+          href: '/about#reviews',
+          description: 'Read what our customers have to say',
+        },
+      ],
     },
     {
-      title: 'Team',
-      href: '/team',
+      title: 'Courses',
+      href: '/book',
     },
     {
       title: 'DVSA',
@@ -40,6 +58,10 @@ export const siteConfig = {
     {
       title: 'Gallery',
       href: '/gallery',
+    },
+    {
+      title: 'Community',
+      href: '/community',
     },
     {
       title: 'Products',

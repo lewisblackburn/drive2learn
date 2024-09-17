@@ -9,6 +9,7 @@ import Navbar from '@/components/Navbar';
 import PageHeader from '@/components/PageHeader';
 import { Recruitment } from '@/components/Recruitment';
 import Reviews from '@/components/Reviews';
+import { Team } from '@/components/Team';
 
 export default function AboutPage() {
   return (
@@ -60,7 +61,10 @@ export default function AboutPage() {
             </div>
           </div>
         </div>
-        <Reviews />
+        <Team />
+        <div id='reviews'>
+          <Reviews />
+        </div>
       </section>
       <Footer />
     </main>

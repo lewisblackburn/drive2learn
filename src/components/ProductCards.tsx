@@ -251,7 +251,7 @@ export const ProductCards = () => {
                   View Product
                 </a>
                 <span className='text-xl font-semibold text-primary'>
-                  ${parseInt(product.price).toFixed(2)}
+                  £{parseInt(product.price).toFixed(2)}
                 </span>
               </div>
             </div>
