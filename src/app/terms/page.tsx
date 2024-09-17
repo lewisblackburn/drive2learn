@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import * as React from 'react';
 import '@/lib/env';
 
@@ -7,10 +8,9 @@ import Banner from '@/components/Banner';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import PageHeader from '@/components/PageHeader';
+import PageLoader from '@/components/PageLoader';
 
 import { useData } from '@/app/hooks/useData';
-import PageLoader from '@/components/PageLoader';
-import dynamic from 'next/dynamic';
 
 const Content = dynamic(() => import('@/components/Content'), {
   ssr: false,

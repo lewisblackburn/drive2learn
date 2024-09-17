@@ -1,4 +1,3 @@
-import Autoplay from 'embla-carousel-autoplay';
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -58,11 +57,6 @@ export const Services = () => {
           align: 'start',
           loop: true,
         }}
-        plugins={[
-          Autoplay({
-            delay: 4000,
-          }),
-        ]}
         className='container w-full'
       >
         <CarouselContent>
