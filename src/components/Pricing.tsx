@@ -45,9 +45,9 @@ export const Pricing = () => {
               buttonLink='/instructor_training'
               active
             >
+              <List>One-on-one training sessions</List>
               <List>Training for Part 1/2/3</List>
               <List>Help with standards checks</List>
-              <List>One-on-one training sessions</List>
               <List>Earn whilst you train</List>
             </PricingCard>
             <PricingCard
