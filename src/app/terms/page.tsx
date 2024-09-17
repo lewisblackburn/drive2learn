@@ -4,13 +4,17 @@ import * as React from 'react';
 import '@/lib/env';
 
 import Banner from '@/components/Banner';
-import Content from '@/components/Content';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import PageHeader from '@/components/PageHeader';
 
 import { useData } from '@/app/hooks/useData';
 import PageLoader from '@/components/PageLoader';
+
+const Content = dynamic(() => import('@/components/Content'), {
+  ssr: false,
+});
+
 export default function TermsPage() {
   const { loading: dataLoading, getDataById } = useData();
   const data = getDataById(1);
