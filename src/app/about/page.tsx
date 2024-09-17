@@ -67,7 +67,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className='flex justify-center'>
+          <div id='locations' className='flex justify-center'>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={filepath ?? '/images/map.png'}

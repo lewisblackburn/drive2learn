@@ -32,12 +32,12 @@ export const siteConfig = {
         },
         {
           title: 'Locations',
-          href: '/locations',
+          href: '/about#locations',
           description: 'Find out where we operate',
         },
         {
           title: 'Terms and Conditions',
-          href: '/about#terms-and-conditions',
+          href: '/terms',
           description: 'Read our terms and conditions',
         },
         {
