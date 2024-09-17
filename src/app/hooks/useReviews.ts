@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 
 import { createClient } from '@/lib/supabase/client';
@@ -17,41 +16,40 @@ export interface NewReview {
   description: string;
 }
 
-export const useReviews = () => {
+export type PaginationType = 'infinite' | 'paged';
+
+const LIMIT = 10; // Number of reviews per page
+
+export const useReviews = (paginationType: PaginationType = 'infinite') => {
   const supabase = createClient();
 
-  const [count, setCount] = useState(0);
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [topReviews, setTopReviews] = useState<Review[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [count, setCount] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
-  const getTopReviews = async () => {
+  const searchReviews = async (query: string) => {
     setLoading(true);
     setError(null);
 
     try {
+      setPage(1);
       const { data, error: fetchError } = await supabase
         .from('reviews')
         .select('*')
-        .order('created_at', { ascending: false })
-        .limit(3);
+        // .textSearch('name', query, { type: 'websearch', config: 'english' });
+        .or(`name.ilike.%${query}%,description.ilike.%${query}%`);
 
-      const { count: totalCount, error: countError } = await supabase
-        .from('reviews')
-        .select('*', { count: 'exact', head: true });
+      if (fetchError) throw fetchError;
 
-      if (fetchError || countError) {
-        throw fetchError;
-      }
-
-      setTopReviews(data || []);
-      setCount(totalCount || 0);
+      setReviews(data || []);
     } catch (err) {
-      setError('Failed to fetch reviews. Please try again later.');
+      setError('Failed to search reviews. Please try again later.');
       toast({
         title: 'Error',
-        description: error,
+        description: String(err),
         variant: 'destructive',
       });
     } finally {
@@ -59,37 +57,74 @@ export const useReviews = () => {
     }
   };
 
-  const getReviews = async () => {
+  const fetchReviews = async (page: number) => {
     setLoading(true);
     setError(null);
 
     try {
-      const { data, error: fetchError } = await supabase
-        .from('reviews')
-        .select('*')
-        .order('created_at', { ascending: false });
+      const from = (page - 1) * LIMIT;
+      const to = page * LIMIT - 1;
 
-      if (fetchError) {
-        throw fetchError;
+      const {
+        data,
+        error: fetchError,
+        count: totalCount,
+      } = await supabase
+        .from('reviews')
+        .select('*', { count: 'exact' })
+        .order('created_at', { ascending: false })
+        .range(from, to);
+
+      if (fetchError) throw fetchError;
+
+      if (data) {
+        if (paginationType === 'infinite') {
+          // Infinite pagination: Only append reviews that haven't been loaded yet
+          setReviews((prev) => {
+            const newReviews = data.filter(
+              (review) => !prev.some((r) => r.id === review.id),
+            );
+            return [...prev, ...newReviews];
+          });
+        } else {
+          // Paged pagination: Replace the current reviews with new ones
+          setReviews(data);
+        }
+
+        setHasMore(data.length === LIMIT); // Check if there are more reviews to load
       }
 
-      setReviews(data || []);
+      if (totalCount !== null) setCount(totalCount);
     } catch (err) {
       setError('Failed to fetch reviews. Please try again later.');
       toast({
         title: 'Error',
-        description: error,
+        description: String(err),
         variant: 'destructive',
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadMoreReviews = () => {
+    if (hasMore) {
+      const nextPage = page + 1;
+      setPage(nextPage);
+      fetchReviews(nextPage);
+    }
+  };
+
+  const previousPage = () => {
+    if (page > 1) {
+      const prevPage = page - 1;
+      setPage(prevPage);
+      fetchReviews(prevPage);
     }
   };
 
   const addReview = async (review: NewReview) => {
-    if (!supabase.auth.getUser()) {
-      return;
-    }
+    if (!supabase.auth.getUser()) return;
 
     setLoading(true);
     setError(null);
@@ -99,20 +134,20 @@ export const useReviews = () => {
         .from('reviews')
         .insert([review]);
 
-      if (insertError) {
-        throw insertError;
-      }
+      if (insertError) throw insertError;
 
-      await getReviews();
       toast({
         title: 'Success',
         description: 'Review added successfully!',
       });
+
+      setPage(1); // Reset to first page
+      fetchReviews(1);
     } catch (err) {
       setError('Failed to add review. Please try again later.');
       toast({
         title: 'Error',
-        description: error,
+        description: String(err),
         variant: 'destructive',
       });
     } finally {
@@ -121,9 +156,7 @@ export const useReviews = () => {
   };
 
   const deleteReview = async (id: number) => {
-    if (!supabase.auth.getUser()) {
-      return;
-    }
+    if (!supabase.auth.getUser()) return;
 
     setLoading(true);
     setError(null);
@@ -134,20 +167,20 @@ export const useReviews = () => {
         .delete()
         .eq('id', id);
 
-      if (deleteError) {
-        throw deleteError;
-      }
+      if (deleteError) throw deleteError;
 
-      await getReviews();
       toast({
         title: 'Success',
         description: 'Review deleted successfully!',
       });
+
+      setPage(1); // Reset to first page
+      fetchReviews(1);
     } catch (err) {
       setError('Failed to delete review. Please try again later.');
       toast({
         title: 'Error',
-        description: error,
+        description: String(err),
         variant: 'destructive',
       });
     } finally {
@@ -156,18 +189,22 @@ export const useReviews = () => {
   };
 
   useEffect(() => {
-    getReviews();
-  }, []);
+    fetchReviews(page); // Fetch reviews for the current page on mount or page change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
   return {
     loading,
-    reviews,
-    topReviews,
-    count,
     error,
-    getReviews,
-    getTopReviews,
+    count,
+    reviews,
+    hasMore,
+    page,
+    loadMoreReviews,
+    previousPage,
     addReview,
     deleteReview,
+    searchReviews,
+    fetchReviews,
   };
 };

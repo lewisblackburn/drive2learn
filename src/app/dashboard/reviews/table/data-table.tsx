@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import {
   ColumnFiltersState,
@@ -13,7 +12,6 @@ import {
 } from '@tanstack/react-table';
 import { ChevronDown, Plus } from 'lucide-react';
 import * as React from 'react';
-import { useEffect } from 'react';
 
 import Spinner from '@/components/Spinner';
 import { Button } from '@/components/ui/button';
@@ -38,18 +36,27 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { Textarea } from '@/components/ui/textarea';
 
 import { columns } from '@/app/dashboard/reviews/table/columns';
 import { useReviews } from '@/app/hooks/useReviews';
 
 export function DataTable() {
-  const { loading, reviews, getReviews, addReview, deleteReview } =
-    useReviews();
+  const {
+    loading,
+    reviews,
+    addReview,
+    deleteReview,
+    count,
+    page,
+    hasMore,
+    previousPage,
+    loadMoreReviews,
+    searchReviews,
+    fetchReviews,
+  } = useReviews('paged');
 
-  useEffect(() => {
-    getReviews();
-  }, []);
-
+  const searchInputRef = React.useRef<HTMLInputElement>(null);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -85,15 +92,25 @@ export function DataTable() {
     },
   });
 
+  const isFiltering = searchInputRef.current
+    ? searchInputRef.current.value.length > 0
+    : false;
+
   return (
     <div className='w-full'>
       <div className='flex items-center py-4'>
         <Input
-          placeholder='Filter names...'
-          value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-          onChange={(event) =>
-            table.getColumn('name')?.setFilterValue(event.target.value)
-          }
+          ref={searchInputRef}
+          placeholder='Search reviews...'
+          onChange={(e) => {
+            if (e.target.value.length < 2) {
+              setTimeout(() => fetchReviews(1), 0);
+              table.reset();
+            } else {
+              searchReviews(e.target.value);
+              table.setPageSize(reviews.length);
+            }
+          }}
           className='max-w-sm'
         />
         <DropdownMenu>
@@ -139,7 +156,7 @@ export function DataTable() {
               }
               className='mb-2'
             />
-            <Input
+            <Textarea
               placeholder='Description'
               value={newReview.description}
               onChange={(e) =>
@@ -157,11 +174,11 @@ export function DataTable() {
               <Button
                 onClick={() => {
                   addReview(newReview);
-                  setIsAddReviewModalOpen(false);
                   setNewReview({ name: '', description: '' });
+                  setIsAddReviewModalOpen(false);
                 }}
               >
-                Add
+                Add Review
               </Button>
             </SheetFooter>
           </div>
@@ -186,12 +203,9 @@ export function DataTable() {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() ? 'selected' : undefined}
-                >
+                <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
@@ -205,7 +219,7 @@ export function DataTable() {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={table.getHeaderGroups()[0].headers.length}
                   className='h-24 text-center'
                 >
                   {loading ? (
@@ -222,20 +236,25 @@ export function DataTable() {
         </Table>
       </div>
       <div className='flex items-center justify-end space-x-2 py-4'>
+        <div className='flex-1 text-sm text-muted-foreground'>
+          {isFiltering
+            ? 'Showing all results'
+            : `Page ${page} of ${Math.ceil(count / 10)}`}
+        </div>
         <div className='space-x-2'>
           <Button
             variant='outline'
             size='sm'
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            onClick={() => previousPage()}
+            disabled={loading || page <= 1 || isFiltering}
           >
             Previous
           </Button>
           <Button
             variant='outline'
             size='sm'
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            onClick={() => loadMoreReviews()}
+            disabled={loading || !hasMore || isFiltering}
           >
             Next
           </Button>

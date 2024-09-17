@@ -1,26 +1,30 @@
-'use client';
-
+import Image from 'next/image';
 import * as React from 'react';
 import '@/lib/env';
+
+import { createClient } from '@/lib/supabase/server';
 
 import Banner from '@/components/Banner';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import PageHeader from '@/components/PageHeader';
-import PageLoader from '@/components/PageLoader';
 import { Recruitment } from '@/components/Recruitment';
 import Reviews from '@/components/Reviews';
 import { Team } from '@/components/Team';
 
-import { useImages } from '@/app/hooks/useImages';
+export default async function AboutPage() {
+  const supabase = createClient();
+  const { data: image } = await supabase
+    .from('images')
+    .select('*')
+    .eq('type', 'map')
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .single();
 
-export default function AboutPage() {
-  const { images, loading } = useImages('map');
   const filepath = process.env.NEXT_PUBLIC_STORAGE_URL
-    ? process.env.NEXT_PUBLIC_STORAGE_URL + images[0]?.image
+    ? process.env.NEXT_PUBLIC_STORAGE_URL + image.image
     : '';
-
-  if (loading) return <PageLoader />;
 
   return (
     <main className='flex flex-col min-h-screen'>
@@ -38,59 +42,69 @@ export default function AboutPage() {
         />
       </section>
 
-      <section className='max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8'>
-        <div className='grid grid-cols-1 xl:grid-cols-2 gap-8'>
-          <div className='space-y-6 text-lg'>
-            <p>
+      <Content image={filepath} />
+
+      <Team />
+
+      <Recruitment />
+
+      <Reviews />
+
+      <Footer />
+    </main>
+  );
+}
+
+const Content = ({ image }: { image: string }) => {
+  return (
+    <div className='px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20'>
+      <div className='grid gap-8 row-gap-12 lg:grid-cols-2'>
+        <div className='flex flex-col justify-center'>
+          <div className='max-w-xl mb-6 space-y-6'>
+            <h2 className='text-2xl font-semibold text-gray-800'>
+              Welcome to Drive 2 Learn
+            </h2>
+            <p className='text-base text-gray-700 md:text-lg leading-relaxed'>
               Hello and welcome to <strong>Drive 2 Learn</strong>. We are a
               community of forward-thinking driving instructors with the aim of
               helping you achieve your driving goals. Everyone involved with
               Drive 2 Learn is professional, reliable, knowledgeable, and down
               to earth.
             </p>
-            <p>
+            <p className='text-base text-gray-700 md:text-lg leading-relaxed'>
               Our ethos is to support everyone who needs us, and we take pride
               in guiding them on their journey. Whether you are a nervous
               driver, an anxious learner, or a stressed driving instructor
               seeking further training, we are here to help you achieve your
               objectives.
             </p>
-            <p>
+            <p className='text-base text-gray-700 md:text-lg leading-relaxed'>
               At Drive 2 Learn, we continuously develop our skills and knowledge
               of the road rules and regulations enforced by the DVSA. We hold
               frequent meetings to discuss the latest developments and ensure
               that our students and instructors are well-informed.
             </p>
-            <p>
+            <p className='text-base text-gray-700 md:text-lg leading-relaxed'>
               Every day, we strive to offer a unique and innovative experience
               to each individual, treating everyone with respect and courtesy.
             </p>
           </div>
+        </div>
 
-          <div id='locations' className='flex justify-center'>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={filepath ?? '/images/map.png'}
+        <div
+          id='locations'
+          className='flex justify-center items-center scroll-m-12'
+        >
+          <div className='relative w-full h-80 xl:h-[500px]'>
+            <Image
+              src={image ?? '/images/map.png'}
               alt='UK map'
-              className='w-3/4 xl:w-full h-auto object-cover'
+              layout='fill'
+              objectFit='contain'
             />
           </div>
         </div>
-      </section>
-
-      <section>
-        <Recruitment />
-      </section>
-
-      <section>
-        <Team />
-      </section>
-
-      <section id='reviews'>
-        <Reviews />
-      </section>
-
-      <Footer />
-    </main>
+      </div>
+    </div>
   );
-}
+};

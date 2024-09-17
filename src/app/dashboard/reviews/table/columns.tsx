@@ -8,11 +8,11 @@ import { Button } from '@/components/ui/button';
 import { Review } from '@/app/hooks/useReviews';
 
 export const columns: ColumnDef<Review>[] = [
-  {
-    accessorKey: 'id',
-    header: 'ID',
-    cell: ({ row }) => <div className='lg:w-[50px]'>{row.getValue('id')}</div>,
-  },
+  // {
+  //   accessorKey: 'id',
+  //   header: 'ID',
+  //   cell: ({ row }) => <div className='lg:w-[50px]'>{row.getValue('id')}</div>,
+  // },
   {
     accessorKey: 'name',
     header: 'Name',

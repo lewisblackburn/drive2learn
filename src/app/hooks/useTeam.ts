@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -15,6 +14,7 @@ export interface TeamMember {
   quote: string;
   image: string;
 }
+
 export interface NewTeamMember {
   name: string;
   job_type: string;
@@ -28,7 +28,7 @@ export const useTeam = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const getTeam = async () => {
+  const fetchTeam = async () => {
     setLoading(true);
     setError(null);
 
@@ -38,16 +38,14 @@ export const useTeam = () => {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (fetchError) {
-        throw fetchError;
-      }
+      if (fetchError) throw fetchError;
 
       setTeam(data || []);
     } catch (err) {
       setError('Failed to fetch team. Please try again later.');
       toast({
         title: 'Error',
-        description: error,
+        description: String(err),
         variant: 'destructive',
       });
     } finally {
@@ -56,9 +54,7 @@ export const useTeam = () => {
   };
 
   const addTeamMember = async (teamMember: NewTeamMember) => {
-    if (!supabase.auth.getUser()) {
-      return;
-    }
+    if (!supabase.auth.getUser()) return;
 
     setLoading(true);
     setError(null);
@@ -68,20 +64,18 @@ export const useTeam = () => {
         .from('team')
         .insert([teamMember]);
 
-      if (insertError) {
-        throw insertError;
-      }
+      if (insertError) throw insertError;
 
-      await getTeam();
+      await fetchTeam();
       toast({
         title: 'Success',
         description: 'Team member added successfully!',
       });
     } catch (err) {
-      setError('Failed to add team. Please try again later.');
+      setError('Failed to add team member. Please try again later.');
       toast({
         title: 'Error',
-        description: error,
+        description: String(err),
         variant: 'destructive',
       });
     } finally {
@@ -90,9 +84,7 @@ export const useTeam = () => {
   };
 
   const editTeamMember = async (id: number, teamMember: NewTeamMember) => {
-    if (!supabase.auth.getUser()) {
-      return;
-    }
+    if (!supabase.auth.getUser()) return;
 
     setLoading(true);
     setError(null);
@@ -103,11 +95,9 @@ export const useTeam = () => {
         .update(teamMember)
         .eq('id', id);
 
-      if (updateError) {
-        throw updateError;
-      }
+      if (updateError) throw updateError;
 
-      await getTeam();
+      await fetchTeam();
       toast({
         title: 'Success',
         description: 'Team member updated successfully!',
@@ -116,7 +106,7 @@ export const useTeam = () => {
       setError('Failed to update team member. Please try again later.');
       toast({
         title: 'Error',
-        description: error,
+        description: String(err),
         variant: 'destructive',
       });
     } finally {
@@ -125,9 +115,7 @@ export const useTeam = () => {
   };
 
   const deleteTeamMember = async (id: number, image: string) => {
-    if (!supabase.auth.getUser()) {
-      return;
-    }
+    if (!supabase.auth.getUser()) return;
 
     setLoading(true);
     setError(null);
@@ -138,13 +126,10 @@ export const useTeam = () => {
         .delete()
         .eq('id', id);
 
-      if (deleteError) {
-        throw deleteError;
-      }
+      if (deleteError) throw deleteError;
 
       await deleteImage(image);
-
-      await getTeam();
+      await fetchTeam();
       toast({
         title: 'Success',
         description: 'Team member deleted successfully!',
@@ -153,7 +138,7 @@ export const useTeam = () => {
       setError('Failed to delete team member. Please try again later.');
       toast({
         title: 'Error',
-        description: error,
+        description: String(err),
         variant: 'destructive',
       });
     } finally {
@@ -161,14 +146,8 @@ export const useTeam = () => {
     }
   };
 
-  useEffect(() => {
-    getTeam();
-  }, []);
-
   const uploadImage = async (file: File | null, teamMemberId: number) => {
-    if (!supabase.auth.getUser()) {
-      return;
-    }
+    if (!supabase.auth.getUser()) return;
 
     if (!file) {
       toast({
@@ -187,20 +166,22 @@ export const useTeam = () => {
         .from('images')
         .upload(filename, file);
 
+      if (uploadError) throw uploadError;
+
       const { error: insertError } = await supabase
         .from('images')
         .insert([{ image: filename, type: ImageTypes.TEAM }]);
+
+      if (insertError) throw insertError;
 
       const { error: updateError } = await supabase
         .from('team')
         .update({ image: filename })
         .eq('id', teamMemberId);
 
-      if (uploadError || insertError || updateError) {
-        throw uploadError;
-      }
+      if (updateError) throw updateError;
 
-      await getTeam();
+      await fetchTeam();
       toast({
         title: 'Success',
         description: 'Image uploaded successfully!',
@@ -209,7 +190,7 @@ export const useTeam = () => {
       setError('Failed to upload image. Please try again later.');
       toast({
         title: 'Error',
-        description: error,
+        description: String(err),
         variant: 'destructive',
       });
     } finally {
@@ -222,22 +203,24 @@ export const useTeam = () => {
     teamMemberId: number,
     image: string,
   ) => {
-    if (!supabase.auth.getUser()) {
-      return;
-    }
+    if (!supabase.auth.getUser()) return;
 
     setLoading(true);
     setError(null);
 
     try {
-      const { error: deleteStorageError } = await supabase.storage
-        .from('images')
-        .remove([image]);
+      if (image) {
+        const { error: deleteStorageError } = await supabase.storage
+          .from('images')
+          .remove([image]);
 
-      const { error: deleteError } = await supabase
-        .from('images')
-        .delete()
-        .eq('image', image);
+        const { error: deleteError } = await supabase
+          .from('images')
+          .delete()
+          .eq('image', image);
+
+        if (deleteError || deleteStorageError) throw deleteError;
+      }
 
       if (!file) {
         toast({
@@ -249,28 +232,26 @@ export const useTeam = () => {
       }
 
       const filename = `${uuidv4()}-${file.name}`;
-      setLoading(true);
-
       const { error: uploadError } = await supabase.storage
         .from('images')
         .upload(filename, file);
 
+      if (uploadError) throw uploadError;
+
       const { error: insertError } = await supabase
         .from('images')
         .insert([{ image: filename, type: ImageTypes.TEAM }]);
+
+      if (insertError) throw insertError;
 
       const { error: updateError } = await supabase
         .from('team')
         .update({ image: filename })
         .eq('id', teamMemberId);
 
-      if (deleteError) throw deleteError;
-      if (deleteStorageError) throw deleteStorageError;
-      if (uploadError) throw uploadError;
-      if (insertError) throw insertError;
       if (updateError) throw updateError;
 
-      await getTeam();
+      await fetchTeam();
       toast({
         title: 'Success',
         description: 'Image updated successfully!',
@@ -279,7 +260,7 @@ export const useTeam = () => {
       setError('Failed to update image. Please try again later.');
       toast({
         title: 'Error',
-        description: error,
+        description: String(err),
         variant: 'destructive',
       });
     } finally {
@@ -288,9 +269,7 @@ export const useTeam = () => {
   };
 
   const deleteImage = async (image: string) => {
-    if (!supabase.auth.getUser()) {
-      return;
-    }
+    if (!supabase.auth.getUser()) return;
 
     setLoading(true);
     setError(null);
@@ -305,11 +284,9 @@ export const useTeam = () => {
         .delete()
         .eq('image', image);
 
-      if (deleteError || deleteStorageError) {
-        throw deleteError;
-      }
+      if (deleteError || deleteStorageError) throw deleteError;
 
-      await getTeam();
+      await fetchTeam();
       toast({
         title: 'Success',
         description: 'Image deleted successfully!',
@@ -318,7 +295,7 @@ export const useTeam = () => {
       setError('Failed to delete image. Please try again later.');
       toast({
         title: 'Error',
-        description: error,
+        description: String(err),
         variant: 'destructive',
       });
     } finally {
@@ -326,11 +303,15 @@ export const useTeam = () => {
     }
   };
 
+  useEffect(() => {
+    fetchTeam(); // Fetch initial team on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return {
     loading,
     team,
     error,
-    getTeam,
     addTeamMember,
     editTeamMember,
     deleteTeamMember,
