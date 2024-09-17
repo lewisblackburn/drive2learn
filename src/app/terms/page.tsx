@@ -10,6 +10,7 @@ import PageHeader from '@/components/PageHeader';
 
 import { useData } from '@/app/hooks/useData';
 import PageLoader from '@/components/PageLoader';
+import dynamic from 'next/dynamic';
 
 const Content = dynamic(() => import('@/components/Content'), {
   ssr: false,
