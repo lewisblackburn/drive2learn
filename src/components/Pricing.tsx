@@ -39,15 +39,15 @@ export const Pricing = () => {
             </PricingCard>
             <PricingCard
               type='Instructor Training'
-              price='From £50/ph'
+              price='From £35/ph*'
               description='Become a successful driving instructor with us and join our community.'
               buttonText='Read More'
               buttonLink='/instructor_training'
               active
             >
+              <List>One-on-one training sessions</List>
               <List>Training for Part 1/2/3</List>
               <List>Help with standards checks</List>
-              <List>One-on-one training sessions</List>
               <List>Earn whilst you train</List>
             </PricingCard>
             <PricingCard

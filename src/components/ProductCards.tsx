@@ -90,7 +90,7 @@ export const ProductCards = () => {
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
       <Sheet open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <SheetContent>
+        <SheetContent className='overflow-y-scroll'>
           <SheetHeader>
             <SheetTitle>{selectedProduct?.name}</SheetTitle>
             <SheetDescription>{selectedProduct?.description}</SheetDescription>
@@ -251,7 +251,7 @@ export const ProductCards = () => {
                   View Product
                 </a>
                 <span className='text-xl font-semibold text-primary'>
-                  ${parseInt(product.price).toFixed(2)}
+                  £{parseInt(product.price).toFixed(2)}
                 </span>
               </div>
             </div>

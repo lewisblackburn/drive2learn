@@ -92,7 +92,7 @@ export const TeamCards = () => {
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
       <Sheet open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <SheetContent>
+        <SheetContent className='overflow-y-scroll'>
           <SheetHeader>
             <SheetTitle>{selectedTeamMember?.name}</SheetTitle>
             <SheetDescription>{selectedTeamMember?.job_type}</SheetDescription>

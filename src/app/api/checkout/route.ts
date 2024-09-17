@@ -11,6 +11,7 @@ export async function POST(req: NextRequest) {
     const parsedBody = parse(body);
     const priceId = parsedBody.priceId as string;
     const intensive = parsedBody.intensive === 'on';
+    const transmission = parsedBody.transmission as string;
 
     // Validate the priceId
     if (!priceId) {
@@ -32,7 +33,10 @@ export async function POST(req: NextRequest) {
       ],
       mode: 'payment',
       payment_intent_data: {
-        description: `Course Payment - Intensive: ${intensive ? 'Yes' : 'No'}`, // Custom description for the PaymentIntent
+        description: `
+        Course Payment - Intensive: ${intensive ? 'Yes' : 'No'}
+        Transmission: ${transmission}
+        `,
       },
       success_url: `${origin}/book/success?success=true`,
       cancel_url: `${origin}/book/error?canceled=true`,

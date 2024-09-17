@@ -7,9 +7,11 @@ import { cn } from '@/lib/utils';
 
 import {
   NavigationMenu,
+  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
+  NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
 
@@ -21,11 +23,30 @@ export function NavigationMenuDemo() {
       <NavigationMenuList>
         {siteConfig.navigationLinks.map((link, index) => (
           <NavigationMenuItem key={index}>
-            <Link href={link.href} legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                {link.title}
-              </NavigationMenuLink>
-            </Link>
+            {Array.isArray(link.links) ? (
+              <>
+                <NavigationMenuTrigger>{link.title}</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className='grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] '>
+                    {link.links.map((link) => (
+                      <ListItem
+                        key={link.title}
+                        title={link.title}
+                        href={link.href}
+                      >
+                        {link.description}
+                      </ListItem>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </>
+            ) : (
+              <Link href={link.href ?? '/'} legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  {link.title}
+                </NavigationMenuLink>
+              </Link>
+            )}
           </NavigationMenuItem>
         ))}
       </NavigationMenuList>

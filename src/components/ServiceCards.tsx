@@ -96,7 +96,7 @@ export const ServiceCards = () => {
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
       <Sheet open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <SheetContent>
+        <SheetContent className='overflow-y-scroll'>
           <SheetHeader>
             <SheetTitle>{selectedService?.title}</SheetTitle>
             <SheetDescription>{selectedService?.description}</SheetDescription>
@@ -284,10 +284,10 @@ export const ServiceCards = () => {
             <div className='p-6 border-t border-gray-200'>
               <div className='flex items-center justify-between'>
                 <span className='text-gray-600'>
-                  Deposit: {service.deposit}
+                  Deposit: £{service.deposit}
                 </span>
                 <span className='text-xl font-semibold text-primary'>
-                  {service.price}
+                  £{service.price}
                 </span>
               </div>
             </div>

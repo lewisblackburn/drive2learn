@@ -128,7 +128,7 @@ export function DataTable() {
         </DropdownMenu>
       </div>
       <Sheet open={isAddReviewModalOpen} onOpenChange={setIsAddReviewModalOpen}>
-        <SheetContent>
+        <SheetContent className='overflow-y-scroll'>
           <SheetTitle>Add Review</SheetTitle>
           <div className='mt-4'>
             <Input

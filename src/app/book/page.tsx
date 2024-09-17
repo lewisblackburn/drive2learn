@@ -61,6 +61,7 @@ export default function BookPage() {
           <div className='container mx-auto px-4 py-8'>
             <div className='mb-24 -mt-24'>
               <Suspense fallback={<div>Loading...</div>}>
+                {/* @ts-expect-error temp */}
                 <SelectFormClient services={services} />
               </Suspense>
             </div>

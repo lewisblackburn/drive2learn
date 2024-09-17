@@ -28,11 +28,25 @@ const FormSchema = z.object({
   course: z.string({
     required_error: 'Please select a course.',
   }),
-  intensive: z.boolean(),
+  intensive: z.boolean().optional(),
+  bookTest: z.boolean().optional(),
+  transmission: z.enum(['manual', 'automatic'], {
+    required_error: 'Please select a transmission type.',
+  }),
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function CourseSelection({ services }: { services: any[] }) {
+export default function CourseSelection({
+  services,
+}: {
+  services: {
+    title: string;
+    price: number;
+    priceId: string;
+    description: string;
+    hours: number;
+    deposit: number;
+  }[];
+}) {
   const searchParams = useSearchParams();
   const course = searchParams.get('course') ?? services[0].title;
 
@@ -40,10 +54,15 @@ export default function CourseSelection({ services }: { services: any[] }) {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       course,
+      intensive: false,
+      bookTest: false,
+      transmission: 'manual',
     },
   });
 
   const selectedCourse = form.watch('course');
+
+  const isAutomatic = form.watch('transmission') === 'automatic';
 
   return (
     <Form {...form}>
@@ -61,6 +80,7 @@ export default function CourseSelection({ services }: { services: any[] }) {
             )?.priceId ?? ''
           }
         />
+
         <FormField
           control={form.control}
           name='course'
@@ -76,7 +96,11 @@ export default function CourseSelection({ services }: { services: any[] }) {
                 <SelectContent>
                   {services.map((service, index) => (
                     <SelectItem key={index} value={service.title}>
-                      {service.title} ({service.price})
+                      {service.title} (£
+                      {isAutomatic
+                        ? (Number(service.price) * 1.1).toFixed(2)
+                        : service.price}
+                      )
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -88,26 +112,98 @@ export default function CourseSelection({ services }: { services: any[] }) {
             </FormItem>
           )}
         />
-        {/* A checkbox field to check whether they want the course to be intensive or not */}
-        <div className='items-top flex space-x-2'>
-          <input
-            type='checkbox'
-            id='intensive'
-            name='intensive'
-            className='peer h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded'
-          />
-          <div className='grid gap-1.5 leading-none'>
-            <label
-              htmlFor='terms1'
-              className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
-            >
-              Intensive Course
-            </label>
-            <p className='text-sm text-muted-foreground'>
-              Select this option to book an intensive course.
-            </p>
-          </div>
-        </div>
+
+        <FormField
+          control={form.control}
+          name='intensive'
+          render={({ field }) => (
+            <FormItem>
+              <div className='flex space-x-2 items-center'>
+                <FormControl>
+                  <input
+                    type='checkbox'
+                    id='intensive'
+                    checked={field.value}
+                    onChange={field.onChange}
+                    className='peer h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded'
+                  />
+                </FormControl>
+                <FormLabel htmlFor='intensive'>Intensive Course</FormLabel>
+              </div>
+              <FormDescription>
+                Select this option to book an intensive course.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name='bookTest'
+          render={({ field }) => (
+            <FormItem>
+              <div className='flex space-x-2 items-center'>
+                <FormControl>
+                  <input
+                    type='checkbox'
+                    id='book-a-test'
+                    checked={field.value}
+                    onChange={field.onChange}
+                    className='peer h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded'
+                  />
+                </FormControl>
+                <FormLabel htmlFor='book-a-test'>
+                  Would you like to book a test?
+                </FormLabel>
+              </div>
+              <FormDescription>
+                Select this option if you would like to book a test yourself.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name='transmission'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Transmission</FormLabel>
+              <div className='flex space-x-4'>
+                <div className='flex items-center space-x-2'>
+                  <FormControl>
+                    <input
+                      type='radio'
+                      id='manual'
+                      value='manual'
+                      checked={field.value === 'manual'}
+                      onChange={field.onChange}
+                      className='peer h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded'
+                    />
+                  </FormControl>
+                  <FormLabel htmlFor='manual'>Manual</FormLabel>
+                </div>
+                <div className='flex items-center space-x-2'>
+                  <FormControl>
+                    <input
+                      type='radio'
+                      id='automatic'
+                      value='automatic'
+                      checked={field.value === 'automatic'}
+                      onChange={field.onChange}
+                      className='peer h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded'
+                    />
+                  </FormControl>
+                  <FormLabel htmlFor='automatic'>Automatic (+10%)</FormLabel>
+                </div>
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <p>
           {
             services.find((service) => service.title === selectedCourse)
@@ -132,6 +228,7 @@ export default function CourseSelection({ services }: { services: any[] }) {
             </p>
           </div>
         </p>
+
         <Button type='submit'>Make a Deposit</Button>
       </form>
     </Form>

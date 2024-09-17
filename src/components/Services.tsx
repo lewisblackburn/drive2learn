@@ -60,7 +60,7 @@ export const Services = () => {
         }}
         plugins={[
           Autoplay({
-            delay: 2000,
+            delay: 4000,
           }),
         ]}
         className='container w-full'
@@ -93,7 +93,7 @@ export const Services = () => {
                         <div className='p-5 flex-grow'>
                           <h1 className='font-bold text-lg'>{service.title}</h1>
                           <h2 className='font-semibold text-md my-2'>
-                            {service.hours} - {service.price}
+                            {service.hours} - £{service.price}
                           </h2>
                           <p className='text-secondary-foreground/60 font-medium mb-4'>
                             {service.description}
@@ -101,7 +101,7 @@ export const Services = () => {
                         </div>
                         <div className='p-5 mt-auto flex justify-between items-center'>
                           <p className='text-secondary-foreground/60 font-medium'>
-                            Deposit: {service.deposit}
+                            Deposit: £{service.deposit}
                           </p>
                           <Link
                             href={`/book?course=${service.title}`}
