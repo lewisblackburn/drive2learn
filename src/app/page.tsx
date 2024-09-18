@@ -27,9 +27,9 @@ export default function HomePage() {
         <Pricing />
         <Contact />
         <Hours />
+        <LogoCloud />
+        <LogoCloud2 />
       </section>
-      <LogoCloud />
-      <LogoCloud2 />
       <Footer />
     </main>
   );
