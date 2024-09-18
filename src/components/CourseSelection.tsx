@@ -16,6 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -120,12 +121,12 @@ export default function CourseSelection({
             <FormItem>
               <div className='flex space-x-2 items-center'>
                 <FormControl>
-                  <input
+                  <Input
                     type='checkbox'
                     id='intensive'
                     checked={field.value}
                     onChange={field.onChange}
-                    className='peer h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded'
+                    className='peer h-4 w-4 accent-primary text-primary focus:ring-primary border-gray-300 rounded'
                   />
                 </FormControl>
                 <FormLabel htmlFor='intensive'>Intensive Course</FormLabel>
@@ -145,12 +146,12 @@ export default function CourseSelection({
             <FormItem>
               <div className='flex space-x-2 items-center'>
                 <FormControl>
-                  <input
+                  <Input
                     type='checkbox'
                     id='book-a-test'
                     checked={field.value}
                     onChange={field.onChange}
-                    className='peer h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded'
+                    className='peer h-4 w-4 accent-primary text-primary focus:ring-primary border-gray-300 rounded'
                   />
                 </FormControl>
                 <FormLabel htmlFor='book-a-test'>
@@ -174,26 +175,26 @@ export default function CourseSelection({
               <div className='flex space-x-4'>
                 <div className='flex items-center space-x-2'>
                   <FormControl>
-                    <input
+                    <Input
                       type='radio'
                       id='manual'
                       value='manual'
                       checked={field.value === 'manual'}
                       onChange={field.onChange}
-                      className='peer h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded'
+                      className='peer h-4 w-4 accent-primary text-primary focus:ring-primary border-gray-300 rounded'
                     />
                   </FormControl>
                   <FormLabel htmlFor='manual'>Manual</FormLabel>
                 </div>
                 <div className='flex items-center space-x-2'>
                   <FormControl>
-                    <input
+                    <Input
                       type='radio'
                       id='automatic'
                       value='automatic'
                       checked={field.value === 'automatic'}
                       onChange={field.onChange}
-                      className='peer h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded'
+                      className='peer h-4 w-4 accent-primary text-primary focus:ring-primary border-gray-300 rounded'
                     />
                   </FormControl>
                   <FormLabel htmlFor='automatic'>Automatic (+10%)</FormLabel>
