@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export default function PageHeader({
   title,
   description,
@@ -12,14 +14,15 @@ export default function PageHeader({
   return (
     <div className='relative bg-red-700'>
       <div className='absolute inset-0'>
-        {/*  eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           className='w-full h-full object-cover object-center'
           src={
             image ??
             'https://images.unsplash.com/photo-1525130413817-d45c1d127c42?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1920&q=60&&sat=-100'
           }
-          alt='page header image'
+          alt={image ? 'page header image' : 'default page header image'}
+          fill
+          priority
         />
         <div
           className='absolute inset-0 bg-red-700 mix-blend-multiply'

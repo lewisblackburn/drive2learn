@@ -1,7 +1,10 @@
 import { Trash2 } from 'lucide-react';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import React from 'react';
+
+import { cn } from '@/lib/utils';
+
+import NextImage from '@/components/NextImage';
 
 import { Image as ImageType } from '@/app/hooks/useImages';
 import { useSupabase } from '@/app/hooks/useSupabase';
@@ -9,9 +12,14 @@ import { useSupabase } from '@/app/hooks/useSupabase';
 interface GalleryProps {
   images: ImageType[];
   onDelete: (id: number, image: string) => void; // New prop for handling delete
+  className?: string;
 }
 
-export const Gallery: React.FC<GalleryProps> = ({ images, onDelete }) => {
+export const Gallery: React.FC<GalleryProps> = ({
+  images,
+  onDelete,
+  className,
+}) => {
   const { user } = useSupabase();
   const pathname = usePathname();
 
@@ -20,7 +28,12 @@ export const Gallery: React.FC<GalleryProps> = ({ images, onDelete }) => {
   const canDelete = user && isOnDashboard;
 
   return (
-    <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+    <div
+      className={cn(
+        'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2',
+        className,
+      )}
+    >
       {images.map((image) => {
         const filepath = process.env.NEXT_PUBLIC_STORAGE_URL
           ? process.env.NEXT_PUBLIC_STORAGE_URL + image.image
@@ -28,10 +41,13 @@ export const Gallery: React.FC<GalleryProps> = ({ images, onDelete }) => {
 
         return (
           <div key={image.id} className={`relative ${user ? 'group' : ''}`}>
-            <Image
+            <NextImage
               src={filepath}
               alt={`Image ${image.id}`}
-              className={`object-cover object-bottom w-full h-[500px] max-w-full rounded-lg transition-all duration-100 ${canDelete ? 'group-hover:brightness-[25%] cursor-pointer' : ''}`}
+              classNames={{
+                image: `object-cover object-bottom w-full h-[500px] max-w-full rounded-lg transition-all duration-100 ${canDelete ? 'group-hover:brightness-[25%] cursor-pointer' : ''}`,
+                blur: 'filter blur-sm',
+              }}
               width={400}
               height={500}
               onClick={

@@ -48,7 +48,7 @@ function UploadImage() {
           <Spinner />
         </div>
       ) : (
-        <Gallery images={images} onDelete={handleDelete} />
+        <Gallery images={images} onDelete={handleDelete} className='gap-16' />
       )}
     </div>
   );
