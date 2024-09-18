@@ -6,6 +6,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import NextImage from '@/components/NextImage';
 import Spinner from '@/components/Spinner';
 import { Button } from '@/components/ui/button';
 import {
@@ -268,12 +269,15 @@ export const ServiceCards = () => {
               setIsDialogOpen(true);
             }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={filepath}
-              alt={service.title}
-              className='w-full h-48 object-cover'
-            />
+            <div className='w-full h-48 relative'>
+              <NextImage
+                src={filepath}
+                alt={service.title}
+                layout='fill'
+                fill
+                classNames={{ image: 'w-full h-48 object-cover' }}
+              />
+            </div>
             <div className='flex-grow p-6 text-start'>
               <h2 className='text-xl font-bold mb-2'>{service.title}</h2>
               <p className='text-gray-700 mb-4'>{service.description}</p>

@@ -1,5 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
-
+import Image from 'next/image';
 import Link from 'next/link';
 
 const stats = [
@@ -52,19 +51,24 @@ export const Recruitment = () => {
           </div>
           <div className='relative mx-auto max-w-md px-4 sm:max-w-3xl sm:px-6 lg:px-0 lg:max-w-none lg:py-20'>
             <div className='relative pt-64 pb-10 rounded-2xl shadow-xl overflow-hidden'>
-              <img
+              <Image
                 className='absolute inset-0 h-full w-full object-cover object-top'
                 src='/images/alex.jpg'
-                alt=''
+                alt='alex'
+                fill
+                priority
               />
               <div className='absolute inset-0 bg-red-600 mix-blend-multiply' />
               <div className='absolute inset-0 bg-gradient-to-t from-red-700 via-red-700 opacity-90' />
               <div className='relative px-8'>
                 <div>
-                  <img
+                  <Image
                     className='h-12'
                     src='/images/logo3.svg'
-                    alt='Workcation'
+                    alt='logo'
+                    width={200}
+                    height={48}
+                    priority
                   />
                 </div>
                 <blockquote className='mt-8'>

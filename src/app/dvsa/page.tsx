@@ -1,6 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
-'use client';
-
+import Image from 'next/image';
 import * as React from 'react';
 import '@/lib/env';
 
@@ -48,15 +46,21 @@ export default function DVSAPage() {
               </p>
             </div>
             <div className='grid grid-cols-2 gap-4 mt-8'>
-              <img
+              <Image
                 className='w-full rounded-lg'
                 src='/images/dvsa1.jpg'
                 alt='car content 1'
+                width={500}
+                height={500}
+                priority
               />
-              <img
+              <Image
                 className='mt-4 w-full lg:mt-10 rounded-lg'
                 src='/images/dvsa2.jpg'
                 alt='car content 2'
+                width={500}
+                height={500}
+                priority
               />
             </div>
           </div>
@@ -132,10 +136,13 @@ export default function DVSAPage() {
               </p>
             </div>
             <div>
-              <img
+              <Image
                 className='object-cover object-left w-full h-56 rounded shadow-lg sm:h-96'
                 src='/images/ready-to-pass.jpg'
-                alt=''
+                alt='readdy-to-pass'
+                width={500}
+                height={500}
+                priority
               />
             </div>
           </div>

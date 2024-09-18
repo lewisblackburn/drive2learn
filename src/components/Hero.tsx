@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
@@ -14,11 +15,13 @@ export const Hero = () => {
         >
           <path d='M50 0H100L50 100H0L50 0Z' />
         </svg>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           className='object-cover object-top w-full h-56 rounded shadow-lg lg:rounded-none lg:shadow-none md:h-96 lg:h-full'
-          src='https://fastwpdemo.com/newwp/udrive/wp-content/uploads/2022/05/banner-img-3.jpg'
-          alt=''
+          src='/images/banner-img-3.jpg'
+          alt='hero-image'
+          width={500}
+          height={500}
+          priority
         />
       </div>
       <div className='relative flex flex-col items-start w-full max-w-xl px-4 mx-auto md:px-0 lg:px-8 lg:max-w-screen-2xl'>

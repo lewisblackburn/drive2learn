@@ -15,8 +15,8 @@ export const Pricing = () => {
                 Our Pricing Plan
               </h2>
               <p className='text-base text-body-color'>
-                There are many variations of passages of Lorem Ipsum available
-                but the majority have suffered alteration in some form.
+                We offer a range of services to help you pass your driving test
+                and become a safe driver for life.
               </p>
             </div>
           </div>
