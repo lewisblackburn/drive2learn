@@ -43,10 +43,9 @@ export const Services = () => {
                 Services Customised For You
               </h2>
               <p className='text-base text-body-color'>
-                The description of each course is only an advisory by our
-                approved driving instructors. If you wish to take the 10 hour
-                course as a beginner then you are free to do so. The choice is
-                yours.
+                We offer various services to help you achieve your goals. Our
+                aim is to provide you with the best possible service for your
+                needs.
               </p>
             </div>
           </div>
