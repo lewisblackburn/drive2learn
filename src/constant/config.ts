@@ -23,6 +23,7 @@ export const siteConfig = {
   navigationLinks: [
     {
       title: 'About',
+      href: '/about',
       links: [
         {
           title: 'About',
@@ -48,6 +49,7 @@ export const siteConfig = {
     },
     {
       title: 'Courses',
+      href: '/book',
       links: [
         {
           title: 'Book a Lesson',
