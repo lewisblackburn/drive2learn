@@ -11,7 +11,7 @@ import { useSupabase } from '@/app/hooks/useSupabase';
 
 interface GalleryProps {
   images: ImageType[];
-  onDelete: (id: number, image: string) => void; // New prop for handling delete
+  onDelete: (id: number, image: string) => void;
   className?: string;
 }
 
@@ -29,7 +29,7 @@ export const Gallery: React.FC<GalleryProps> = ({
   return (
     <div
       className={cn(
-        'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4',
+        'flex  gap-4', // Adjust the gap size for better spacing
         className,
       )}
     >
@@ -41,16 +41,19 @@ export const Gallery: React.FC<GalleryProps> = ({
         return (
           <div
             key={image.id}
-            className='relative w-full h-[500px] pb-[100%] group'
+            className={`relative ${user ? 'group' : ''} min-h-0 min-w-0`} // Ensure no overflow
           >
             <NextImage
               src={filepath}
               alt={`Image ${image.id}`}
-              layout='fill' // Make the image fill the parent container
-              objectFit='cover' // Ensure the image covers the entire area
               classNames={{
-                image: `rounded-lg transition-all duration-100 ${canDelete ? 'group-hover:brightness-[25%] cursor-pointer' : ''}`,
+                image: `object-cover w-full h-full max-w-full rounded-lg transition-all duration-100 ${
+                  canDelete ? 'group-hover:brightness-[25%] cursor-pointer' : ''
+                }`,
+                blur: 'filter blur-sm',
               }}
+              width={400}
+              height={500}
               onClick={
                 canDelete ? () => onDelete(image.id, image.image) : undefined
               }
