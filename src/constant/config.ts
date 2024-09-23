@@ -23,7 +23,6 @@ export const siteConfig = {
   navigationLinks: [
     {
       title: 'About',
-      href: '/about',
       links: [
         {
           title: 'About',
@@ -49,7 +48,18 @@ export const siteConfig = {
     },
     {
       title: 'Courses',
-      href: '/book',
+      links: [
+        {
+          title: 'Book a Lesson',
+          href: '/book',
+          description: 'Book your driving lessons',
+        },
+        {
+          title: 'Instructor Training',
+          href: '/instructor-training',
+          description: 'Become a driving instructor',
+        },
+      ],
     },
     {
       title: 'DVSA',

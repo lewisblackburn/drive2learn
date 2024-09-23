@@ -50,6 +50,21 @@ export default async function AboutPage() {
 
       <Reviews />
 
+      {/* <section className='py-12'> */}
+      {/*   <div className='max-w-screen-xl px-4 mx-auto text-center'> */}
+      {/*     <h2 className='text-lg font-semibold text-gray-700'> */}
+      {/*       Company Information */}
+      {/*     </h2> */}
+      {/*     <p className='mt-4 text-sm text-gray-500'> */}
+      {/*       <strong>Drive 2 Learn Ltd</strong> */}
+      {/*       <br /> */}
+      {/*       Registered in England & Wales */}
+      {/*       <br /> */}
+      {/*       Company Number: 12345678 */}
+      {/*     </p> */}
+      {/*   </div> */}
+      {/* </section> */}
+
       <Footer />
     </main>
   );

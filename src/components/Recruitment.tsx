@@ -4,6 +4,7 @@ import Link from 'next/link';
 const stats = [
   { label: 'Founded', value: '2021' },
   { label: 'Location', value: 'UK' },
+  { label: 'Company Number', value: '14874845' },
 ];
 
 export const Recruitment = () => {
@@ -138,7 +139,7 @@ export const Recruitment = () => {
 
             <div className='mt-10'>
               <a
-                href='/instructor_training'
+                href='/instructor-training'
                 className='text-base font-medium text-red-600'
               >
                 {' '}

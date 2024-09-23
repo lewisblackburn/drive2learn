@@ -18,7 +18,7 @@ export interface NewReview {
 
 export type PaginationType = 'infinite' | 'paged';
 
-const LIMIT = 10; // Number of reviews per page
+const LIMIT = 5; // Number of reviews per page
 
 export const useReviews = (paginationType: PaginationType = 'infinite') => {
   const supabase = createClient();
