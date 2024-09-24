@@ -1,4 +1,5 @@
 import {
+  Handshake,
   Home,
   Image,
   Pencil,
@@ -110,6 +111,11 @@ export const siteConfig = {
       name: 'Products',
       href: '/dashboard/products',
       icon: ShoppingBag,
+    },
+    {
+      name: 'Community',
+      href: '/dashboard/community',
+      icon: Handshake,
     },
     {
       name: 'Editor',

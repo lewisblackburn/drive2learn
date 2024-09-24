@@ -21,6 +21,7 @@ export const ImageTypes = {
   TEAM: 'team',
   PRODUCT: 'product',
   MAP: 'map',
+  COMMUNITY: 'community',
 };
 export type ImageType = (typeof ImageTypes)[keyof typeof ImageTypes];
 
