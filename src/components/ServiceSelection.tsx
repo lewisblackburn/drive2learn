@@ -93,8 +93,7 @@ export default function ServiceSelection({
                 <SelectContent>
                   {services.map((service, index) => (
                     <SelectItem key={index} value={service.title}>
-                      {service.title}
-                      {service.price}
+                      {service.title} - {service.price}
                     </SelectItem>
                   ))}
                 </SelectContent>
