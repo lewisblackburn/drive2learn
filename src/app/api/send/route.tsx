@@ -10,10 +10,9 @@ export async function POST(request: Request) {
     const body = await request.json();
 
     const { data, error } = await resend.emails.send({
-      // This will need to be changed when verifying your domain
-      from: 'Acme <onboarding@resend.dev>',
+      from: 'Acme <all@resend.dev>',
       // Add all the emails you want to send to here
-      to: ['delivered@resend.dev'],
+      to: ['delivered@resend.dev', 'info@drive2learn.co.uk'],
       subject: body.subject,
       react: ContactEmail(body),
     });
