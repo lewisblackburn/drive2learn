@@ -5,13 +5,13 @@ import '@/lib/env';
 
 import Banner from '@/components/Banner';
 import Contact from '@/components/Contact';
+import { Courses } from '@/components/Courses';
 import Footer from '@/components/Footer';
 import { Hero } from '@/components/Hero';
 import { Hours } from '@/components/Hours';
 import LogoCloud, { LogoCloud2 } from '@/components/LogoCloud';
 import Navbar from '@/components/Navbar';
-import { Pricing } from '@/components/Pricing';
-import { Services } from '@/components/Services';
+import Services from '@/components/ServiceCards';
 
 export default function HomePage() {
   return (
@@ -23,8 +23,8 @@ export default function HomePage() {
       {/* mb-auto needed for bottom footer */}
       <section className='mb-auto'>
         <Hero />
+        <Courses />
         <Services />
-        <Pricing />
         <Contact />
         <Hours />
         <LogoCloud />

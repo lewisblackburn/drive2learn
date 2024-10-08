@@ -12,8 +12,8 @@ import PageHeader from '@/components/PageHeader';
 import PageLoader from '@/components/PageLoader';
 import { toast } from '@/components/ui/use-toast';
 
+import { useCourses } from '@/app/hooks/useCourses';
 import { useData } from '@/app/hooks/useData';
-import { useServices } from '@/app/hooks/useServices';
 
 const SelectFormClient = dynamic(() => import('@/components/CourseSelection'), {
   suspense: true,
@@ -25,7 +25,7 @@ const Content = dynamic(() => import('@/components/Content'), {
 export default function BookPage() {
   const { loading: dataLoading, getDataById } = useData();
   const data = getDataById(1);
-  const { loading, error, services } = useServices();
+  const { loading, error, courses } = useCourses();
 
   useEffect(() => {
     setTimeout(() => {
@@ -62,7 +62,7 @@ export default function BookPage() {
             <div className='mb-24 -mt-24'>
               <Suspense fallback={<div>Loading...</div>}>
                 {/* @ts-expect-error temp */}
-                <SelectFormClient services={services} />
+                <SelectFormClient courses={courses} />
               </Suspense>
             </div>
 

@@ -37,9 +37,10 @@ const FormSchema = z.object({
 });
 
 export default function CourseSelection({
-  services,
+  courses,
 }: {
-  services: {
+  courses: {
+    id: string;
     title: string;
     price: number;
     priceId: string;
@@ -49,7 +50,10 @@ export default function CourseSelection({
   }[];
 }) {
   const searchParams = useSearchParams();
-  const course = searchParams.get('course') ?? services[0].title;
+  const courseId = searchParams.get('id') ?? courses[0].id;
+  const course = courses.find(
+    (course) => parseInt(course.id, 10) === parseInt(courseId, 10),
+  )?.title;
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -76,9 +80,8 @@ export default function CourseSelection({
           className='hidden'
           name='priceId'
           value={
-            services.find(
-              (service) => service.title === form.getValues('course'),
-            )?.priceId ?? ''
+            courses.find((course) => course.title === form.getValues('course'))
+              ?.priceId ?? ''
           }
         />
 
@@ -95,12 +98,12 @@ export default function CourseSelection({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {services.map((service, index) => (
-                    <SelectItem key={index} value={service.title}>
-                      {service.title} (£
+                  {courses.map((course, index) => (
+                    <SelectItem key={index} value={course.title}>
+                      {course.title} (£
                       {isAutomatic
-                        ? (Number(service.price) * 1.1).toFixed(2)
-                        : service.price}
+                        ? (Number(course.price) * 1.1).toFixed(2)
+                        : course.price}
                       )
                     </SelectItem>
                   ))}
@@ -207,7 +210,7 @@ export default function CourseSelection({
 
         <p>
           {
-            services.find((service) => service.title === selectedCourse)
+            courses.find((course) => course.title === selectedCourse)
               ?.description
           }
           <br />
@@ -215,15 +218,12 @@ export default function CourseSelection({
           <div className='flex flex-col space-y-1'>
             <p>
               <b>Hours</b>:{' '}
-              {
-                services.find((service) => service.title === selectedCourse)
-                  ?.hours
-              }
+              {courses.find((course) => course.title === selectedCourse)?.hours}
             </p>
             <p>
               <b>Deposit</b>:{' '}
               {
-                services.find((service) => service.title === selectedCourse)
+                courses.find((course) => course.title === selectedCourse)
                   ?.deposit
               }
             </p>

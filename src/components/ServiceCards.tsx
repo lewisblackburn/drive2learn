@@ -1,303 +1,387 @@
-'use client';
+import Link from 'next/link';
+import React from 'react';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus } from 'lucide-react';
-import { ChangeEvent, useEffect, useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
-import { z } from 'zod';
-
-import NextImage from '@/components/NextImage';
-import Spinner from '@/components/Spinner';
-import { Button } from '@/components/ui/button';
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from '@/components/ui/sheet';
-import { Textarea } from '@/components/ui/textarea';
-
-import { Service, useServices } from '@/app/hooks/useServices';
-
-const editServiceSchema = z.object({
-  title: z.string(),
-  hours: z.string(),
-  description: z.string(),
-  priceId: z.string(),
-  price: z.string(),
-  deposit: z.string(),
-});
-
-export const ServiceCards = () => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState<Service | null>(null);
-  const {
-    loading,
-    services,
-    editService,
-    addService,
-    deleteService,
-    updateImage,
-  } = useServices();
-
-  const methods = useForm<z.infer<typeof editServiceSchema>>({
-    resolver: zodResolver(editServiceSchema),
-    defaultValues: {
-      title: selectedService?.title ?? '',
-      hours: selectedService?.hours ?? '',
-      description: selectedService?.description ?? '',
-      priceId: selectedService?.priceId ?? '',
-      price: selectedService?.price ?? '',
-      deposit: selectedService?.deposit ?? '',
-    },
-  });
-
-  useEffect(() => {
-    methods.reset({
-      title: selectedService?.title ?? '',
-      hours: selectedService?.hours ?? '',
-      description: selectedService?.description ?? '',
-      priceId: selectedService?.priceId ?? '',
-      price: selectedService?.price ?? '',
-      deposit: selectedService?.deposit ?? '',
-    });
-  }, [selectedService, methods]);
-
-  function onSubmit(values: z.infer<typeof editServiceSchema>) {
-    if (!selectedService) return;
-    editService(selectedService.id, values);
-    setIsDialogOpen(false);
-  }
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] ?? null;
-    updateImage(file, selectedService?.id ?? -1, selectedService?.image ?? '');
-    e.target.value = ''; // Reset file input after upload
-    setSelectedService(null);
-    setIsDialogOpen(false);
-  };
-
-  if (loading)
-    return (
-      <div className='flex items-center justify-center w-full mt-20'>
-        <Spinner />
-      </div>
-    );
-
+export const Services = () => {
   return (
-    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-      <Sheet open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <SheetContent className='overflow-y-scroll'>
-          <SheetHeader>
-            <SheetTitle>{selectedService?.title}</SheetTitle>
-            <SheetDescription>{selectedService?.description}</SheetDescription>
-          </SheetHeader>
-          <div className='relative flex items-center justify-center p-4 border border-gray-300 rounded-lg bg-gray-50 my-6'>
-            <input
-              type='file'
-              accept='image/*'
-              onChange={handleChange}
-              className='absolute inset-0 w-full h-full opacity-0 cursor-pointer'
-            />
-            <div className='flex flex-col items-center'>
-              <Plus className='text-gray-500' size={40} />
-              <p className='mt-2 text-gray-500'>
-                Drag & Drop or Click to Upload
+    <section className='relative z-10 overflow-hidden bg-white pb-12 pt-10 lg:pb-[90px]'>
+      <div className='container mx-auto'>
+        <div className='-mx-4 flex flex-wrap'>
+          <div className='w-full px-4'>
+            <div className='mx-auto mb-[60px] max-w-[510px] text-center'>
+              <span className='mb-2 block text-lg font-semibold text-primary'>
+                Pricing Table
+              </span>
+              <h2 className='mb-3 text-3xl font-bold leading-[1.208] text-dark sm:text-4xl md:text-[40px]'>
+                Our Services
+              </h2>
+              <p className='text-base text-body-color'>
+                We offer a range of services to help you pass your driving test
+                and become a safe driver for life.
               </p>
             </div>
           </div>
-          <FormProvider {...methods}>
-            <form
-              onSubmit={methods.handleSubmit(onSubmit)}
-              className='space-y-8'
+        </div>
+
+        <div className='-mx-4 flex flex-wrap justify-center'>
+          <div className='-mx-4 flex flex-wrap'>
+            <ServiceCard
+              type='Hire Service'
+              price='From £440'
+              description='Are you ready for your test but need a vehicle?'
+              buttonText='Read More'
+              buttonLink='/book?course=Experienced / Refresher'
+              active={false}
             >
-              <FormField
-                control={methods.control}
-                name='title'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Title</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Enter the title of the service
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={methods.control}
-                name='hours'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Hours</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Specify the number of hours for the service
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={methods.control}
-                name='description'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Provide a detailed description of the service
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={methods.control}
-                name='priceId'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Price ID</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Enter the Stripe price ID for the service
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={methods.control}
-                name='price'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Price</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Specify the price of the service
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={methods.control}
-                name='deposit'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Deposit</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Enter the deposit amount required for the service
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className='flex items-center justify-between w-full'>
-                <Button
-                  autoFocus={false}
-                  onClick={() => {
-                    selectedService &&
-                      deleteService(selectedService.id, selectedService.image);
-                    setIsDialogOpen(false);
-                  }}
-                  variant='destructive'
-                  type='button'
-                >
-                  Delete
-                </Button>
-                <Button type='submit'>Submit</Button>
-              </div>
-            </form>
-          </FormProvider>
-        </SheetContent>
-      </Sheet>
-      <div
-        className='bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer h-[500px] flex flex-col'
-        onClick={() => {
-          addService({
-            title: 'New Service',
-            hours: 'New Hours',
-            description: 'New Description',
-            priceId: 'New Price ID',
-            price: 'New Price',
-            deposit: 'New Deposit',
-          });
-        }}
-      >
-        <div className='flex-grow'>
-          <div className='flex items-center justify-center w-full h-full object-cover'>
-            <Plus />
+              <List>Free Pickup</List>
+              <List>Practical Lessons</List>
+              <List>Theory Tips</List>
+              <List>Manual Car</List>
+            </ServiceCard>
+            <ServiceCard
+              type='Instructor Training'
+              price='From £35/ph*'
+              description='Become a successful driving instructor with us and join our community.'
+              buttonText='Read More'
+              buttonLink='/instructor-training'
+              active
+            >
+              <List>One-on-one training sessions</List>
+              <List>Training for Part 1/2/3</List>
+              <List>Help with standards checks</List>
+              <List>Earn whilst you train</List>
+            </ServiceCard>
+            <ServiceCard
+              type='Help & Support'
+              price='Free'
+              description='Feel free to get in touch if you have any enquiries.'
+              buttonText='Read More'
+              buttonLink='/#contact'
+              active={false}
+            >
+              <List>Expert Advice</List>
+              <List>Guidence</List>
+              <List>No obligations</List>
+              <List>Grounded People</List>
+            </ServiceCard>
           </div>
         </div>
       </div>
-      {services.map((service) => {
-        const filepath = process.env.NEXT_PUBLIC_STORAGE_URL
-          ? process.env.NEXT_PUBLIC_STORAGE_URL + service.image
-          : '';
-
-        return (
-          <div
-            key={service.id}
-            className='bg-white rounded-lg shadow-lg overflow-hidden flex flex-col h-[500px] cursor-pointer'
-            onClick={() => {
-              setSelectedService(service);
-              setIsDialogOpen(true);
-            }}
-          >
-            <div className='w-full h-48 relative'>
-              <NextImage
-                src={filepath}
-                alt={service.title}
-                layout='fill'
-                fill
-                classNames={{ image: 'w-full h-48 object-cover' }}
-              />
-            </div>
-            <div className='flex-grow p-6 text-start'>
-              <h2 className='text-xl font-bold mb-2'>{service.title}</h2>
-              <p className='text-gray-700 mb-4'>{service.description}</p>
-              <div className='flex justify-between items-center mb-4'>
-                <span className='text-gray-600'>{service.hours}</span>
-              </div>
-            </div>
-            <div className='p-6 border-t border-gray-200'>
-              <div className='flex items-center justify-between'>
-                <span className='text-gray-600'>
-                  Deposit: £{service.deposit}
-                </span>
-                <span className='text-xl font-semibold text-primary'>
-                  £{service.price}
-                </span>
-              </div>
-            </div>
-          </div>
-        );
-      })}
-    </div>
+    </section>
   );
+};
+
+export default Services;
+
+const ServiceCard = ({
+  children,
+  description,
+  price,
+  type,
+  buttonText,
+  buttonLink,
+  active,
+}: {
+  children: React.ReactNode;
+  description: string;
+  price: string;
+  type: string;
+  buttonText: string;
+  buttonLink: string;
+  active: boolean;
+}) => {
+  return (
+    <>
+      <div className='w-full px-4 md:w-1/2 lg:w-1/3'>
+        <div className='relative z-10 mb-10 overflow-hidden rounded-[10px] border-2 border-stroke bg-white px-8 py-10 shadow-pricing sm:p-12 lg:px-6 lg:py-10 xl:p-[50px]'>
+          <span className='mb-3 block text-lg font-semibold text-primary'>
+            {type}
+          </span>
+          <h2 className='mb-5 text-[42px] font-bold text-dark '>
+            {price}
+            {/* <span className='text-base font-medium text-body-color '>
+              / {subscription}
+            </span> */}
+          </h2>
+          <p className='mb-8 border-b border-stroke pb-8 text-base text-body-color '>
+            {description}
+          </p>
+          <div className='mb-9 flex flex-col gap-[14px]'>{children}</div>
+          <Link
+            href={buttonLink}
+            className={` ${
+              active
+                ? 'block w-full rounded-md border border-primary bg-primary p-3 text-center text-base font-medium text-white transition hover:bg-opacity-90'
+                : 'block w-full rounded-md border border-stroke bg-transparent p-3 text-center text-base font-medium text-primary transition hover:border-primary hover:bg-primary hover:text-white '
+            } `}
+          >
+            {buttonText}
+          </Link>
+          <div>
+            <span className='absolute right-0 top-7 z-[-1]'>
+              <svg
+                width={77}
+                height={172}
+                viewBox='0 0 77 172'
+                fill='none'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <circle cx={86} cy={86} r={86} fill='url(#paint0_linear)' />
+                <defs>
+                  <linearGradient
+                    id='paint0_linear'
+                    x1={86}
+                    y1={0}
+                    x2={86}
+                    y2={172}
+                    gradientUnits='userSpaceOnUse'
+                  >
+                    <stop stopColor='#dc2626' stopOpacity='0.09' />
+                    <stop offset={1} stopColor='#C4C4C4' stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </span>
+            <span className='absolute right-4 top-4 z-[-1]'>
+              <svg
+                width={41}
+                height={89}
+                viewBox='0 0 41 89'
+                fill='none'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <circle
+                  cx='38.9138'
+                  cy='87.4849'
+                  r='1.42021'
+                  transform='rotate(180 38.9138 87.4849)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='38.9138'
+                  cy='74.9871'
+                  r='1.42021'
+                  transform='rotate(180 38.9138 74.9871)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='38.9138'
+                  cy='62.4892'
+                  r='1.42021'
+                  transform='rotate(180 38.9138 62.4892)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='38.9138'
+                  cy='38.3457'
+                  r='1.42021'
+                  transform='rotate(180 38.9138 38.3457)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='38.9138'
+                  cy='13.634'
+                  r='1.42021'
+                  transform='rotate(180 38.9138 13.634)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='38.9138'
+                  cy='50.2754'
+                  r='1.42021'
+                  transform='rotate(180 38.9138 50.2754)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='38.9138'
+                  cy='26.1319'
+                  r='1.42021'
+                  transform='rotate(180 38.9138 26.1319)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='38.9138'
+                  cy='1.42021'
+                  r='1.42021'
+                  transform='rotate(180 38.9138 1.42021)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='26.4157'
+                  cy='87.4849'
+                  r='1.42021'
+                  transform='rotate(180 26.4157 87.4849)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='26.4157'
+                  cy='74.9871'
+                  r='1.42021'
+                  transform='rotate(180 26.4157 74.9871)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='26.4157'
+                  cy='62.4892'
+                  r='1.42021'
+                  transform='rotate(180 26.4157 62.4892)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='26.4157'
+                  cy='38.3457'
+                  r='1.42021'
+                  transform='rotate(180 26.4157 38.3457)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='26.4157'
+                  cy='13.634'
+                  r='1.42021'
+                  transform='rotate(180 26.4157 13.634)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='26.4157'
+                  cy='50.2754'
+                  r='1.42021'
+                  transform='rotate(180 26.4157 50.2754)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='26.4157'
+                  cy='26.1319'
+                  r='1.42021'
+                  transform='rotate(180 26.4157 26.1319)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='26.4157'
+                  cy='1.4202'
+                  r='1.42021'
+                  transform='rotate(180 26.4157 1.4202)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='13.9177'
+                  cy='87.4849'
+                  r='1.42021'
+                  transform='rotate(180 13.9177 87.4849)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='13.9177'
+                  cy='74.9871'
+                  r='1.42021'
+                  transform='rotate(180 13.9177 74.9871)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='13.9177'
+                  cy='62.4892'
+                  r='1.42021'
+                  transform='rotate(180 13.9177 62.4892)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='13.9177'
+                  cy='38.3457'
+                  r='1.42021'
+                  transform='rotate(180 13.9177 38.3457)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='13.9177'
+                  cy='13.634'
+                  r='1.42021'
+                  transform='rotate(180 13.9177 13.634)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='13.9177'
+                  cy='50.2754'
+                  r='1.42021'
+                  transform='rotate(180 13.9177 50.2754)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='13.9177'
+                  cy='26.1319'
+                  r='1.42021'
+                  transform='rotate(180 13.9177 26.1319)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='13.9177'
+                  cy='1.42019'
+                  r='1.42021'
+                  transform='rotate(180 13.9177 1.42019)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='1.41963'
+                  cy='87.4849'
+                  r='1.42021'
+                  transform='rotate(180 1.41963 87.4849)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='1.41963'
+                  cy='74.9871'
+                  r='1.42021'
+                  transform='rotate(180 1.41963 74.9871)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='1.41963'
+                  cy='62.4892'
+                  r='1.42021'
+                  transform='rotate(180 1.41963 62.4892)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='1.41963'
+                  cy='38.3457'
+                  r='1.42021'
+                  transform='rotate(180 1.41963 38.3457)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='1.41963'
+                  cy='13.634'
+                  r='1.42021'
+                  transform='rotate(180 1.41963 13.634)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='1.41963'
+                  cy='50.2754'
+                  r='1.42021'
+                  transform='rotate(180 1.41963 50.2754)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='1.41963'
+                  cy='26.1319'
+                  r='1.42021'
+                  transform='rotate(180 1.41963 26.1319)'
+                  fill='#dc2626'
+                />
+                <circle
+                  cx='1.41963'
+                  cy='1.4202'
+                  r='1.42021'
+                  transform='rotate(180 1.41963 1.4202)'
+                  fill='#dc2626'
+                />
+              </svg>
+            </span>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+const List = ({ children }: { children: React.ReactNode }) => {
+  return <p className='text-base text-body-color '>{children}</p>;
 };

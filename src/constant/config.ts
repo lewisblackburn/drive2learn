@@ -3,6 +3,7 @@ import {
   Home,
   Image,
   Pencil,
+  School,
   ShoppingBag,
   Star,
   Users2,
@@ -21,6 +22,7 @@ export const siteConfig = {
     'https://www.linkedin.com/in/alex-d2l-570a98287?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
   google:
     'https://www.google.com/maps/place/Drive+2+Learn+with+Alex/@53.6398854,-1.3486284,15z/data=!4m5!3m4!1s0x0:0x2b5a6ab71f7937b4!8m2!3d53.6398854!4d-1.3486284?sa=X&ved=2ahUKEwjP97qR39H8AhVJe8AKHYLCC3AQ_BJ6BAhdEAk&coh=164777&entry=tt&shorturl=1',
+  tiktok: 'https://www.tiktok.com/@drive2learn',
   navigationLinks: [
     {
       title: 'About',
@@ -96,6 +98,11 @@ export const siteConfig = {
       name: 'Reviews',
       href: '/dashboard/reviews',
       icon: Star,
+    },
+    {
+      name: 'Courses',
+      href: '/dashboard/courses',
+      icon: School,
     },
     {
       name: 'Services',

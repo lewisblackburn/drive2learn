@@ -6,6 +6,7 @@ import {
   RiLinkedinLine,
   RiMapPin2Line,
   RiPhoneLine,
+  RiTiktokLine,
 } from 'react-icons/ri';
 
 import Issues from '@/components/Issues';
@@ -71,7 +72,6 @@ const Footer = () => {
             </LinkGroup>
             <LinkGroup header='Quick Links'>
               <NavLink link='/about' label='About' />
-              <NavLink link='/instructors' label='Instructors' />
               <NavLink link='/dvsa' label='DVSA' />
               <NavLink link='/gallery' label='Gallery' />
             </LinkGroup>
@@ -113,6 +113,14 @@ const Footer = () => {
                     className='border rounded-full p-2 hover:bg-[#34A853] hover:text-white transition-all duration-75'
                   >
                     <RiGoogleLine className=' text-md' />
+                  </a>
+                  <a
+                    href={siteConfig.tiktok}
+                    target='_blank'
+                    rel='noreferrer'
+                    className='border rounded-full p-2 hover:bg-[#7b68ee] hover:text-white transition-all duration-75'
+                  >
+                    <RiTiktokLine className=' text-md' />
                   </a>
                 </div>
                 <p className='text-base text-body-color '>

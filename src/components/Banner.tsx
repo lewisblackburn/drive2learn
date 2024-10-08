@@ -6,6 +6,7 @@ import {
   RiGoogleFill,
   RiInstagramFill,
   RiLinkedinBoxFill,
+  RiTiktokFill,
 } from 'react-icons/ri';
 
 import { siteConfig } from '@/constant/config';
@@ -47,6 +48,9 @@ export default function Banner() {
           </a>
           <a href={siteConfig.google} target='_blank' rel='noreferrer'>
             <RiGoogleFill />
+          </a>
+          <a href={siteConfig.tiktok} target='_blank' rel='noreferrer'>
+            <RiTiktokFill />
           </a>
         </div>
       </div>

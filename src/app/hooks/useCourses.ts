@@ -8,7 +8,7 @@ import { toast } from '@/components/ui/use-toast';
 
 import { ImageTypes } from '@/app/hooks/useImages';
 
-export interface Service {
+export interface Course {
   id: number;
   created_at: string;
   image: string;
@@ -19,7 +19,7 @@ export interface Service {
   price: string;
   deposit: string;
 }
-export interface NewService {
+export interface NewCourse {
   title: string;
   hours: string;
   description: string;
@@ -28,30 +28,33 @@ export interface NewService {
   deposit: string;
 }
 
-export const useServices = () => {
+export const useCourses = () => {
   const supabase = createClient();
 
-  const [services, setServices] = useState<Service[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const getServices = async () => {
+  const getCourses = async () => {
     setLoading(true);
     setError(null);
 
     try {
       const { data, error: fetchError } = await supabase
-        .from('services')
-        .select('*')
-        .order('id', { ascending: true });
+        .from('courses')
+        .select('*');
+
+      const sortedData = data?.sort((a, b) => {
+        return parseFloat(a.price) - parseFloat(b.price);
+      });
 
       if (fetchError) {
         throw fetchError;
       }
 
-      setServices(data || []);
+      setCourses(sortedData || []);
     } catch (err) {
-      setError('Failed to fetch services. Please try again later.');
+      setError('Failed to fetch courses. Please try again later.');
       toast({
         title: 'Error',
         description: error,
@@ -62,7 +65,7 @@ export const useServices = () => {
     }
   };
 
-  const addService = async (service: NewService) => {
+  const addCourse = async (course: NewCourse) => {
     if (!supabase.auth.getUser()) {
       return;
     }
@@ -72,20 +75,20 @@ export const useServices = () => {
 
     try {
       const { error: insertError } = await supabase
-        .from('services')
-        .insert([service]);
+        .from('courses')
+        .insert([course]);
 
       if (insertError) {
         throw insertError;
       }
 
-      await getServices();
+      await getCourses();
       toast({
         title: 'Success',
-        description: 'Service added successfully!',
+        description: 'Course added successfully!',
       });
     } catch (err) {
-      setError('Failed to add service. Please try again later.');
+      setError('Failed to add course. Please try again later.');
       toast({
         title: 'Error',
         description: error,
@@ -96,7 +99,7 @@ export const useServices = () => {
     }
   };
 
-  const editService = async (id: number, service: NewService) => {
+  const editCourse = async (id: number, course: NewCourse) => {
     if (!supabase.auth.getUser()) {
       return;
     }
@@ -106,21 +109,21 @@ export const useServices = () => {
 
     try {
       const { error: updateError } = await supabase
-        .from('services')
-        .update(service)
+        .from('courses')
+        .update(course)
         .eq('id', id);
 
       if (updateError) {
         throw updateError;
       }
 
-      await getServices();
+      await getCourses();
       toast({
         title: 'Success',
-        description: 'Service updated successfully!',
+        description: 'Course updated successfully!',
       });
     } catch (err) {
-      setError('Failed to update service. Please try again later.');
+      setError('Failed to update course. Please try again later.');
       toast({
         title: 'Error',
         description: error,
@@ -131,7 +134,7 @@ export const useServices = () => {
     }
   };
 
-  const deleteService = async (id: number, image: string) => {
+  const deleteCourse = async (id: number, image: string) => {
     if (!supabase.auth.getUser()) {
       return;
     }
@@ -141,7 +144,7 @@ export const useServices = () => {
 
     try {
       const { error: deleteError } = await supabase
-        .from('services')
+        .from('courses')
         .delete()
         .eq('id', id);
 
@@ -151,13 +154,13 @@ export const useServices = () => {
 
       await deleteImage(image);
 
-      await getServices();
+      await getCourses();
       toast({
         title: 'Success',
-        description: 'Service deleted successfully!',
+        description: 'Course deleted successfully!',
       });
     } catch (err) {
-      setError('Failed to delete service. Please try again later.');
+      setError('Failed to delete course. Please try again later.');
       toast({
         title: 'Error',
         description: error,
@@ -169,10 +172,10 @@ export const useServices = () => {
   };
 
   useEffect(() => {
-    getServices();
+    getCourses();
   }, []);
 
-  const uploadImage = async (file: File | null, serviceId: number) => {
+  const uploadImage = async (file: File | null, courseId: number) => {
     if (!supabase.auth.getUser()) {
       return;
     }
@@ -196,18 +199,18 @@ export const useServices = () => {
 
       const { error: insertError } = await supabase
         .from('images')
-        .insert([{ image: filename, type: ImageTypes.SERVICE }]);
+        .insert([{ image: filename, type: ImageTypes.COURSE }]);
 
       const { error: updateError } = await supabase
-        .from('services')
+        .from('courses')
         .update({ image: filename })
-        .eq('id', serviceId);
+        .eq('id', courseId);
 
       if (uploadError || insertError || updateError) {
         throw uploadError;
       }
 
-      await getServices();
+      await getCourses();
       toast({
         title: 'Success',
         description: 'Image uploaded successfully!',
@@ -226,7 +229,7 @@ export const useServices = () => {
 
   const updateImage = async (
     file: File | null,
-    serviceId: number,
+    courseId: number,
     image: string,
   ) => {
     if (!supabase.auth.getUser()) {
@@ -264,12 +267,12 @@ export const useServices = () => {
 
       const { error: insertError } = await supabase
         .from('images')
-        .insert([{ image: filename, type: ImageTypes.SERVICE }]);
+        .insert([{ image: filename, type: ImageTypes.COURSE }]);
 
       const { error: updateError } = await supabase
-        .from('services')
+        .from('courses')
         .update({ image: filename })
-        .eq('id', serviceId);
+        .eq('id', courseId);
 
       if (deleteError) throw deleteError;
       if (deleteStorageError) throw deleteStorageError;
@@ -277,7 +280,7 @@ export const useServices = () => {
       if (insertError) throw insertError;
       if (updateError) throw updateError;
 
-      await getServices();
+      await getCourses();
       toast({
         title: 'Success',
         description: 'Image updated successfully!',
@@ -316,7 +319,7 @@ export const useServices = () => {
         throw deleteError;
       }
 
-      await getServices();
+      await getCourses();
       toast({
         title: 'Success',
         description: 'Image deleted successfully!',
@@ -335,12 +338,12 @@ export const useServices = () => {
 
   return {
     loading,
-    services,
+    courses,
     error,
-    getServices,
-    addService,
-    editService,
-    deleteService,
+    getCourses,
+    addCourse,
+    editCourse,
+    deleteCourse,
     uploadImage,
     updateImage,
     deleteImage,

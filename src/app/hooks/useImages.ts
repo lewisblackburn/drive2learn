@@ -17,6 +17,7 @@ export interface NewImage {
 
 export const ImageTypes = {
   GALLERY: 'gallery',
+  COURSE: 'course',
   SERVICE: 'service',
   TEAM: 'team',
   PRODUCT: 'product',
