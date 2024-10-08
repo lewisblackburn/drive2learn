@@ -4,16 +4,15 @@ import {
   Head,
   Hr,
   Html,
-  Img,
   Preview,
   Section,
   Text,
 } from '@react-email/components';
 import * as React from 'react';
 
-import { siteConfig } from '@/constant/config';
+// import { siteConfig } from '@/constant/config';
 
-const baseUrl = siteConfig.url ?? '';
+// const baseUrl = siteConfig.url ?? '';
 
 interface ContactEmailProps {
   name: string;
