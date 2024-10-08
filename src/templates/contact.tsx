@@ -34,13 +34,13 @@ export const ContactEmail: React.FC<Readonly<ContactEmailProps>> = ({
     <Body style={main}>
       <Container style={container}>
         <Section style={box}>
-          <Img
+          {/* <Img
             src={`${baseUrl}/images/logo.svg`}
             width='100'
             height='100'
             alt='Drive 2 Learn'
           />
-          <Hr style={hr} />
+          <Hr style={hr} /> */}
           <Text style={paragraph}>You have received a new enquiry:</Text>
           <Text style={paragraph}>
             <strong>Name:</strong> {name}

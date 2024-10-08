@@ -10,12 +10,15 @@ export async function POST(request: Request) {
     const body = await request.json();
 
     const { data, error } = await resend.emails.send({
-      from: 'Acme <all@resend.dev>',
+      from: 'info@drive2learn.co.uk',
       // Add all the emails you want to send to here
-      to: ['delivered@resend.dev', 'info@drive2learn.co.uk'],
+      // to: ['drive2learn.alex@gmail.com', 'info@drive2learn.co.uk'],
+      to: ['drive2learn.test@gmail.com'],
       subject: body.subject,
       react: ContactEmail(body),
     });
+
+    // console.log(data, error);
 
     if (error) {
       return NextResponse.json(
