@@ -66,9 +66,9 @@ const Footer = () => {
                 link='/instructor-training'
                 label='Instructor Training'
               />
-              <NavLink link='/book' label='Book a Lesson' />
+              <NavLink link='/courses' label='Book a Lesson' />
               <NavLink link='/#contact' label='Contact & Support' />
-              <NavLink link='/book#terms' label='Terms & Conditions' />
+              <NavLink link='/courses#terms' label='Terms & Conditions' />
             </LinkGroup>
             <LinkGroup header='Quick Links'>
               <NavLink link='/about' label='About' />

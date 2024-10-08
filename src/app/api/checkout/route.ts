@@ -38,8 +38,8 @@ export async function POST(req: NextRequest) {
         Transmission: ${transmission}
         `,
       },
-      success_url: `${origin}/book/success?success=true`,
-      cancel_url: `${origin}/book/error?canceled=true`,
+      success_url: `${origin}/courses/success?success=true`,
+      cancel_url: `${origin}/courses/error?canceled=true`,
     });
 
     return NextResponse.redirect(session.url, 303);

@@ -52,11 +52,11 @@ export const siteConfig = {
     },
     {
       title: 'Courses',
-      href: '/book',
+      href: '/courses',
       links: [
         {
           title: 'Book a Lesson',
-          href: '/book',
+          href: '/courses',
           description: 'Book your driving lessons',
         },
         {

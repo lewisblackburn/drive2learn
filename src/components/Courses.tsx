@@ -72,7 +72,7 @@ export const Courses = () => {
                     key={index}
                     className='md:basis-1/2 lg:basis-1/3'
                   >
-                    <Link href={`/book?course=${course.title}`}>
+                    <Link href={`/courses?course=${course.title}`}>
                       <Card className='rounded-lg h-[470px] flex flex-col justify-between'>
                         <Image
                           src={filepath}
@@ -97,7 +97,7 @@ export const Courses = () => {
                             Deposit: £{course.deposit}
                           </p>
                           <Link
-                            href={`/book?id=${course.id}`}
+                            href={`/courses?id=${course.id}`}
                             className='text-primary font-medium flex items-center'
                           >
                             Find Out More

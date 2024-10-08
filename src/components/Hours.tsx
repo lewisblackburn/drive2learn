@@ -11,11 +11,11 @@ export function Hours() {
         </p>
         <div className='mt-10 grid grid-cols-2 gap-10 lg:grid-cols-5'>
           {[
-            { day: 'Monday', time: '9:00am - 6:00pm' },
-            { day: 'Tuesday', time: '9:00am - 6:00pm' },
-            { day: 'Wednesday', time: '9:00am - 6:00pm' },
-            { day: 'Thursday', time: '9:00am - 6:00pm' },
-            { day: 'Friday', time: '9:00am - 6:00pm' },
+            { day: 'Monday', time: '9:00am - 5:00pm' },
+            { day: 'Tuesday', time: '9:00am - 5:00pm' },
+            { day: 'Wednesday', time: '9:00am - 5:00pm' },
+            { day: 'Thursday', time: '9:00am - 5:00pm' },
+            { day: 'Friday', time: '9:00am - 5:00pm' },
             { day: 'Saturday', time: 'Closed' },
             { day: 'Sunday', time: 'Closed' },
           ].map(({ day, time }) => (

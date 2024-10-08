@@ -28,7 +28,7 @@ export default function DVSAPage() {
                 Check what you need to do to learn to drive
               </h2>
               <p className='mb-4'>
-                A helpful guided can be found on the DVSA website. Click on the
+                A helpful guide can be found on the DVSA website. Click on the
                 link{' '}
                 <a
                   href='https://www.gov.uk/learn-to-drive-a-car'

@@ -11,7 +11,7 @@ import { Hero } from '@/components/Hero';
 import { Hours } from '@/components/Hours';
 import LogoCloud, { LogoCloud2 } from '@/components/LogoCloud';
 import Navbar from '@/components/Navbar';
-import Services from '@/components/ServiceCards';
+import { Services } from '@/components/ServiceCards';
 
 export default function HomePage() {
   return (
