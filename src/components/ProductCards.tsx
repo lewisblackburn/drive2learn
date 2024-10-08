@@ -235,7 +235,7 @@ export const ProductCards = () => {
                 alt={product.name}
                 layout='fill'
                 fill
-                classNames={{ image: 'w-full h-48 object-cover' }}
+                classNames={{ image: 'w-full h-48 object-contain' }}
               />
             </div>
             <div className='flex-grow p-6 text-start'>

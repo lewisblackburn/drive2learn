@@ -27,9 +27,7 @@ function CommunityCard({ community }: { community: CommunityType }) {
         <h3 className='text-lg font-semibold text-gray-800'>
           {community.title}
         </h3>
-        <p className='mt-2 text-sm text-gray-600 line-clamp-3'>
-          {community.description}
-        </p>
+        <p className='mt-2 text-sm text-gray-600'>{community.description}</p>
       </div>
     </div>
   );

@@ -11,22 +11,26 @@ function ProductCard({ product }: { product: Product }) {
     : '';
 
   return (
-    <div className='bg-white shadow-lg rounded-lg overflow-hidden'>
+    <div className='bg-white shadow-lg rounded-lg overflow-hidden flex flex-col'>
       <Image
         src={filepath}
         alt={product.name}
-        className='object-cover w-full h-[300px]'
+        className='object-contain w-full h-[300px]'
         width={400}
         height={300}
       />
-      <div className='p-4'>
-        <h3 className='text-lg font-semibold text-gray-800'>{product.name}</h3>
-        <div className='mt-2'>
-          <span className='text-gray-900 font-bold'>{product.price}</span>
+      <div className='p-4 flex flex-col flex-grow justify-between'>
+        <div>
+          <h3 className='text-lg font-semibold text-gray-800'>
+            {product.name}
+          </h3>
+          <div className='mt-2'>
+            <span className='text-gray-900 font-bold'>{product.price}</span>
+          </div>
+          <p className='mt-2 text-sm text-gray-600 line-clamp-3'>
+            {product.description}
+          </p>
         </div>
-        <p className='mt-2 text-sm text-gray-600 line-clamp-3'>
-          {product.description}
-        </p>
         <a href={product.link} target='_blank' rel='noopener noreferrer'>
           <Button className='mt-4 inline-block w-full text-center py-2 px-4'>
             Find Out More
@@ -39,13 +43,15 @@ function ProductCard({ product }: { product: Product }) {
 
 function ProductSkeletonCard() {
   return (
-    <div className='bg-white shadow-lg rounded-lg overflow-hidden'>
+    <div className='bg-white shadow-lg rounded-lg overflow-hidden flex flex-col'>
       <Skeleton className='w-full h-[300px]' />
-      <div className='p-4'>
-        <Skeleton className='h-6 w-3/4 mb-2' />
-        <Skeleton className='h-6 w-1/3 mb-4' />
-        <Skeleton className='h-4 w-full' />
-        <Skeleton className='h-4 w-5/6 mt-2' />
+      <div className='p-4 flex flex-col flex-grow justify-between'>
+        <div>
+          <Skeleton className='h-6 w-3/4 mb-2' />
+          <Skeleton className='h-6 w-1/3 mb-4' />
+          <Skeleton className='h-4 w-full' />
+          <Skeleton className='h-4 w-5/6 mt-2' />
+        </div>
         <Skeleton className='h-10 w-full mt-4' />
       </div>
     </div>
