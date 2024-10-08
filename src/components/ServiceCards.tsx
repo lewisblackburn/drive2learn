@@ -51,9 +51,7 @@ export const Services = () => {
                   type={service.title}
                   buttonText='Read More'
                   buttonLink={
-                    service.priceId
-                      ? `/services?id=${service.priceId}`
-                      : '/#contact'
+                    service.priceId ? `/services?id=${service.id}` : '/#contact'
                   }
                   active={!!service.active}
                 >

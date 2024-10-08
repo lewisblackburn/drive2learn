@@ -115,7 +115,7 @@ export default function ServiceSelection({
           <br />
         </p>
 
-        <Button type='submit'>Make a Deposit</Button>
+        <Button type='submit'>Make a deposit</Button>
       </form>
     </Form>
   );
