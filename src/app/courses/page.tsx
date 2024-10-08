@@ -22,7 +22,7 @@ const Content = dynamic(() => import('@/components/Content'), {
   ssr: false,
 });
 
-export default function BookPage() {
+export default function CoursesPage() {
   const { loading: dataLoading, getDataById } = useData();
   const data = getDataById(1);
   const { loading, error, courses } = useCourses();

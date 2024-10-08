@@ -14,7 +14,7 @@ export default function ErrorPage() {
     if (query.get('canceled')) {
       setTimeout(() => {
         toast({
-          title: 'Deposit Failed!',
+          title: 'Purchase Failed!',
           description:
             'Please try again or contact support if you continue to have issues.',
           variant: 'destructive',
@@ -33,7 +33,7 @@ export default function ErrorPage() {
             size={60}
             className='drop-shadow-glow animate-flicker text-red-500'
           />
-          <h1 className='mt-8 text-4xl md:text-6xl'>Deposit Failed</h1>
+          <h1 className='mt-8 text-4xl md:text-6xl'>Purchase Failed</h1>
           <Link href='/'>
             <Button>Back to home</Button>
           </Link>

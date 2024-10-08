@@ -16,7 +16,7 @@ export default function SuccessPage() {
       emailSentRef.current = true; // Set the ref to prevent multiple sends
 
       toast({
-        title: 'Deposit Successful!',
+        title: 'Purchase Successful!',
         description:
           'Thank you for your purchase. You will receive an email confirmation.',
       });
@@ -33,7 +33,7 @@ export default function SuccessPage() {
             size={60}
             className='drop-shadow-glow animate-flicker text-green-500'
           />
-          <h1 className='mt-8 text-4xl md:text-6xl'>Deposit Successful</h1>
+          <h1 className='mt-8 text-4xl md:text-6xl'>Purchase Successful</h1>
           <Link href='/'>
             <Button>Back to home</Button>
           </Link>
