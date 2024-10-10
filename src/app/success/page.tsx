@@ -7,11 +7,7 @@ import { RiCheckFill } from 'react-icons/ri';
 import { ServiceCards } from '@/components/ServiceCards';
 import { Button } from '@/components/ui/button';
 
-import { useServices } from '@/app/hooks/useServices';
-
 export default function SuccessPage() {
-  const { loading, services } = useServices();
-
   React.useEffect(() => {
     const query = new URLSearchParams(window.location.search);
     if (!query.get('success')) {
@@ -35,7 +31,7 @@ export default function SuccessPage() {
             <Button>Back to home</Button>
           </Link>
           <div className='text-start w-full'>
-            <ServiceCards loading={loading} services={services} />
+            <ServiceCards />
           </div>
         </div>
       </section>

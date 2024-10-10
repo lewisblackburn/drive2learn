@@ -13,11 +13,7 @@ import LogoCloud, { LogoCloud2 } from '@/components/LogoCloud';
 import Navbar from '@/components/Navbar';
 import { ServiceCards } from '@/components/ServiceCards';
 
-import { useServices } from '@/app/hooks/useServices';
-
 export default function HomePage() {
-  const { loading, services } = useServices();
-
   return (
     <main className='flex flex-col h-screen justify-between'>
       <header>
@@ -28,7 +24,7 @@ export default function HomePage() {
       <section className='mb-auto'>
         <Hero />
         <Courses />
-        <ServiceCards loading={loading} services={services.slice(0, 3)} />
+        <ServiceCards />
         <Contact />
         <Hours />
         <LogoCloud />

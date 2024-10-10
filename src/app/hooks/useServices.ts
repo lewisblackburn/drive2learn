@@ -13,7 +13,6 @@ export interface Service {
   priceId: string;
   price: string;
   points: string;
-  active: boolean;
 }
 export interface NewService {
   title: string;
@@ -21,7 +20,6 @@ export interface NewService {
   priceId: string;
   price: string;
   points: string;
-  active: boolean;
 }
 
 export const useServices = () => {

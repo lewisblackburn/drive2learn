@@ -34,7 +34,6 @@ const editServiceSchema = z.object({
   priceId: z.string(),
   price: z.string(),
   points: z.string(),
-  active: z.boolean(),
 });
 
 export const ServiceEditCards = () => {
@@ -51,7 +50,6 @@ export const ServiceEditCards = () => {
       priceId: selectedService?.priceId ?? '',
       price: selectedService?.price ?? '',
       points: selectedService?.points ?? '',
-      active: selectedService?.active ?? false,
     },
   });
 
@@ -62,7 +60,6 @@ export const ServiceEditCards = () => {
       priceId: selectedService?.priceId ?? '',
       price: selectedService?.price ?? '',
       points: selectedService?.points ?? '',
-      active: selectedService?.active ?? false,
     });
   }, [selectedService, methods]);
 
@@ -172,31 +169,6 @@ export const ServiceEditCards = () => {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={methods.control}
-                name='active'
-                render={({ field }) => (
-                  <FormItem>
-                    <div className='flex space-x-2 items-center'>
-                      <FormControl>
-                        <Input
-                          type='checkbox'
-                          id='active'
-                          checked={field.value}
-                          onChange={field.onChange}
-                          className='peer h-4 w-4 accent-primary text-primary focus:ring-primary border-gray-300 rounded'
-                        />
-                      </FormControl>
-                      <FormLabel htmlFor='active'>Active</FormLabel>
-                    </div>
-                    <FormDescription>
-                      Select this option to make the Read More button active
-                      (turn red).
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <div className='flex items-center justify-between w-full'>
                 <Button
                   autoFocus={false}
@@ -224,7 +196,6 @@ export const ServiceEditCards = () => {
             priceId: 'New Price ID',
             price: 'New Price',
             points: 'Point 1, Point 2, Point 3, Point 4',
-            active: false,
           });
         }}
       >
