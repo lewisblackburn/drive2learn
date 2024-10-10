@@ -6,13 +6,18 @@ import { Trash } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 import { Review } from '@/app/hooks/useReviews';
+import { capitalizeFirstLetter } from '@/lib/utils';
 
 export const columns: ColumnDef<Review>[] = [
-  // {
-  //   accessorKey: 'id',
-  //   header: 'ID',
-  //   cell: ({ row }) => <div className='lg:w-[50px]'>{row.getValue('id')}</div>,
-  // },
+  {
+    accessorKey: 'type',
+    header: 'Type',
+    cell: ({ row }) => (
+      <div className='lg:w-[50px]'>
+        {capitalizeFirstLetter(row.getValue('type'))}
+      </div>
+    ),
+  },
   {
     accessorKey: 'name',
     header: 'Name',

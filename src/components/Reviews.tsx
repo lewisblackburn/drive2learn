@@ -12,7 +12,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useReviews } from '@/app/hooks/useReviews';
 
 export default function Reviews() {
-  const { reviews, loadMoreReviews, hasMore, count, loading } = useReviews();
+  const { reviews, loadMoreReviews, hasMore, count, loading } =
+    useReviews('infinite');
 
   return (
     <section id='reviews' className='bg-white'>

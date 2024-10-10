@@ -43,9 +43,8 @@ export const Courses = () => {
                 Courses Customised For You
               </h2>
               <p className='text-base text-body-color'>
-                We offer various services to help you achieve your goals. Our
-                aim is to provide you with the best possible service for your
-                needs.
+                We offer a range of courses to help you pass your driving test
+                and become a safe driver for life.
               </p>
             </div>
           </div>

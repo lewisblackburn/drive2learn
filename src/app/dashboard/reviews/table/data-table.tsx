@@ -68,6 +68,7 @@ export function DataTable() {
   const [newReview, setNewReview] = React.useState({
     name: '',
     description: '',
+    type: 'student',
   });
 
   const table = useReactTable({
@@ -174,7 +175,7 @@ export function DataTable() {
               <Button
                 onClick={() => {
                   addReview(newReview);
-                  setNewReview({ name: '', description: '' });
+                  setNewReview({ name: '', description: '', type: 'student' });
                   setIsAddReviewModalOpen(false);
                 }}
               >
@@ -239,7 +240,7 @@ export function DataTable() {
         <div className='flex-1 text-sm text-muted-foreground'>
           {isFiltering
             ? 'Showing all results'
-            : `Page ${page} of ${Math.ceil(count / 10)}`}
+            : `Page ${page} of ${Math.ceil(count / 5)}`}
         </div>
         <div className='space-x-2'>
           <Button

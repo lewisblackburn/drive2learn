@@ -10,10 +10,12 @@ export interface Review {
   rating: number;
   name: string;
   description: string;
+  type: string;
 }
 export interface NewReview {
   name: string;
   description: string;
+  type: string;
 }
 
 export type PaginationType = 'infinite' | 'paged';

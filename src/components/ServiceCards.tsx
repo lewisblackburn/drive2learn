@@ -44,8 +44,9 @@ export const ServiceCards = () => {
                 Our Services
               </h2>
               <p className='text-base text-body-color'>
-                We offer a range of services to help you pass your driving test
-                and become a safe driver for life.
+                We offer various services to help you achieve your goals. Our
+                aim is to provide you with the best possible service for your
+                needs.
               </p>
             </div>
           </div>
