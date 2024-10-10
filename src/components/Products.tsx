@@ -24,9 +24,6 @@ function ProductCard({ product }: { product: Product }) {
           <h3 className='text-lg font-semibold text-gray-800'>
             {product.name}
           </h3>
-          <div className='mt-2'>
-            <span className='text-gray-900 font-bold'>{product.price}</span>
-          </div>
           <p className='mt-2 text-sm text-gray-600 line-clamp-3'>
             {product.description}
           </p>

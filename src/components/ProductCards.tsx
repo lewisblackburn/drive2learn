@@ -31,7 +31,6 @@ import { Product, useProducts } from '@/app/hooks/useProducts';
 
 const editProductSchema = z.object({
   name: z.string(),
-  price: z.string(),
   description: z.string(),
   link: z.string().url(),
 });
@@ -52,7 +51,6 @@ export const ProductCards = () => {
     resolver: zodResolver(editProductSchema),
     defaultValues: {
       name: selectedProduct?.name ?? '',
-      price: selectedProduct?.price ?? '0',
       description: selectedProduct?.description ?? '',
       link: selectedProduct?.link ?? '',
     },
@@ -61,7 +59,6 @@ export const ProductCards = () => {
   useEffect(() => {
     methods.reset({
       name: selectedProduct?.name ?? '',
-      price: selectedProduct?.price ?? '0',
       description: selectedProduct?.description ?? '',
       link: selectedProduct?.link ?? '',
     });
@@ -133,22 +130,6 @@ export const ProductCards = () => {
               />
               <FormField
                 control={methods.control}
-                name='price'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Price</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Specify the price of the product
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={methods.control}
                 name='description'
                 render={({ field }) => (
                   <FormItem>
@@ -203,7 +184,6 @@ export const ProductCards = () => {
         onClick={() => {
           addProduct({
             name: 'New Product',
-            price: '0',
             description: 'New Description',
             link: 'https://example.com',
           });
@@ -254,9 +234,6 @@ export const ProductCards = () => {
                 >
                   View Product
                 </a>
-                <span className='text-xl font-semibold text-primary'>
-                  £{parseInt(product.price).toFixed(2)}
-                </span>
               </div>
             </div>
           </div>

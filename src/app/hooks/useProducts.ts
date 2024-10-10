@@ -13,14 +13,12 @@ export interface Product {
   created_at: string;
   image: string;
   name: string;
-  price: string;
   description: string;
   link: string;
 }
 
 export interface NewProduct {
   name: string;
-  price: string;
   description: string;
   link: string;
 }
