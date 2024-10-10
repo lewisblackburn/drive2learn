@@ -1,10 +1,14 @@
 import Link from 'next/link';
 
-import { useServices } from '@/app/hooks/useServices';
+import { Service } from '@/app/hooks/useServices';
 
-export const Services = () => {
-  const { loading, services } = useServices();
-
+export const ServiceCards = ({
+  loading,
+  services,
+}: {
+  loading: boolean;
+  services: Service[];
+}) => {
   const placeholderCards = Array.from({ length: 3 }).map((_, index) => (
     <div key={index} className='w-full px-4 md:w-1/2 lg:w-1/3'>
       <div className='relative z-10 mb-10 overflow-hidden rounded-[10px] border-2 border-stroke bg-gray-200 px-8 py-10 animate-pulse'>
