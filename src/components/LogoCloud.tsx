@@ -60,6 +60,16 @@ export function LogoCloud2() {
               >
                 <img className='h-12' src='/images/msagb.png' alt='MSAGB' />
               </Link>
+              <Link
+                href='https://www.lofaway2pass.com/'
+                className='mt-4 ml-8 flex flex-grow flex-shrink-0 justify-center lg:flex-grow-0 lg:ml-4'
+              >
+                <img
+                  className='h-12'
+                  src='/images/l-of-a-way-to-pass.png'
+                  alt='L of a way to pass'
+                />
+              </Link>
             </div>
           </div>
         </div>
