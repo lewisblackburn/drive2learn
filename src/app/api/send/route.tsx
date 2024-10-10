@@ -13,7 +13,7 @@ export async function POST(request: Request) {
       from: 'info@drive2learn.co.uk',
       // Add all the emails you want to send to here
       // to: ['drive2learn.alex@gmail.com', 'info@drive2learn.co.uk'],
-      to: ['drive2learn.test@gmail.com'],
+      to: ['info@drive2learn.co.uk'],
       subject: body.subject,
       react: ContactEmail(body),
     });
