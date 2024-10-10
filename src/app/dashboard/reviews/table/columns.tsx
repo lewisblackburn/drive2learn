@@ -3,10 +3,11 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Trash } from 'lucide-react';
 
+import { capitalizeFirstLetter } from '@/lib/utils';
+
 import { Button } from '@/components/ui/button';
 
 import { Review } from '@/app/hooks/useReviews';
-import { capitalizeFirstLetter } from '@/lib/utils';
 
 export const columns: ColumnDef<Review>[] = [
   {
