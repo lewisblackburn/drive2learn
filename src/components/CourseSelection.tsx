@@ -68,6 +68,21 @@ export default function CourseSelection({
   const selectedCourse = form.watch('course');
 
   const isAutomatic = form.watch('transmission') === 'automatic';
+  const isBooking = form.watch('bookTest') === true;
+
+  const selectedCourseObj = courses.find(
+    (course) => course.title === selectedCourse,
+  );
+  const coursePrice = selectedCourseObj ? selectedCourseObj.price : 0;
+
+  const calculatePrice = () => {
+    let finalPrice = Number(coursePrice);
+
+    if (isAutomatic) finalPrice *= 1.1;
+    if (isBooking) finalPrice += 99.0;
+
+    return finalPrice.toFixed(2);
+  };
 
   return (
     <Form {...form}>
@@ -101,10 +116,7 @@ export default function CourseSelection({
                   {courses.map((course, index) => (
                     <SelectItem key={index} value={course.title}>
                       {course.title} (£
-                      {isAutomatic
-                        ? (Number(course.price) * 1.1).toFixed(2)
-                        : course.price}
-                      )
+                      {calculatePrice()})
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -162,7 +174,9 @@ export default function CourseSelection({
                 </FormLabel>
               </div>
               <FormDescription>
-                Select this option if you would like to book a test yourself.
+                Select this option if you would like us to book a test for you
+                at a date of your choosing (we require a two week window around
+                your date).
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -221,7 +235,7 @@ export default function CourseSelection({
               {courses.find((course) => course.title === selectedCourse)?.hours}
             </p>
             <p>
-              <b>Deposit</b>:{' '}
+              <b>Deposit</b>: £
               {
                 courses.find((course) => course.title === selectedCourse)
                   ?.deposit
