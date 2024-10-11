@@ -68,6 +68,7 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
   });
 
   const selectedTransmission = form.watch('transmission');
+  const selectedCourse = form.watch('course'); // Watch for course selection changes
 
   // Function to calculate price for each course, adjusting for transmission type
   const calculatePrice = (basePrice: number): string => {
@@ -77,6 +78,11 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
     }
     return Number(finalPrice).toFixed(2).toString();
   };
+
+  // Find the current selected course object
+  const currentCourse = courses.find(
+    (course) => course.title === selectedCourse,
+  );
 
   return (
     <Form {...form}>
@@ -89,10 +95,7 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
         <input
           type='hidden'
           name='priceId'
-          value={
-            courses.find((course) => course.title === form.getValues('course'))
-              ?.priceId ?? ''
-          }
+          value={currentCourse?.priceId ?? ''}
         />
 
         {/* Course Selection Dropdown */}
@@ -192,28 +195,15 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
 
         {/* Course Description and Details */}
         <p>
-          {
-            courses.find((course) => course.title === form.getValues('course'))
-              ?.description
-          }
+          {currentCourse?.description}
           <br />
           <br />
           <div className='flex flex-col space-y-1'>
             <p>
-              <b>Hours</b>:{' '}
-              {
-                courses.find(
-                  (course) => course.title === form.getValues('course'),
-                )?.hours
-              }
+              <b>Hours</b>: {currentCourse?.hours}
             </p>
             <p>
-              <b>Deposit</b>: £
-              {
-                courses.find(
-                  (course) => course.title === form.getValues('course'),
-                )?.deposit
-              }
+              <b>Deposit</b>: £{currentCourse?.deposit}
             </p>
           </div>
         </p>
