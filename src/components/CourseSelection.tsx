@@ -68,7 +68,6 @@ export default function CourseSelection({
   const selectedCourse = form.watch('course');
 
   const isAutomatic = form.watch('transmission') === 'automatic';
-  const isBooking = form.watch('bookTest') === true;
 
   const selectedCourseObj = courses.find(
     (course) => course.title === selectedCourse,
@@ -79,7 +78,6 @@ export default function CourseSelection({
     let finalPrice = Number(coursePrice);
 
     if (isAutomatic) finalPrice *= 1.1;
-    if (isBooking) finalPrice += 99.0;
 
     return finalPrice.toFixed(2);
   };
@@ -148,35 +146,6 @@ export default function CourseSelection({
               </div>
               <FormDescription>
                 Select this option to book an intensive course.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name='bookTest'
-          render={({ field }) => (
-            <FormItem>
-              <div className='flex space-x-2 items-center'>
-                <FormControl>
-                  <Input
-                    type='checkbox'
-                    id='book-a-test'
-                    checked={field.value}
-                    onChange={field.onChange}
-                    className='peer h-4 w-4 accent-primary text-primary focus:ring-primary border-gray-300 rounded'
-                  />
-                </FormControl>
-                <FormLabel htmlFor='book-a-test'>
-                  Would you like to book a test?
-                </FormLabel>
-              </div>
-              <FormDescription>
-                Select this option if you would like us to book a test for you
-                at a date of your choosing (we require a two week window around
-                your date).
               </FormDescription>
               <FormMessage />
             </FormItem>
