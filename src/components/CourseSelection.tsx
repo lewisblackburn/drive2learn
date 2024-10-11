@@ -25,61 +25,57 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
+// Form validation schema using Zod
 const FormSchema = z.object({
-  course: z.string({
-    required_error: 'Please select a course.',
-  }),
+  course: z.string().nonempty({ message: 'Please select a course.' }),
   intensive: z.boolean().optional(),
-  bookTest: z.boolean().optional(),
   transmission: z.enum(['manual', 'automatic'], {
     required_error: 'Please select a transmission type.',
   }),
 });
 
-export default function CourseSelection({
-  courses,
-}: {
-  courses: {
-    id: string;
-    title: string;
-    price: number;
-    priceId: string;
-    description: string;
-    hours: number;
-    deposit: number;
-  }[];
-}) {
+interface Course {
+  id: string;
+  title: string;
+  price: number;
+  priceId: string;
+  description: string;
+  hours: number;
+  deposit: number;
+}
+
+interface CourseSelectionProps {
+  courses: Course[];
+}
+
+export default function CourseSelection({ courses }: CourseSelectionProps) {
   const searchParams = useSearchParams();
   const courseId = searchParams.get('id') ?? courses[0].id;
-  const course = courses.find(
+
+  // Fetch the initial selected course based on URL param or default to the first course
+  const initialCourse = courses.find(
     (course) => parseInt(course.id, 10) === parseInt(courseId, 10),
   )?.title;
 
+  // Initialize the form with default values and Zod schema resolver
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      course,
+      course: initialCourse || '',
       intensive: false,
-      bookTest: false,
       transmission: 'manual',
     },
   });
 
-  const selectedCourse = form.watch('course');
+  const selectedTransmission = form.watch('transmission');
 
-  const isAutomatic = form.watch('transmission') === 'automatic';
-
-  const selectedCourseObj = courses.find(
-    (course) => course.title === selectedCourse,
-  );
-  const coursePrice = selectedCourseObj ? selectedCourseObj.price : 0;
-
-  const calculatePrice = () => {
-    let finalPrice = Number(coursePrice);
-
-    if (isAutomatic) finalPrice *= 1.1;
-
-    return finalPrice.toFixed(2);
+  // Function to calculate price for each course, adjusting for transmission type
+  const calculatePrice = (basePrice: number): string => {
+    let finalPrice = basePrice;
+    if (selectedTransmission === 'automatic') {
+      finalPrice *= 1.1; // Add 10% for automatic transmission
+    }
+    return Number(finalPrice).toFixed(2).toString();
   };
 
   return (
@@ -89,8 +85,9 @@ export default function CourseSelection({
         method='POST'
         className='w-full sm:w-2/3 space-y-6'
       >
+        {/* Hidden input to send priceId */}
         <input
-          className='hidden'
+          type='hidden'
           name='priceId'
           value={
             courses.find((course) => course.title === form.getValues('course'))
@@ -98,6 +95,7 @@ export default function CourseSelection({
           }
         />
 
+        {/* Course Selection Dropdown */}
         <FormField
           control={form.control}
           name='course'
@@ -111,10 +109,9 @@ export default function CourseSelection({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {courses.map((course, index) => (
-                    <SelectItem key={index} value={course.title}>
-                      {course.title} (£
-                      {calculatePrice()})
+                  {courses.map((course) => (
+                    <SelectItem key={course.id} value={course.title}>
+                      {course.title} (£{calculatePrice(course.price)})
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -127,6 +124,7 @@ export default function CourseSelection({
           )}
         />
 
+        {/* Intensive Course Checkbox */}
         <FormField
           control={form.control}
           name='intensive'
@@ -152,6 +150,7 @@ export default function CourseSelection({
           )}
         />
 
+        {/* Transmission Type Radio Buttons */}
         <FormField
           control={form.control}
           name='transmission'
@@ -191,9 +190,10 @@ export default function CourseSelection({
           )}
         />
 
+        {/* Course Description and Details */}
         <p>
           {
-            courses.find((course) => course.title === selectedCourse)
+            courses.find((course) => course.title === form.getValues('course'))
               ?.description
           }
           <br />
@@ -201,18 +201,24 @@ export default function CourseSelection({
           <div className='flex flex-col space-y-1'>
             <p>
               <b>Hours</b>:{' '}
-              {courses.find((course) => course.title === selectedCourse)?.hours}
+              {
+                courses.find(
+                  (course) => course.title === form.getValues('course'),
+                )?.hours
+              }
             </p>
             <p>
               <b>Deposit</b>: £
               {
-                courses.find((course) => course.title === selectedCourse)
-                  ?.deposit
+                courses.find(
+                  (course) => course.title === form.getValues('course'),
+                )?.deposit
               }
             </p>
           </div>
         </p>
 
+        {/* Submit Button */}
         <Button type='submit'>Make a Deposit</Button>
       </form>
     </Form>
