@@ -32,7 +32,7 @@ export default function InstructorTrainingPage() {
       <section className='mb-auto'>
         <PageHeader
           title='Instructor Training'
-          description='We also offer training for those who want to become driving instructors. Our training is designed to help you pass the DVSA Approved Driving Instructor (ADI) exams and become a successful driving instructor.'
+          description='We offer training for those who want to become driving instructors. Our training is designed to help you pass the DVSA Approved Driving Instructor (ADI) exams and become a successful driving instructor.'
         />
         <FeatureOne />
         <FeatureTwo />

@@ -1,13 +1,44 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { MessageCircleMore } from 'lucide-react';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { sendContactForm } from '@/lib/api';
 
+import Spinner from '@/components/Spinner';
 import { useToast } from '@/components/ui/use-toast';
 
 const Contact = () => {
   const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    // @ts-ignore
+    const name = e.target[0].value;
+    // @ts-ignore
+    const email = e.target[1].value;
+    // @ts-ignore
+    const phone = e.target[2].value;
+    // @ts-ignore
+    const message = e.target[3].value;
+
+    const result = await sendContactForm({
+      subject: "Drive2Learn's Contact Form",
+      name,
+      email,
+      phone,
+      message,
+    });
+
+    toast({
+      title: result.message,
+    });
+
+    setLoading(false);
+    const form = e.target as HTMLFormElement;
+    form.reset();
+  };
 
   return (
     <>
@@ -140,31 +171,7 @@ const Contact = () => {
               <div className='relative rounded-lg bg-white p-8 shadow-lg dark:bg-dark-2 sm:p-12'>
                 <form
                   method='post'
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    // @ts-ignore
-                    const name = e.target[0].value;
-                    // @ts-ignore
-                    const email = e.target[1].value;
-                    // @ts-ignore
-                    const phone = e.target[2].value;
-                    // @ts-ignore
-                    const message = e.target[3].value;
-                    const result = await sendContactForm({
-                      subject: "Drive2Learn's Contact Form",
-                      name,
-                      email,
-                      phone,
-                      message,
-                    });
-
-                    toast({
-                      title: result.message,
-                    });
-
-                    const form = e.target as HTMLFormElement;
-                    form.reset();
-                  }}
+                  onSubmit={handleSubmit}
                   encType='text/plain'
                 >
                   <ContactInputBox
@@ -191,9 +198,14 @@ const Contact = () => {
                   <div>
                     <button
                       type='submit'
-                      className='w-full rounded border border-primary bg-primary p-3 text-white transition hover:bg-opacity-90'
+                      className='grid place-items-center w-full rounded text-center border border-primary bg-primary p-3 text-white transition hover:bg-opacity-90'
+                      disabled={loading}
                     >
-                      Send Message
+                      {loading ? (
+                        <Spinner className='text-white' />
+                      ) : (
+                        <span>Send Message</span>
+                      )}
                     </button>
                   </div>
                 </form>

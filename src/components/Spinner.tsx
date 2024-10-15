@@ -1,5 +1,9 @@
 import { Loader } from 'lucide-react';
 
-export default function Spinner() {
-  return <Loader className='text-gray-500 animate-spin' size={20} />;
+import { cn } from '@/lib/utils';
+
+export default function Spinner({ className }: { className?: string }) {
+  return (
+    <Loader className={cn('text-gray-500 animate-spin', className)} size={20} />
+  );
 }

@@ -8,16 +8,12 @@ import Footer from '@/components/Footer';
 import { Gallery } from '@/components/Gallery';
 import Navbar from '@/components/Navbar';
 import PageHeader from '@/components/PageHeader';
-import PageLoader from '@/components/PageLoader';
+import Spinner from '@/components/Spinner';
 
 import { useImages } from '@/app/hooks/useImages';
 
 export default function GalleryPage() {
   const { loading, images } = useImages('gallery');
-
-  if (loading) {
-    return <PageLoader />;
-  }
 
   return (
     <main className='flex flex-col h-screen justify-between'>
@@ -34,8 +30,16 @@ export default function GalleryPage() {
         />
 
         <div className='relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8'>
-          {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
-          <Gallery images={images} onDelete={() => {}} />
+          {loading ? (
+            <div className='flex items-center justify-center w-full mt-20'>
+              <Spinner />
+            </div>
+          ) : (
+            <>
+              {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
+              <Gallery images={images} onDelete={() => {}} />
+            </>
+          )}
         </div>
       </section>
       <Footer />

@@ -11,8 +11,6 @@ export async function POST(request: Request) {
 
     const { data, error } = await resend.emails.send({
       from: 'info@drive2learn.co.uk',
-      // Add all the emails you want to send to here
-      // to: ['drive2learn.alex@gmail.com', 'info@drive2learn.co.uk'],
       to: ['info@drive2learn.co.uk'],
       subject: body.subject,
       react: ContactEmail(body),
