@@ -1,3 +1,4 @@
+import Autoplay from 'embla-carousel-autoplay';
 import Link from 'next/link';
 
 import { Card } from '@/components/ui/card';
@@ -58,13 +59,22 @@ export const ServiceCards = () => {
           align: 'start',
           loop: true,
         }}
+        plugins={[
+          Autoplay({
+            delay: 3000,
+            stopOnFocusIn: true,
+            stopOnMouseEnter: true,
+            stopOnLastSnap: true,
+            stopOnInteraction: true,
+          }),
+        ]}
         className='container w-full mb-10'
       >
         <CarouselContent>
           {loading
             ? placeholderCards
             : services.map((service, index) => {
-                const isActive = index % 2 === 0; // Alternate active state based on index
+                const isActive = index % 2 === 0;
 
                 return (
                   <CarouselItem
@@ -82,7 +92,7 @@ export const ServiceCards = () => {
                           ? `/services?id=${service.id}`
                           : '/#contact'
                       }
-                      active={isActive} // Alternating active state
+                      active={isActive}
                     >
                       {service.points.split(',').map((list: string) => (
                         <List key={list}>{list}</List>

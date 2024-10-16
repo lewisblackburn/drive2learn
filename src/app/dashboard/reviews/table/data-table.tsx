@@ -1,4 +1,6 @@
 'use client';
+
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   ColumnFiltersState,
   flexRender,
@@ -12,6 +14,10 @@ import {
 } from '@tanstack/react-table';
 import { ChevronDown, Plus } from 'lucide-react';
 import * as React from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+import { capitalizeFirstLetter } from '@/lib/utils';
 
 import Spinner from '@/components/Spinner';
 import { Button } from '@/components/ui/button';
@@ -21,7 +27,22 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import {
   Sheet,
   SheetContent,
@@ -40,6 +61,14 @@ import { Textarea } from '@/components/ui/textarea';
 
 import { columns } from '@/app/dashboard/reviews/table/columns';
 import { useReviews } from '@/app/hooks/useReviews';
+
+const FormSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  description: z.string().min(1, 'Description is required'),
+  type: z.enum(['student', 'instructor'], {
+    required_error: 'Please select a type.',
+  }),
+});
 
 export function DataTable() {
   const {
@@ -65,11 +94,6 @@ export function DataTable() {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
   const [isAddReviewModalOpen, setIsAddReviewModalOpen] = React.useState(false);
-  const [newReview, setNewReview] = React.useState({
-    name: '',
-    description: '',
-    type: 'student',
-  });
 
   const table = useReactTable({
     data: reviews,
@@ -96,6 +120,21 @@ export function DataTable() {
   const isFiltering = searchInputRef.current
     ? searchInputRef.current.value.length > 0
     : false;
+
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      name: '',
+      description: '',
+      type: 'student',
+    },
+  });
+
+  const onSubmit = (data: z.infer<typeof FormSchema>) => {
+    addReview(data);
+    form.reset();
+    setIsAddReviewModalOpen(false);
+  };
 
   return (
     <div className='w-full'>
@@ -148,41 +187,80 @@ export function DataTable() {
       <Sheet open={isAddReviewModalOpen} onOpenChange={setIsAddReviewModalOpen}>
         <SheetContent className='overflow-y-scroll'>
           <SheetTitle>Add Review</SheetTitle>
-          <div className='mt-4'>
-            <Input
-              placeholder='Name'
-              value={newReview.name}
-              onChange={(e) =>
-                setNewReview({ ...newReview, name: e.target.value })
-              }
-              className='mb-2'
-            />
-            <Textarea
-              placeholder='Description'
-              value={newReview.description}
-              onChange={(e) =>
-                setNewReview({ ...newReview, description: e.target.value })
-              }
-              className='mb-4'
-            />
-            <SheetFooter>
-              <Button
-                variant='outline'
-                onClick={() => setIsAddReviewModalOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={() => {
-                  addReview(newReview);
-                  setNewReview({ name: '', description: '', type: 'student' });
-                  setIsAddReviewModalOpen(false);
-                }}
-              >
-                Add Review
-              </Button>
-            </SheetFooter>
-          </div>
+          <FormProvider {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className='space-y-4 mt-4'
+            >
+              <FormField
+                control={form.control}
+                name='type'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Review Type</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder='Select a course to book' />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {['student', 'instructor'].map((type) => (
+                          <SelectItem key={type} value={type}>
+                            {capitalizeFirstLetter(type)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      You can change your course selection above.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name='name'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder='Name' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='description'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea placeholder='Description' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <SheetFooter>
+                <Button
+                  variant='outline'
+                  onClick={() => setIsAddReviewModalOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button type='submit'>Add Review</Button>
+              </SheetFooter>
+            </form>
+          </FormProvider>
         </SheetContent>
       </Sheet>
       <div className='rounded-md border'>

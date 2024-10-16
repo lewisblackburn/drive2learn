@@ -11,9 +11,11 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 import { useReviews } from '@/app/hooks/useReviews';
 
-export default function Reviews() {
-  const { reviews, loadMoreReviews, hasMore, count, loading } =
-    useReviews('infinite');
+export default function StudentReviews() {
+  const { reviews, loadMoreReviews, hasMore, count, loading } = useReviews(
+    'infinite',
+    'student',
+  );
 
   return (
     <section id='reviews' className='bg-white'>

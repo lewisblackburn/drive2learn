@@ -18,6 +18,7 @@ import '@/lib/env';
 
 import Banner from '@/components/Banner';
 import Footer from '@/components/Footer';
+import InstructorReviews from '@/components/InstructorReviews';
 import Navbar from '@/components/Navbar';
 import PageHeader from '@/components/PageHeader';
 
@@ -37,6 +38,7 @@ export default function InstructorTrainingPage() {
         <FeatureOne />
         <FeatureTwo />
         <FeatureThree />
+        <InstructorReviews />
       </section>
       <Footer />
     </main>

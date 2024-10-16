@@ -9,7 +9,7 @@ import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import PageHeader from '@/components/PageHeader';
 import { Recruitment } from '@/components/Recruitment';
-import Reviews from '@/components/Reviews';
+import StudentReviews from '@/components/StudentReviews';
 import { Team } from '@/components/Team';
 
 export default async function AboutPage() {
@@ -48,7 +48,7 @@ export default async function AboutPage() {
 
       <Recruitment />
 
-      <Reviews />
+      <StudentReviews />
 
       {/* <section className='py-12'> */}
       {/*   <div className='max-w-screen-xl px-4 mx-auto text-center'> */}

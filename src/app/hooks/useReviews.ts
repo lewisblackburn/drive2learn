@@ -19,10 +19,14 @@ export interface NewReview {
 }
 
 export type PaginationType = 'infinite' | 'paged';
+export type ReviewType = 'student' | 'instructor';
 
 const LIMIT = 5; // Number of reviews per page
 
-export const useReviews = (paginationType: PaginationType = 'infinite') => {
+export const useReviews = (
+  paginationType: PaginationType = 'infinite',
+  reviewType?: ReviewType,
+) => {
   const supabase = createClient();
 
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -67,15 +71,17 @@ export const useReviews = (paginationType: PaginationType = 'infinite') => {
       const from = (page - 1) * LIMIT;
       const to = page * LIMIT - 1;
 
-      const {
-        data,
-        error: fetchError,
-        count: totalCount,
-      } = await supabase
+      let query = supabase
         .from('reviews')
         .select('*', { count: 'exact' })
         .order('created_at', { ascending: false })
         .range(from, to);
+
+      if (reviewType) {
+        query = query.eq('type', reviewType);
+      }
+
+      const { data, error: fetchError, count: totalCount } = await query;
 
       if (fetchError) throw fetchError;
 
