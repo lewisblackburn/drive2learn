@@ -13,6 +13,7 @@ export interface Service {
   priceId: string;
   price: string;
   points: string;
+  order: string;
 }
 export interface NewService {
   title: string;
@@ -37,7 +38,7 @@ export const useServices = () => {
       const { data, error: fetchError } = await supabase
         .from('services')
         .select('*')
-        .order('id', { ascending: true });
+        .order('order', { ascending: true });
 
       if (fetchError) {
         throw fetchError;
@@ -125,6 +126,41 @@ export const useServices = () => {
     }
   };
 
+  const updateServiceOrder = async (updatedServices: Service[]) => {
+    if (!supabase.auth.getUser()) {
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { error: updateError } = await supabase
+        .from('services')
+        .upsert(updatedServices, { onConflict: 'id' }); // Batch update course orders
+
+      if (updateError) {
+        throw updateError;
+      }
+
+      await getServices();
+
+      toast({
+        title: 'Success',
+        description: 'Service order updated successfully!',
+      });
+    } catch (err) {
+      setError('Failed to update service order. Please try again later.');
+      toast({
+        title: 'Error',
+        description: 'Failed to update service order. Please try again later.',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const deleteService = async (id: number) => {
     if (!supabase.auth.getUser()) {
       return;
@@ -171,6 +207,7 @@ export const useServices = () => {
     getServices,
     addService,
     editService,
+    updateServiceOrder,
     deleteService,
   };
 };

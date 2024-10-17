@@ -13,6 +13,7 @@ export interface TeamMember {
   job_type: string;
   quote: string;
   image: string;
+  order: string;
 }
 
 export interface NewTeamMember {
@@ -28,7 +29,7 @@ export const useTeam = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchTeam = async () => {
+  const getTeam = async () => {
     setLoading(true);
     setError(null);
 
@@ -36,7 +37,7 @@ export const useTeam = () => {
       const { data, error: fetchError } = await supabase
         .from('team')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('order', { ascending: true });
 
       if (fetchError) throw fetchError;
 
@@ -66,7 +67,7 @@ export const useTeam = () => {
 
       if (insertError) throw insertError;
 
-      await fetchTeam();
+      await getTeam();
       toast({
         title: 'Success',
         description: 'Team member added successfully!',
@@ -97,7 +98,7 @@ export const useTeam = () => {
 
       if (updateError) throw updateError;
 
-      await fetchTeam();
+      await getTeam();
       toast({
         title: 'Success',
         description: 'Team member updated successfully!',
@@ -107,6 +108,41 @@ export const useTeam = () => {
       toast({
         title: 'Error',
         description: String(err),
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateTeamMemberOrder = async (updatedTeamMembers: TeamMember[]) => {
+    if (!supabase.auth.getUser()) {
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { error: updateError } = await supabase
+        .from('team')
+        .upsert(updatedTeamMembers, { onConflict: 'id' }); // Batch update course orders
+
+      if (updateError) {
+        throw updateError;
+      }
+
+      await getTeam();
+
+      toast({
+        title: 'Success',
+        description: 'Team order updated successfully!',
+      });
+    } catch (err) {
+      setError('Failed to update team order. Please try again later.');
+      toast({
+        title: 'Error',
+        description: 'Failed to update team order. Please try again later.',
         variant: 'destructive',
       });
     } finally {
@@ -129,7 +165,7 @@ export const useTeam = () => {
       if (deleteError) throw deleteError;
 
       await deleteImage(image);
-      await fetchTeam();
+      await getTeam();
       toast({
         title: 'Success',
         description: 'Team member deleted successfully!',
@@ -181,7 +217,7 @@ export const useTeam = () => {
 
       if (updateError) throw updateError;
 
-      await fetchTeam();
+      await getTeam();
       toast({
         title: 'Success',
         description: 'Image uploaded successfully!',
@@ -251,7 +287,7 @@ export const useTeam = () => {
 
       if (updateError) throw updateError;
 
-      await fetchTeam();
+      await getTeam();
       toast({
         title: 'Success',
         description: 'Image updated successfully!',
@@ -286,7 +322,7 @@ export const useTeam = () => {
 
       if (deleteError || deleteStorageError) throw deleteError;
 
-      await fetchTeam();
+      await getTeam();
       toast({
         title: 'Success',
         description: 'Image deleted successfully!',
@@ -304,7 +340,7 @@ export const useTeam = () => {
   };
 
   useEffect(() => {
-    fetchTeam(); // Fetch initial team on mount
+    getTeam(); // Fetch initial team on mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -314,6 +350,7 @@ export const useTeam = () => {
     error,
     addTeamMember,
     editTeamMember,
+    updateTeamMemberOrder,
     deleteTeamMember,
     uploadImage,
     updateImage,

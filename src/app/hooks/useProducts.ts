@@ -15,6 +15,7 @@ export interface Product {
   name: string;
   description: string;
   link: string;
+  order: number;
 }
 
 export interface NewProduct {
@@ -38,7 +39,7 @@ export const useProducts = () => {
       const { data, error: fetchError } = await supabase
         .from('products')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('order', { ascending: true });
 
       if (fetchError) {
         throw fetchError;
@@ -119,6 +120,41 @@ export const useProducts = () => {
       toast({
         title: 'Error',
         description: error,
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateProductOrder = async (updatedProducts: Product[]) => {
+    if (!supabase.auth.getUser()) {
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { error: updateError } = await supabase
+        .from('products')
+        .upsert(updatedProducts, { onConflict: 'id' }); // Batch update course orders
+
+      if (updateError) {
+        throw updateError;
+      }
+
+      await getProducts();
+
+      toast({
+        title: 'Success',
+        description: 'Product order updated successfully!',
+      });
+    } catch (err) {
+      setError('Failed to update product order. Please try again later.');
+      toast({
+        title: 'Error',
+        description: 'Failed to update product order. Please try again later.',
         variant: 'destructive',
       });
     } finally {
@@ -335,6 +371,7 @@ export const useProducts = () => {
     getProducts,
     addProduct,
     editProduct,
+    updateProductOrder,
     deleteProduct,
     uploadImage,
     updateImage,

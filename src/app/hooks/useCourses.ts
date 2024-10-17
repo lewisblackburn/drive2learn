@@ -18,6 +18,7 @@ export interface Course {
   priceId: string;
   price: string;
   deposit: string;
+  order: number;
 }
 export interface NewCourse {
   title: string;
@@ -42,22 +43,19 @@ export const useCourses = () => {
     try {
       const { data, error: fetchError } = await supabase
         .from('courses')
-        .select('*');
-
-      const sortedData = data?.sort((a, b) => {
-        return parseFloat(a.price) - parseFloat(b.price);
-      });
+        .select('*')
+        .order('order', { ascending: true });
 
       if (fetchError) {
         throw fetchError;
       }
 
-      setCourses(sortedData || []);
+      setCourses(data || []);
     } catch (err) {
       setError('Failed to fetch courses. Please try again later.');
       toast({
         title: 'Error',
-        description: error,
+        description: 'Failed to fetch courses. Please try again later.',
         variant: 'destructive',
       });
     } finally {
@@ -91,7 +89,7 @@ export const useCourses = () => {
       setError('Failed to add course. Please try again later.');
       toast({
         title: 'Error',
-        description: error,
+        description: 'Failed to add course. Please try again later.',
         variant: 'destructive',
       });
     } finally {
@@ -124,6 +122,41 @@ export const useCourses = () => {
       });
     } catch (err) {
       setError('Failed to update course. Please try again later.');
+      toast({
+        title: 'Error',
+        description: 'Failed to update course. Please try again later.',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateCourseOrder = async (updatedCourses: Course[]) => {
+    if (!supabase.auth.getUser()) {
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { error: updateError } = await supabase
+        .from('courses')
+        .upsert(updatedCourses, { onConflict: 'id' }); // Batch update course orders
+
+      if (updateError) {
+        throw updateError;
+      }
+
+      await getCourses(); // Refresh the courses list
+
+      toast({
+        title: 'Success',
+        description: 'Course order updated successfully!',
+      });
+    } catch (err) {
+      setError('Failed to update course order. Please try again later.');
       toast({
         title: 'Error',
         description: error,
@@ -163,17 +196,13 @@ export const useCourses = () => {
       setError('Failed to delete course. Please try again later.');
       toast({
         title: 'Error',
-        description: error,
+        description: 'Failed to delete course. Please try again later.',
         variant: 'destructive',
       });
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    getCourses();
-  }, []);
 
   const uploadImage = async (file: File | null, courseId: number) => {
     if (!supabase.auth.getUser()) {
@@ -219,7 +248,7 @@ export const useCourses = () => {
       setError('Failed to upload image. Please try again later.');
       toast({
         title: 'Error',
-        description: error,
+        description: 'Failed to upload image. Please try again later.',
         variant: 'destructive',
       });
     } finally {
@@ -289,7 +318,7 @@ export const useCourses = () => {
       setError('Failed to update image. Please try again later.');
       toast({
         title: 'Error',
-        description: error,
+        description: 'Failed to update image. Please try again later.',
         variant: 'destructive',
       });
     } finally {
@@ -328,13 +357,17 @@ export const useCourses = () => {
       setError('Failed to delete image. Please try again later.');
       toast({
         title: 'Error',
-        description: error,
+        description: 'Failed to delete image. Please try again later.',
         variant: 'destructive',
       });
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    getCourses();
+  }, []);
 
   return {
     loading,
@@ -347,5 +380,6 @@ export const useCourses = () => {
     uploadImage,
     updateImage,
     deleteImage,
+    updateCourseOrder, // Expose the new function
   };
 };

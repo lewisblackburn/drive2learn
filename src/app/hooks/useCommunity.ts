@@ -35,7 +35,7 @@ export const useCommunity = () => {
       const { data, error: fetchError } = await supabase
         .from('community')
         .select('*')
-        .order('id', { ascending: true });
+        .order('order', { ascending: true });
 
       if (fetchError) {
         throw fetchError;
@@ -113,6 +113,40 @@ export const useCommunity = () => {
       });
     } catch (err) {
       setError('Failed to update community. Please try again later.');
+      toast({
+        title: 'Error',
+        description: error,
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateCommunityOrder = async (updatedCommunity: Community[]) => {
+    if (!supabase.auth.getUser()) {
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { error: updateError } = await supabase
+        .from('community')
+        .upsert(updatedCommunity, { onConflict: 'id' });
+
+      if (updateError) {
+        throw updateError;
+      }
+
+      await getCommunity();
+      toast({
+        title: 'Success',
+        description: 'Community order updated successfully!',
+      });
+    } catch (err) {
+      setError('Failed to update community order. Please try again later.');
       toast({
         title: 'Error',
         description: error,
@@ -332,6 +366,7 @@ export const useCommunity = () => {
     getCommunity,
     addCommunity,
     editCommunity,
+    updateCommunityOrder,
     deleteCommunity,
     uploadImage,
     updateImage,

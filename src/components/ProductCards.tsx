@@ -1,13 +1,34 @@
 'use client';
 
+import {
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  rectSortingStrategy,
+  SortableContext,
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { debounce } from 'lodash';
 import { Plus } from 'lucide-react';
-import { ChangeEvent, useEffect, useState } from 'react';
+import {
+  ChangeEvent,
+  forwardRef,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import NextImage from '@/components/NextImage';
-import Spinner from '@/components/Spinner';
 import { Button } from '@/components/ui/button';
 import {
   FormControl,
@@ -38,14 +59,56 @@ const editProductSchema = z.object({
 export const ProductCards = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [productList, setProductList] = useState<Product[]>([]);
   const {
-    loading,
     products,
     editProduct,
+    updateProductOrder,
     addProduct,
     deleteProduct,
     updateImage,
   } = useProducts();
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+  );
+
+  const updateProductOrderInDatabase = useCallback(
+    debounce((updatedProducts: Product[]) => {
+      updateProductOrder(updatedProducts);
+    }, 300),
+    [],
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = productList.findIndex(
+      (product) => product.id === active.id,
+    );
+    const newIndex = productList.findIndex((product) => product.id === over.id);
+
+    const newProductList = arrayMove(productList, oldIndex, newIndex).map(
+      (product, index) => ({
+        ...product,
+        order: index, // Update order
+      }),
+    );
+
+    setProductList(newProductList); // Update the state immediately for a smoother UX
+    updateProductOrderInDatabase(newProductList); // Debounce the database update
+  };
+
+  useEffect(() => {
+    if (products) {
+      setProductList(products);
+    }
+  }, [products]);
 
   const methods = useForm<z.infer<typeof editProductSchema>>({
     resolver: zodResolver(editProductSchema),
@@ -78,15 +141,8 @@ export const ProductCards = () => {
     setIsDialogOpen(false);
   };
 
-  if (loading)
-    return (
-      <div className='flex items-center justify-center w-full mt-20'>
-        <Spinner />
-      </div>
-    );
-
   return (
-    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+    <>
       <Sheet open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <SheetContent className='overflow-y-scroll'>
           <SheetHeader>
@@ -179,66 +235,108 @@ export const ProductCards = () => {
           </FormProvider>
         </SheetContent>
       </Sheet>
-      <div
-        className='bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer h-[500px] flex flex-col'
-        onClick={() => {
-          addProduct({
-            name: 'New Product',
-            description: 'New Description',
-            link: 'https://example.com',
-          });
-        }}
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
       >
-        <div className='flex-grow'>
-          <div className='flex items-center justify-center w-full h-full object-cover'>
-            <Plus />
+        <SortableContext
+          items={productList.map((product) => product.id)}
+          strategy={rectSortingStrategy}
+        >
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+            <div
+              className='bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer h-[500px] flex flex-col'
+              onClick={() => {
+                addProduct({
+                  name: 'New Product',
+                  description: 'New Description',
+                  link: 'https://example.com',
+                });
+              }}
+            >
+              <div className='flex-grow'>
+                <div className='flex items-center justify-center w-full h-full object-cover'>
+                  <Plus />
+                </div>
+              </div>
+            </div>
+            {productList.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onClick={() => {
+                  setSelectedProduct(product);
+                  setIsDialogOpen(true);
+                }}
+              />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
+    </>
+  );
+};
+
+interface ProductCardProps {
+  product: Product;
+  onClick: () => void;
+}
+
+export const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
+  ({ product, onClick }, ref) => {
+    const { attributes, listeners, setNodeRef, transform, transition } =
+      useSortable({ id: product.id });
+
+    const style = {
+      transform: CSS.Transform.toString(transform),
+      transition,
+    };
+
+    const filepath = process.env.NEXT_PUBLIC_STORAGE_URL
+      ? process.env.NEXT_PUBLIC_STORAGE_URL + product.image
+      : '';
+
+    return (
+      <div
+        ref={(node) => {
+          setNodeRef(node);
+          if (ref && 'current' in ref) ref.current = node;
+        }}
+        style={style}
+        {...attributes}
+        {...listeners}
+        className='bg-white rounded-lg shadow-lg overflow-hidden flex flex-col h-[500px] cursor-pointer'
+        onClick={onClick}
+      >
+        <div className='w-full h-48 relative'>
+          <NextImage
+            src={filepath}
+            alt={product.name}
+            layout='fill'
+            fill
+            classNames={{ image: 'w-full h-48 object-contain' }}
+          />
+        </div>
+        <div className='flex-grow p-6 text-start'>
+          <h2 className='text-xl font-bold mb-2'>{product.name}</h2>
+          <p className='text-gray-700 mb-4 line-clamp-3'>
+            {product.description}
+          </p>
+        </div>
+        <div className='p-6 border-t border-gray-200'>
+          <div className='flex items-center justify-between'>
+            <a
+              href={product.link}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='text-primary underline'
+            >
+              View Product
+            </a>
           </div>
         </div>
       </div>
-      {products.map((product) => {
-        const filepath = process.env.NEXT_PUBLIC_STORAGE_URL
-          ? process.env.NEXT_PUBLIC_STORAGE_URL + product.image
-          : '';
-
-        return (
-          <div
-            key={product.id}
-            className='bg-white rounded-lg shadow-lg overflow-hidden flex flex-col h-[500px] cursor-pointer'
-            onClick={() => {
-              setSelectedProduct(product);
-              setIsDialogOpen(true);
-            }}
-          >
-            <div className='w-full h-48 relative'>
-              <NextImage
-                src={filepath}
-                alt={product.name}
-                layout='fill'
-                fill
-                classNames={{ image: 'w-full h-48 object-contain' }}
-              />
-            </div>
-            <div className='flex-grow p-6 text-start'>
-              <h2 className='text-xl font-bold mb-2'>{product.name}</h2>
-              <p className='text-gray-700 mb-4 line-clamp-3'>
-                {product.description}
-              </p>
-            </div>
-            <div className='p-6 border-t border-gray-200'>
-              <div className='flex items-center justify-between'>
-                <a
-                  href={product.link}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='text-primary underline'
-                >
-                  View Product
-                </a>
-              </div>
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-};
+    );
+  },
+);

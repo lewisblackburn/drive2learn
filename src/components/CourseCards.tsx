@@ -1,13 +1,28 @@
 'use client';
-
+import {
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  rectSortingStrategy,
+  SortableContext,
+} from '@dnd-kit/sortable';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { debounce } from 'lodash';
 import { Plus } from 'lucide-react';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { forwardRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import NextImage from '@/components/NextImage';
-import Spinner from '@/components/Spinner';
 import { Button } from '@/components/ui/button';
 import {
   FormControl,
@@ -41,8 +56,54 @@ const editCourseSchema = z.object({
 export const CourseCards = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
-  const { loading, courses, editCourse, addCourse, deleteCourse, updateImage } =
-    useCourses();
+  const [courseList, setCourseList] = useState<Course[]>([]);
+  const {
+    courses,
+    addCourse,
+    editCourse,
+    updateImage,
+    deleteCourse,
+    updateCourseOrder,
+  } = useCourses();
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+  );
+
+  const updateCourseOrderInDatabase = useCallback(
+    debounce((updatedCourses: Course[]) => {
+      updateCourseOrder(updatedCourses);
+    }, 300),
+    [],
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = courseList.findIndex((course) => course.id === active.id);
+    const newIndex = courseList.findIndex((course) => course.id === over.id);
+
+    const newCourseList = arrayMove(courseList, oldIndex, newIndex).map(
+      (course, index) => ({
+        ...course,
+        order: index, // Update order
+      }),
+    );
+
+    setCourseList(newCourseList); // Update the state immediately for a smoother UX
+    updateCourseOrderInDatabase(newCourseList); // Debounce the database update
+  };
+
+  useEffect(() => {
+    if (courses) {
+      setCourseList(courses);
+    }
+  }, [courses]);
 
   const methods = useForm<z.infer<typeof editCourseSchema>>({
     resolver: zodResolver(editCourseSchema),
@@ -81,15 +142,8 @@ export const CourseCards = () => {
     setIsDialogOpen(false);
   };
 
-  if (loading)
-    return (
-      <div className='flex items-center justify-center w-full mt-20'>
-        <Spinner />
-      </div>
-    );
-
   return (
-    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+    <>
       <Sheet open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <SheetContent className='overflow-y-scroll'>
           <SheetHeader>
@@ -230,68 +284,108 @@ export const CourseCards = () => {
           </FormProvider>
         </SheetContent>
       </Sheet>
-      <div
-        className='bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer h-[500px] flex flex-col'
-        onClick={() => {
-          addCourse({
-            title: 'New Course',
-            hours: 'New Hours',
-            description: 'New Description',
-            priceId: 'New Price ID',
-            price: 'New Price',
-            deposit: 'New Deposit',
-          });
-        }}
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
       >
-        <div className='flex-grow'>
-          <div className='flex items-center justify-center w-full h-full object-cover'>
-            <Plus />
+        <SortableContext
+          items={courseList.map((course) => course.id)}
+          strategy={rectSortingStrategy}
+        >
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+            <div
+              className='bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer h-[500px] flex flex-col'
+              onClick={() => {
+                addCourse({
+                  title: 'New Course',
+                  hours: 'New Hours',
+                  description: 'New Description',
+                  priceId: 'New Price ID',
+                  price: 'New Price',
+                  deposit: 'New Deposit',
+                });
+              }}
+            >
+              <div className='flex-grow'>
+                <div className='flex items-center justify-center w-full h-full object-cover'>
+                  <Plus />
+                </div>
+              </div>
+            </div>
+            {courseList.map((course) => (
+              <CourseCard
+                key={course.id}
+                course={course}
+                onClick={() => {
+                  setSelectedCourse(course);
+                  setIsDialogOpen(true);
+                }}
+              />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
+    </>
+  );
+};
+
+interface CourseCardProps {
+  course: Course;
+  onClick: () => void;
+}
+
+export const CourseCard = forwardRef<HTMLDivElement, CourseCardProps>(
+  ({ course, onClick }, ref) => {
+    const { attributes, listeners, setNodeRef, transform, transition } =
+      useSortable({ id: course.id });
+
+    const style = {
+      transform: CSS.Transform.toString(transform),
+      transition,
+    };
+
+    const filepath = process.env.NEXT_PUBLIC_STORAGE_URL
+      ? process.env.NEXT_PUBLIC_STORAGE_URL + course.image
+      : '';
+
+    return (
+      <div
+        ref={(node) => {
+          setNodeRef(node);
+          if (ref && 'current' in ref) ref.current = node;
+        }}
+        style={style}
+        {...attributes}
+        {...listeners}
+        className='bg-white rounded-lg shadow-lg overflow-hidden flex flex-col h-[500px] cursor-pointer'
+        onClick={onClick}
+      >
+        <div className='w-full h-48 relative'>
+          <NextImage
+            src={filepath}
+            alt={course.title}
+            layout='fill'
+            fill
+            classNames={{ image: 'w-full h-48 object-cover' }}
+          />
+        </div>
+        <div className='flex-grow p-6 text-start'>
+          <h2 className='text-xl font-bold mb-2'>{course.title}</h2>
+          <p className='text-gray-700 mb-4'>{course.description}</p>
+          <div className='flex justify-between items-center mb-4'>
+            <span className='text-gray-600'>{course.hours}</span>
+          </div>
+        </div>
+        <div className='p-6 border-t border-gray-200'>
+          <div className='flex items-center justify-between'>
+            <span className='text-gray-600'>Deposit: £{course.deposit}</span>
+            <span className='text-xl font-semibold text-primary'>
+              £{course.price}
+            </span>
           </div>
         </div>
       </div>
-      {courses.map((course) => {
-        const filepath = process.env.NEXT_PUBLIC_STORAGE_URL
-          ? process.env.NEXT_PUBLIC_STORAGE_URL + course.image
-          : '';
-
-        return (
-          <div
-            key={course.id}
-            className='bg-white rounded-lg shadow-lg overflow-hidden flex flex-col h-[500px] cursor-pointer'
-            onClick={() => {
-              setSelectedCourse(course);
-              setIsDialogOpen(true);
-            }}
-          >
-            <div className='w-full h-48 relative'>
-              <NextImage
-                src={filepath}
-                alt={course.title}
-                layout='fill'
-                fill
-                classNames={{ image: 'w-full h-48 object-cover' }}
-              />
-            </div>
-            <div className='flex-grow p-6 text-start'>
-              <h2 className='text-xl font-bold mb-2'>{course.title}</h2>
-              <p className='text-gray-700 mb-4'>{course.description}</p>
-              <div className='flex justify-between items-center mb-4'>
-                <span className='text-gray-600'>{course.hours}</span>
-              </div>
-            </div>
-            <div className='p-6 border-t border-gray-200'>
-              <div className='flex items-center justify-between'>
-                <span className='text-gray-600'>
-                  Deposit: £{course.deposit}
-                </span>
-                <span className='text-xl font-semibold text-primary'>
-                  £{course.price}
-                </span>
-              </div>
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-};
+    );
+  },
+);
