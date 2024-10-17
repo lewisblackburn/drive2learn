@@ -29,6 +29,7 @@
     "@editorjs/inline-code": "^1.5.1",
     "@editorjs/link": "^2.6.2",
     "@editorjs/list": "^1.10.0",
+    "@editorjs/nested-list": "^1.4.3",
     "@editorjs/table": "^2.4.1",
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-checkbox": "^1.1.1",

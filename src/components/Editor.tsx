@@ -62,7 +62,7 @@ export function Editor({ data }: EditorProps) {
     try {
       const EditorJS = (await import('@editorjs/editorjs')).default;
       const Header = (await import('@editorjs/header')).default;
-      const List = (await import('@editorjs/list')).default;
+      const NestedList = (await import('@editorjs/nested-list')).default;
 
       const body = dataPatchSchema.parse(data);
       const editorData = body.content || { blocks: [] };
@@ -76,7 +76,14 @@ export function Editor({ data }: EditorProps) {
           data: editorData,
           tools: {
             header: Header,
-            list: List,
+            list: {
+              // @ts-expect-error - Adjust types for custom tools
+              class: NestedList,
+              inlineToolbar: true,
+              config: {
+                defaultStyle: 'unordered',
+              },
+            },
           },
         });
       } else {
