@@ -24,7 +24,7 @@ export const MobileNav = ({ image }: { image: string }) => {
       </SheetTrigger>
       <SheetContent className='flex flex-col h-full justify-between'>
         <div className='flex flex-col space-y-2 items-start'>
-          {siteConfig.navigationLinks.map((link, index) => (
+          {siteConfig.mobileNavigationLinks.map((link, index) => (
             <Link href={link.href} key={index}>
               <Button variant='ghost'>{link.title}</Button>
             </Link>

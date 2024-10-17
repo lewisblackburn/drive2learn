@@ -83,6 +83,40 @@ export const siteConfig = {
       href: '/products',
     },
   ],
+  mobileNavigationLinks: [
+    {
+      title: 'Home',
+      href: '/',
+    },
+    {
+      title: 'About',
+      href: '/about',
+    },
+    {
+      title: 'Courses',
+      href: '/courses',
+    },
+    {
+      title: 'Instructor Training',
+      href: '/instructor-training',
+    },
+    {
+      title: 'DVSA',
+      href: '/dvsa',
+    },
+    {
+      title: 'Gallery',
+      href: '/gallery',
+    },
+    {
+      title: 'Community',
+      href: '/community',
+    },
+    {
+      title: 'Products',
+      href: '/products',
+    },
+  ],
   dashboardNavigationLinks: [
     {
       name: 'Dashboard',
