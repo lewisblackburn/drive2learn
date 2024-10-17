@@ -79,10 +79,12 @@ export const CommunityCards = () => {
   );
 
   const updateCommunityOrderInDatabase = useCallback(
-    debounce((updatedCommunities: Community[]) => {
-      updateCommunityOrder(updatedCommunities);
-    }, 300),
-    [],
+    (updatedCommunities: Community[]) => {
+      debounce(() => {
+        updateCommunityOrder(updatedCommunities);
+      }, 300)();
+    },
+    [updateCommunityOrder],
   );
 
   const handleDragEnd = (event: DragEndEvent) => {

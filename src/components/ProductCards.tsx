@@ -78,10 +78,10 @@ export const ProductCards = () => {
   );
 
   const updateProductOrderInDatabase = useCallback(
-    debounce((updatedProducts: Product[]) => {
-      updateProductOrder(updatedProducts);
-    }, 300),
-    [],
+    (updatedProducts: Product[]) => {
+      debounce(() => updateProductOrder(updatedProducts), 300)();
+    },
+    [updateProductOrder],
   );
 
   const handleDragEnd = (event: DragEndEvent) => {

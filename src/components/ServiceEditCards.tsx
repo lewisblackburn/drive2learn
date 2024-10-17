@@ -72,10 +72,10 @@ export const ServiceEditCards = () => {
   );
 
   const updateServiceOrderInDatabase = useCallback(
-    debounce((updatedServices: Service[]) => {
-      updateServiceOrder(updatedServices);
-    }, 300),
-    [],
+    (updatedServices: Service[]) => {
+      debounce(() => updateServiceOrder(updatedServices), 300)();
+    },
+    [updateServiceOrder],
   );
 
   const handleDragEnd = (event: DragEndEvent) => {

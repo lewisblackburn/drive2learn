@@ -13,7 +13,7 @@ export interface TeamMember {
   job_type: string;
   quote: string;
   image: string;
-  order: string;
+  order: number;
 }
 
 export interface NewTeamMember {

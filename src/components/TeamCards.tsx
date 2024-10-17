@@ -79,10 +79,12 @@ export const TeamCards = () => {
   );
 
   const updateTeamMemberOrderInDatabase = useCallback(
-    debounce((updatedTeamMembers: TeamMember[]) => {
-      updateTeamMemberOrder(updatedTeamMembers);
-    }, 300),
-    [],
+    (updatedTeamMembers: TeamMember[]) => {
+      debounce(() => {
+        updateTeamMemberOrder(updatedTeamMembers);
+      }, 300)();
+    },
+    [updateTeamMemberOrder],
   );
 
   const handleDragEnd = (event: DragEndEvent) => {

@@ -13,7 +13,7 @@ export interface Service {
   priceId: string;
   price: string;
   points: string;
-  order: string;
+  order: number;
 }
 export interface NewService {
   title: string;

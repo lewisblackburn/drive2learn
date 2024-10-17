@@ -75,10 +75,10 @@ export const CourseCards = () => {
   );
 
   const updateCourseOrderInDatabase = useCallback(
-    debounce((updatedCourses: Course[]) => {
-      updateCourseOrder(updatedCourses);
-    }, 300),
-    [],
+    (updatedCourses: Course[]) => {
+      debounce(() => updateCourseOrder(updatedCourses), 300)();
+    },
+    [updateCourseOrder],
   );
 
   const handleDragEnd = (event: DragEndEvent) => {
