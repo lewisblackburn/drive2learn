@@ -2,7 +2,7 @@
 
 import EditorJS, { OutputData } from '@editorjs/editorjs';
 import Header from '@editorjs/header';
-import List from '@editorjs/list';
+import NestedList from '@editorjs/nested-list';
 import dynamic from 'next/dynamic';
 import React, { useEffect, useRef } from 'react';
 
@@ -26,7 +26,7 @@ const Content = ({ title, content }: ContentProps) => {
         data: content,
         tools: {
           header: Header,
-          list: List,
+          list: NestedList,
         },
         readOnly: true,
       });
