@@ -1,7 +1,8 @@
 import Autoplay from 'embla-carousel-autoplay';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Clock } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { TbAutomaticGearbox, TbManualGearbox } from 'react-icons/tb';
 
 import { Card } from '@/components/ui/card';
 import {
@@ -36,21 +37,86 @@ export const Courses = () => {
 
   return (
     <section className='flex flex-col items-center justify-center text-black px-0 sm:px-20 pb-40 pt-60'>
-      <div className='container mx-auto'>
-        <div className='-mx-4 flex flex-wrap'>
-          <div className='w-full px-4'>
-            <div className='mx-auto mb-[60px] max-w-[610px] text-center'>
-              <h2 className='mb-6 text-3xl font-bold leading-[1.208] text-dark sm:text-4xl md:text-[40px]'>
-                Courses Customised For You
-              </h2>
-              <p className='text-base text-body-color'>
-                We offer a range of courses to help you pass your driving test
-                and become a safe driver for life.
-              </p>
+      <div className='relative bg-white py-16 sm:py-24 lg:py-32'>
+        <div className='mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl'>
+          <h2 className='text-base font-semibold tracking-wider text-red-600 uppercase'>
+            Courses
+          </h2>
+          <p className='mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl'>
+            Courses Customised For You
+          </p>
+          <p className='mt-5 max-w-prose mx-auto text-xl text-gray-500'>
+            We offer a range of courses to help you pass your driving test and
+            become a safe driver for life.
+          </p>
+          <div className='mt-12'>
+            <div className='grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3'>
+              <Link href='/courses'>
+                <div className='pt-6'>
+                  <div className='flow-root bg-gray-50 rounded-lg px-6 pb-8'>
+                    <div className='-mt-6'>
+                      <div>
+                        <span className='inline-flex items-center justify-center p-3 bg-red-500 rounded-md shadow-lg'>
+                          <TbManualGearbox className='size-6 text-white' />
+                        </span>
+                      </div>
+                      <h3 className='mt-8 text-lg font-medium text-gray-900 tracking-tight'>
+                        Manual Cars
+                      </h3>
+                      <p className='mt-5 text-base text-gray-500'>
+                        Looking to start your driving lessons in a manual car?
+                        Let's start today.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+
+              <Link href='/courses'>
+                <div className='pt-6'>
+                  <div className='flow-root bg-gray-50 rounded-lg px-6 pb-8'>
+                    <div className='-mt-6'>
+                      <div>
+                        <span className='inline-flex items-center justify-center p-3 bg-red-500 rounded-md shadow-lg'>
+                          <Clock className='size-6 text-white' />
+                        </span>
+                      </div>
+                      <h3 className='mt-8 text-lg font-medium text-gray-900 tracking-tight'>
+                        Intensive Courses
+                      </h3>
+                      <p className='mt-5 text-base text-gray-500'>
+                        Fast track your driving lessons by making it intensive.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+
+              <Link href='/courses'>
+                <div className='pt-6'>
+                  <div className='flow-root bg-gray-50 rounded-lg px-6 pb-8'>
+                    <div className='-mt-6'>
+                      <div>
+                        <span className='inline-flex items-center justify-center p-3 bg-red-500 rounded-md shadow-lg'>
+                          <TbAutomaticGearbox className='size-6 text-white' />
+                        </span>
+                      </div>
+                      <h3 className='mt-8 text-lg font-medium text-gray-900 tracking-tight'>
+                        Automatic Cars
+                      </h3>
+                      <p className='mt-5 text-base text-gray-500'>
+                        Interested in having driving lessons in an automatic
+                        car? We have you covered.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </Link>
             </div>
           </div>
         </div>
       </div>
+
       <Carousel
         opts={{
           align: 'start',
