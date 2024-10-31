@@ -52,12 +52,22 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
   const searchParams = useSearchParams();
   const courseId = searchParams.get('id') ?? courses[0].id;
 
-  // Fetch the initial selected course based on URL param or default to the first course
-  const initialCourse = courses.find(
+  const modifiedCourses = courses.map((course) => {
+    const hoursString = course.hours;
+    const parsedHours = parseInt(hoursString.match(/\d+/)?.[0] ?? '0', 10);
+
+    const additionalCost = 5 * Number(parsedHours);
+    return {
+      ...course,
+      manualPrice: course.price,
+      automaticPrice: Number(course.price) + Number(additionalCost),
+    };
+  });
+
+  const initialCourse = modifiedCourses.find(
     (course) => parseInt(course.id, 10) === parseInt(courseId, 10),
   )?.title;
 
-  // Initialize the form with default values and Zod schema resolver
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -68,19 +78,8 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
   });
 
   const selectedTransmission = form.watch('transmission');
-  const selectedCourse = form.watch('course'); // Watch for course selection changes
-
-  // Function to calculate price for each course, adjusting for transmission type
-  const calculatePrice = (basePrice: number): string => {
-    let finalPrice = basePrice;
-    if (selectedTransmission === 'automatic') {
-      finalPrice *= 1.1; // Add 10% for automatic transmission
-    }
-    return Number(finalPrice).toFixed(2).toString();
-  };
-
-  // Find the current selected course object
-  const currentCourse = courses.find(
+  const selectedCourse = form.watch('course');
+  const currentCourse = modifiedCourses.find(
     (course) => course.title === selectedCourse,
   );
 
@@ -91,14 +90,12 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
         method='POST'
         className='w-full sm:w-2/3 space-y-6'
       >
-        {/* Hidden input to send priceId */}
         <input
           type='hidden'
           name='priceId'
           value={currentCourse?.priceId ?? ''}
         />
 
-        {/* Course Selection Dropdown */}
         <FormField
           control={form.control}
           name='course'
@@ -112,9 +109,13 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {courses.map((course) => (
+                  {modifiedCourses.map((course) => (
                     <SelectItem key={course.id} value={course.title}>
-                      {course.title} (£{calculatePrice(course.price)})
+                      {course.title} (£
+                      {selectedTransmission === 'automatic'
+                        ? Number(course.automaticPrice).toFixed(2)
+                        : Number(course.manualPrice).toFixed(2)}
+                      )
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -185,7 +186,7 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
                       className='peer h-4 w-4 accent-primary text-primary focus:ring-primary border-gray-300 rounded'
                     />
                   </FormControl>
-                  <FormLabel htmlFor='automatic'>Automatic (+10%)</FormLabel>
+                  <FormLabel htmlFor='automatic'>Automatic (+£5)</FormLabel>
                 </div>
               </div>
               <FormMessage />

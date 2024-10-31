@@ -60,6 +60,7 @@ const Footer = () => {
                 link='https://www.safedrivingforlife.info/shop/car/'
                 label='eLearning Kit'
               />
+              <NavLink link='/products' label='Products' />
             </LinkGroup>
             <LinkGroup header='Company'>
               <NavLink
@@ -74,6 +75,7 @@ const Footer = () => {
               <NavLink link='/about' label='About' />
               <NavLink link='/dvsa' label='DVSA' />
               <NavLink link='/gallery' label='Gallery' />
+              <NavLink link='/about#reviews' label='Reviews' />
             </LinkGroup>
 
             <div className='w-full px-4 sm:w-1/2 lg:w-3/12'>
