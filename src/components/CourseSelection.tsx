@@ -54,6 +54,7 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
 
   const modifiedCourses = courses.map((course) => {
     const hoursString = course.hours;
+    // @ts-expect-error - We are sure that the match method will return a string
     const parsedHours = parseInt(hoursString.match(/\d+/)?.[0] ?? '0', 10);
 
     const additionalCost = 5 * Number(parsedHours);
