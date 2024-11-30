@@ -11,7 +11,6 @@ export async function POST(req: NextRequest) {
     const parsedBody = parse(body);
     const priceId = parsedBody.priceId as string;
     const intensive = parsedBody.intensive === 'on';
-    const transmission = parsedBody.transmission as string;
 
     // Validate the priceId
     if (!priceId) {
@@ -35,7 +34,6 @@ export async function POST(req: NextRequest) {
       payment_intent_data: {
         description: `
         Course Payment - Intensive: ${intensive ? 'Yes' : 'No'}
-        Transmission: ${transmission}
         `,
       },
       success_url: `${origin}/success?success=true`,
