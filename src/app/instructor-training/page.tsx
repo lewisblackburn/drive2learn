@@ -17,6 +17,7 @@ import * as React from 'react';
 import '@/lib/env';
 
 import Banner from '@/components/Banner';
+import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import InstructorReviews from '@/components/InstructorReviews';
 import Navbar from '@/components/Navbar';
@@ -38,6 +39,7 @@ export default function InstructorTrainingPage() {
         <FeatureOne />
         <FeatureTwo />
         <FeatureThree />
+        <Contact />
         <InstructorReviews />
       </section>
       <Footer />

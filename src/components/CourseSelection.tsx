@@ -38,7 +38,8 @@ interface Course {
   id: string;
   title: string;
   price: number;
-  priceId: string;
+  manualPriceId: string;
+  automaticPriceId: string;
   description: string;
   hours: number;
   deposit: number;
@@ -84,6 +85,14 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
     (course) => course.title === selectedCourse,
   );
 
+  // Determine the correct priceId based on the selected transmission type
+  const priceId =
+    selectedTransmission === 'automatic'
+      ? currentCourse?.automaticPriceId
+      : currentCourse?.manualPriceId;
+
+  console.log(priceId, currentCourse);
+
   return (
     <Form {...form}>
       <form
@@ -91,11 +100,7 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
         method='POST'
         className='w-full sm:w-2/3 space-y-6'
       >
-        <input
-          type='hidden'
-          name='priceId'
-          value={currentCourse?.priceId ?? ''}
-        />
+        <input type='hidden' name='priceId' value={priceId ?? ''} />
 
         <FormField
           control={form.control}
@@ -205,7 +210,10 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
               <b>Hours</b>: {currentCourse?.hours}
             </p>
             <p>
-              <b>Deposit</b>: £{currentCourse?.deposit}
+              <b>Deposit</b>: £
+              {selectedTransmission === 'automatic'
+                ? (Number(currentCourse?.deposit) + 5).toFixed(2)
+                : Number(currentCourse?.deposit).toFixed(2)}
             </p>
           </div>
         </p>

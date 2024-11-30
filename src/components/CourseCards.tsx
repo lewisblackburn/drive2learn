@@ -48,7 +48,6 @@ const editCourseSchema = z.object({
   title: z.string(),
   hours: z.string(),
   description: z.string(),
-  priceId: z.string(),
   price: z.string(),
   deposit: z.string(),
 });
@@ -111,7 +110,6 @@ export const CourseCards = () => {
       title: selectedCourse?.title ?? '',
       hours: selectedCourse?.hours ?? '',
       description: selectedCourse?.description ?? '',
-      priceId: selectedCourse?.priceId ?? '',
       price: selectedCourse?.price ?? '',
       deposit: selectedCourse?.deposit ?? '',
     },
@@ -122,7 +120,6 @@ export const CourseCards = () => {
       title: selectedCourse?.title ?? '',
       hours: selectedCourse?.hours ?? '',
       description: selectedCourse?.description ?? '',
-      priceId: selectedCourse?.priceId ?? '',
       price: selectedCourse?.price ?? '',
       deposit: selectedCourse?.deposit ?? '',
     });
@@ -219,22 +216,6 @@ export const CourseCards = () => {
               />
               <FormField
                 control={methods.control}
-                name='priceId'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Price ID</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Enter the Stripe price ID for the course
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={methods.control}
                 name='price'
                 render={({ field }) => (
                   <FormItem>
@@ -301,7 +282,6 @@ export const CourseCards = () => {
                   title: 'New Course',
                   hours: 'New Hours',
                   description: 'New Description',
-                  priceId: 'New Price ID',
                   price: 'New Price',
                   deposit: 'New Deposit',
                 });

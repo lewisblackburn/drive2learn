@@ -15,7 +15,8 @@ export interface Course {
   title: string;
   hours: string;
   description: string;
-  priceId: string;
+  manualPriceId: string;
+  automaticPriceId: string;
   price: string;
   deposit: string;
   order: number;
@@ -24,7 +25,6 @@ export interface NewCourse {
   title: string;
   hours: string;
   description: string;
-  priceId: string;
   price: string;
   deposit: string;
 }
