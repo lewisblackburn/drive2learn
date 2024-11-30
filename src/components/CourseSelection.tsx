@@ -91,8 +91,6 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
       ? currentCourse?.automaticPriceId
       : currentCourse?.manualPriceId;
 
-  console.log(priceId, currentCourse);
-
   return (
     <Form {...form}>
       <form
