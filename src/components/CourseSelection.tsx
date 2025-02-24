@@ -91,8 +91,6 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
       ? currentCourse?.automaticPriceId
       : currentCourse?.manualPriceId;
 
-  console.log(priceId, currentCourse);
-
   return (
     <Form {...form}>
       <form
@@ -216,6 +214,11 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
                 : Number(currentCourse?.deposit).toFixed(2)}
             </p>
           </div>
+        </p>
+
+        <p className='text-sm text-red-600 font-medium'>
+          Please call us or message to double-check availability before making a
+          booking.
         </p>
 
         {/* Submit Button */}

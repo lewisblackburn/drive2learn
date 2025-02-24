@@ -16,8 +16,6 @@ export async function POST(request: Request) {
       react: ContactEmail(body),
     });
 
-    // console.log(data, error);
-
     if (error) {
       return NextResponse.json(
         { message: 'Error sending email' },
