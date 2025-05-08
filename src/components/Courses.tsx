@@ -2,7 +2,9 @@ import Autoplay from 'embla-carousel-autoplay';
 import { ArrowRight, Clock } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { TbAutomaticGearbox, TbManualGearbox } from 'react-icons/tb';
+import { TbManualGearbox } from 'react-icons/tb';
+
+import { FaCar } from 'react-icons/fa';
 
 import { Card } from '@/components/ui/card';
 import {
@@ -92,21 +94,21 @@ export const Courses = () => {
                 </div>
               </Link>
 
-              <Link href='/courses'>
+              <Link href='/services?id=1'>
                 <div className='pt-6'>
                   <div className='flow-root bg-gray-50 rounded-lg px-6 pb-8'>
                     <div className='-mt-6'>
                       <div>
                         <span className='inline-flex items-center justify-center p-3 bg-red-500 rounded-md shadow-lg'>
-                          <TbAutomaticGearbox className='size-6 text-white' />
+                          <FaCar className='size-6 text-white' />
                         </span>
                       </div>
                       <h3 className='mt-8 text-lg font-medium text-gray-900 tracking-tight'>
-                        Automatic Cars
+                        Hire a Car
                       </h3>
                       <p className='mt-5 text-base text-gray-500'>
-                        Interested in having driving lessons in an automatic
-                        car? We have you covered.
+                        Need a car for your test? Drive 2 Learn offers
+                        stress-free manual vehicle hire.
                       </p>
                     </div>
                   </div>

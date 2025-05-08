@@ -29,9 +29,9 @@ import {
 const FormSchema = z.object({
   course: z.string().nonempty({ message: 'Please select a course.' }),
   intensive: z.boolean().optional(),
-  transmission: z.enum(['manual', 'automatic'], {
-    required_error: 'Please select a transmission type.',
-  }),
+  // transmission: z.enum(['manual', 'automatic'], {
+  //   required_error: 'Please select a transmission type.',
+  // }),
 });
 
 interface Course {
@@ -75,21 +75,22 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
     defaultValues: {
       course: initialCourse || '',
       intensive: false,
-      transmission: 'manual',
+      // transmission: 'manual',
     },
   });
 
-  const selectedTransmission = form.watch('transmission');
+  // const selectedTransmission = form.watch('transmission');
   const selectedCourse = form.watch('course');
   const currentCourse = modifiedCourses.find(
     (course) => course.title === selectedCourse,
   );
 
   // Determine the correct priceId based on the selected transmission type
-  const priceId =
-    selectedTransmission === 'automatic'
-      ? currentCourse?.automaticPriceId
-      : currentCourse?.manualPriceId;
+  // const priceId =
+  //   selectedTransmission === 'automatic'
+  //     ? currentCourse?.automaticPriceId
+  //     : currentCourse?.manualPriceId;
+  const priceId = currentCourse?.manualPriceId;
 
   return (
     <Form {...form}>
@@ -115,11 +116,12 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
                 <SelectContent>
                   {modifiedCourses.map((course) => (
                     <SelectItem key={course.id} value={course.title}>
-                      {course.title} (£
-                      {selectedTransmission === 'automatic'
-                        ? Number(course.automaticPrice).toFixed(2)
-                        : Number(course.manualPrice).toFixed(2)}
-                      )
+                      {course.title}
+                      {/* (£ */}
+                      {/* {selectedTransmission === 'automatic' */}
+                      {/*   ? Number(course.automaticPrice).toFixed(2) */}
+                      {/*   : Number(course.manualPrice).toFixed(2)} */}
+                      {/* ) */}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -159,44 +161,44 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
         />
 
         {/* Transmission Type Radio Buttons */}
-        <FormField
-          control={form.control}
-          name='transmission'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Transmission</FormLabel>
-              <div className='flex space-x-4'>
-                <div className='flex items-center space-x-2'>
-                  <FormControl>
-                    <Input
-                      type='radio'
-                      id='manual'
-                      value='manual'
-                      checked={field.value === 'manual'}
-                      onChange={field.onChange}
-                      className='peer h-4 w-4 accent-primary text-primary focus:ring-primary border-gray-300 rounded'
-                    />
-                  </FormControl>
-                  <FormLabel htmlFor='manual'>Manual</FormLabel>
-                </div>
-                <div className='flex items-center space-x-2'>
-                  <FormControl>
-                    <Input
-                      type='radio'
-                      id='automatic'
-                      value='automatic'
-                      checked={field.value === 'automatic'}
-                      onChange={field.onChange}
-                      className='peer h-4 w-4 accent-primary text-primary focus:ring-primary border-gray-300 rounded'
-                    />
-                  </FormControl>
-                  <FormLabel htmlFor='automatic'>Automatic (+£5)</FormLabel>
-                </div>
-              </div>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {/* <FormField */}
+        {/*   control={form.control} */}
+        {/*   name='transmission' */}
+        {/*   render={({ field }) => ( */}
+        {/*     <FormItem> */}
+        {/*       <FormLabel>Transmission</FormLabel> */}
+        {/*       <div className='flex space-x-4'> */}
+        {/*         <div className='flex items-center space-x-2'> */}
+        {/*           <FormControl> */}
+        {/*             <Input */}
+        {/*               type='radio' */}
+        {/*               id='manual' */}
+        {/*               value='manual' */}
+        {/*               checked={field.value === 'manual'} */}
+        {/*               onChange={field.onChange} */}
+        {/*               className='peer h-4 w-4 accent-primary text-primary focus:ring-primary border-gray-300 rounded' */}
+        {/*             /> */}
+        {/*           </FormControl> */}
+        {/*           <FormLabel htmlFor='manual'>Manual</FormLabel> */}
+        {/*         </div> */}
+        {/*         <div className='flex items-center space-x-2'> */}
+        {/*           <FormControl> */}
+        {/*             <Input */}
+        {/*               type='radio' */}
+        {/*               id='automatic' */}
+        {/*               value='automatic' */}
+        {/*               checked={field.value === 'automatic'} */}
+        {/*               onChange={field.onChange} */}
+        {/*               className='peer h-4 w-4 accent-primary text-primary focus:ring-primary border-gray-300 rounded' */}
+        {/*             /> */}
+        {/*           </FormControl> */}
+        {/*           <FormLabel htmlFor='automatic'>Automatic (+£5)</FormLabel> */}
+        {/*         </div> */}
+        {/*       </div> */}
+        {/*       <FormMessage /> */}
+        {/*     </FormItem> */}
+        {/*   )} */}
+        {/* /> */}
 
         {/* Course Description and Details */}
         <p>
@@ -208,10 +210,10 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
               <b>Hours</b>: {currentCourse?.hours}
             </p>
             <p>
-              <b>Deposit</b>: £
-              {selectedTransmission === 'automatic'
-                ? (Number(currentCourse?.deposit) + 5).toFixed(2)
-                : Number(currentCourse?.deposit).toFixed(2)}
+              <b>Deposit</b>: £{/* {selectedTransmission === 'automatic' */}
+              {/*   ? (Number(currentCourse?.deposit) + 5).toFixed(2) */}
+              {/*   : Number(currentCourse?.deposit).toFixed(2)} */}
+              {Number(currentCourse?.deposit).toFixed(2)}
             </p>
           </div>
         </p>
