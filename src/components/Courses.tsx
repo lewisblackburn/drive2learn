@@ -2,9 +2,8 @@ import Autoplay from 'embla-carousel-autoplay';
 import { ArrowRight, Clock } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { TbManualGearbox } from 'react-icons/tb';
-
 import { FaCar } from 'react-icons/fa';
+import { TbManualGearbox } from 'react-icons/tb';
 
 import { Card } from '@/components/ui/card';
 import {

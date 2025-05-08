@@ -86,18 +86,11 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
   );
 
   // Determine the correct priceId based on the selected transmission type
-<<<<<<< HEAD
   // const priceId =
   //   selectedTransmission === 'automatic'
   //     ? currentCourse?.automaticPriceId
   //     : currentCourse?.manualPriceId;
   const priceId = currentCourse?.manualPriceId;
-=======
-  const priceId =
-    selectedTransmission === 'automatic'
-      ? currentCourse?.automaticPriceId
-      : currentCourse?.manualPriceId;
->>>>>>> c27f5bfa740a874579fca718485595d67e22f307
 
   return (
     <Form {...form}>
