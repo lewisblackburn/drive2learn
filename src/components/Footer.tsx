@@ -4,7 +4,6 @@ import {
   RiGoogleLine,
   RiInstagramLine,
   RiLinkedinLine,
-  RiMapPin2Line,
   RiPhoneLine,
   RiTiktokLine,
 } from 'react-icons/ri';
@@ -31,15 +30,6 @@ const Footer = () => {
                     <RiPhoneLine className='text-primary text-xl mr-2' />
                     <span>0333 772 3575</span>
                   </p>
-                  <a
-                    href='https://www.google.com/maps?q=Unit+45,+Innovation+Way,+S75+1JL'
-                    className='flex items-center text-sm font-medium text-dark'
-                    target='_blank'
-                    rel='noopener noreferrer'
-                  >
-                    <RiMapPin2Line className='text-primary text-xl mr-2' />
-                    <span>Unit 45, Innovation Way, S75 1JL</span>
-                  </a>
                   <p className='text-sm text-muted-foreground'>
                     Please make an appointment if you wish to meet the team 🙂
                   </p>
