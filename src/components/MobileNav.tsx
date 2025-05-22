@@ -1,6 +1,7 @@
 import { MenuIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -13,19 +14,23 @@ import {
 import { siteConfig } from '@/constant/config';
 
 export const MobileNav = ({ image }: { image: string }) => {
+  const [open, setOpen] = useState(false);
   const filepath = process.env.NEXT_PUBLIC_STORAGE_URL
     ? process.env.NEXT_PUBLIC_STORAGE_URL + image
     : '';
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger className='block lg:hidden'>
         <MenuIcon />
       </SheetTrigger>
-      <SheetContent className='flex flex-col h-full justify-between overflow-y-scroll'>
+      <SheetContent
+        className='flex flex-col h-full justify-between overflow-y-scroll'
+        onCloseAutoFocus={(event) => event.preventDefault()}
+      >
         <div className='flex flex-col space-y-2 items-start'>
           {siteConfig.mobileNavigationLinks.map((link, index) => (
-            <Link href={link.href} key={index}>
+            <Link href={link.href} key={index} onClick={() => setOpen(false)}>
               <Button variant='ghost'>{link.title}</Button>
             </Link>
           ))}

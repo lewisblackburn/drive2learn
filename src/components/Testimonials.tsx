@@ -52,6 +52,7 @@ const testimonials = [
 
 const Testimonials = () => {
   const [isMobile, setIsMobile] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [api, setApi] = useState<any>();
 
   useEffect(() => {
@@ -83,7 +84,7 @@ const Testimonials = () => {
   );
 
   return (
-    <section className='py-24 bg-white text-black'>
+    <section className='py-24 bg-white text-black' id='testimonials'>
       <div className='container flex flex-col items-center gap-4'>
         <h2 className='text-center text-3xl font-semibold lg:text-4xl text-black'>
           Trusted by Driving Instructors

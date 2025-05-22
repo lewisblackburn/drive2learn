@@ -116,6 +116,14 @@ export const siteConfig = {
       title: 'Products',
       href: '/products',
     },
+    {
+      title: 'Reviews',
+      href: '/about#reviews',
+    },
+    {
+      title: 'Testimonials',
+      href: '/#testimonials',
+    },
   ],
   dashboardNavigationLinks: [
     {
