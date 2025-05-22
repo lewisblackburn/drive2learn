@@ -44,7 +44,7 @@ const Contact = () => {
     <>
       <section
         id='contact'
-        className='relative z-10 overflow-hidden bg-white pb-12 pt-10 lg:pb-[90px]'
+        className='relative z-10 overflow-hidden bg-white py-24'
       >
         <div className='container'>
           <div className='-mx-4 flex flex-wrap lg:justify-between'>

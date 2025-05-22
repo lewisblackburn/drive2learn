@@ -4,8 +4,8 @@ import Link from 'next/link';
 
 export default function LogoCloud() {
   return (
-    <div className='bg-red-200 bg-opacity-25'>
-      <div className='max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 '>
+    <div className='bg-red-200 bg-opacity-25 py-24'>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className=''>
           <h2 className='max-w-md mx-auto text-3xl font-extrabold text-red-900 text-center '>
             We are huge supporters of Brake the road safety charity.
@@ -28,8 +28,8 @@ export default function LogoCloud() {
 
 export function LogoCloud2() {
   return (
-    <div className='bg-red-200 bg-opacity-25'>
-      <div className='max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 '>
+    <div className='bg-red-200 bg-opacity-25 py-24'>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className=''>
           <h2 className='max-w-md mx-auto text-3xl font-extrabold text-red-900 text-center '>
             We are proud to be members of the following associations.

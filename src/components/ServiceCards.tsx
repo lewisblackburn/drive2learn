@@ -33,7 +33,7 @@ export const ServiceCards = () => {
   ));
 
   return (
-    <section className='relative z-10 overflow-hidden bg-white pb-12 pt-10 lg:pb-[90px]'>
+    <section className='relative z-10 overflow-hidden bg-white py-24'>
       <div className='container mx-auto'>
         <div className='-mx-4 flex flex-wrap'>
           <div className='w-full px-4'>

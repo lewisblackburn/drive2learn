@@ -12,6 +12,7 @@ import { Hours } from '@/components/Hours';
 import LogoCloud, { LogoCloud2 } from '@/components/LogoCloud';
 import Navbar from '@/components/Navbar';
 import { ServiceCards } from '@/components/ServiceCards';
+import { Testimonials } from '@/components/Testimonials';
 
 export default function HomePage() {
   return (
@@ -29,6 +30,7 @@ export default function HomePage() {
         <Hours />
         <LogoCloud />
         <LogoCloud2 />
+        <Testimonials />
       </section>
       <Footer />
     </main>
