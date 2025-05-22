@@ -14,7 +14,11 @@ import { useData } from '@/app/hooks/useData';
 
 const Content = dynamic(() => import('@/components/Content'), {
   ssr: false,
-});
+}) as React.FC<{
+  title?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  content?: any;
+}>;
 
 export default function TermsPage() {
   const { loading: dataLoading, getDataById } = useData();
@@ -32,7 +36,7 @@ export default function TermsPage() {
       <section>
         <PageHeader
           title='Terms and Conditions'
-          description='These terms and conditions outline the rules and regulations for the use of Drive 2 Learn’s Website.'
+          description="These terms and conditions outline the rules and regulations for the use of Drive 2 Learn's Website."
           image='/images/headers/4.jpg'
         />
       </section>

@@ -20,7 +20,7 @@ const SelectFormClient = dynamic(() => import('@/components/CourseSelection'), {
 });
 const Content = dynamic(() => import('@/components/Content'), {
   ssr: false,
-}) as React.ComponentType<{
+}) as React.FC<{
   title?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   content?: any;

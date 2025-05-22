@@ -12,7 +12,7 @@ interface ContentProps {
   content?: OutputData | undefined;
 }
 
-const Content = ({ title, content }: ContentProps) => {
+const Content: React.FC<ContentProps> = ({ title, content }) => {
   const editorRef = useRef<EditorJS | null>(null);
   const editorContainerRef = useRef<HTMLDivElement>(null);
 
