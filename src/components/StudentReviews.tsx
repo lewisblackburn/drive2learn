@@ -2,6 +2,7 @@
 
 import { StarIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect } from 'react';
 import { RiGoogleFill } from 'react-icons/ri';
 
 import { cn } from '@/lib/utils';
@@ -17,8 +18,17 @@ export default function StudentReviews() {
     'student',
   );
 
+  useEffect(() => {
+    setTimeout(() => {
+      const termsElement = document.getElementById('reviews');
+      if (termsElement && window.location.hash === '#reviews') {
+        termsElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 500);
+  }, [loading]); // Ensure data is loaded before attempting to scroll
+
   return (
-    <section id='reviews' className='bg-white scroll-mt-32'>
+    <section id='reviews' className='bg-white scroll-mt-0'>
       <div className='max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8 lg:grid lg:grid-cols-12 lg:gap-x-8'>
         {/* Review Summary Section */}
         <div className='lg:col-span-4'>
