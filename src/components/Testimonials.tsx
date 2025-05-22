@@ -84,7 +84,10 @@ const Testimonials = () => {
   );
 
   return (
-    <section className='py-24 bg-white text-black' id='testimonials'>
+    <section
+      id='testimonials'
+      className='py-24 bg-white text-black scroll-mt-0'
+    >
       <div className='container flex flex-col items-center gap-4'>
         <h2 className='text-center text-3xl font-semibold lg:text-4xl text-black'>
           Trusted by Driving Instructors

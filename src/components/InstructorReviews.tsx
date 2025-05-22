@@ -20,7 +20,7 @@ export default function InstructorReviews() {
   if (count === 0 && !loading) return null;
 
   return (
-    <section id='reviews' className='bg-white'>
+    <section id='reviews' className='bg-white scroll-mt-0'>
       <div className='max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8 lg:grid lg:grid-cols-12 lg:gap-x-8'>
         {/* Review Summary Section */}
         <div className='lg:col-span-4'>
