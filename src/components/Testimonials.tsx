@@ -2,7 +2,7 @@
 
 import AutoScroll from 'embla-carousel-auto-scroll';
 import { Star } from 'lucide-react';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
@@ -51,10 +51,34 @@ const testimonials = [
 ];
 
 const Testimonials = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  const [api, setApi] = useState<any>();
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (!api || !isMobile) return;
+
+    const interval = setInterval(() => {
+      api.scrollNext();
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [api, isMobile]);
+
   const plugin = useRef(
     AutoScroll({
-      startDelay: 500,
       speed: 0.7,
+      stopOnInteraction: true,
+      stopOnMouseEnter: true,
     }),
   );
 
@@ -73,10 +97,13 @@ const Testimonials = () => {
           <Carousel
             opts={{
               loop: true,
+              align: 'center',
             }}
-            plugins={[plugin.current]}
-            onMouseLeave={() => plugin.current.play()}
-            className='relative before:absolute before:top-0 before:bottom-0 before:left-0 before:z-10 before:w-36 before:bg-gradient-to-r before:from-white before:to-transparent after:absolute after:top-0 after:right-0 after:bottom-0 after:z-10 after:w-36 after:bg-gradient-to-l after:from-white after:to-transparent'
+            plugins={!isMobile ? [plugin.current] : []}
+            onMouseEnter={() => !isMobile && plugin.current.stop()}
+            onMouseLeave={() => !isMobile && plugin.current.play()}
+            setApi={setApi}
+            className='relative before:absolute before:top-0 before:bottom-0 before:left-0 before:z-10 before:w-12 sm:before:w-36 before:bg-gradient-to-r before:from-white before:to-transparent after:absolute after:top-0 after:right-0 after:bottom-0 after:z-10 after:w-12 sm:after:w-36 after:bg-gradient-to-l after:from-white after:to-transparent'
           >
             <CarouselContent>
               {testimonials.map((testimonial, index) => (
