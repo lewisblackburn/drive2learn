@@ -20,7 +20,11 @@ const SelectFormClient = dynamic(() => import('@/components/CourseSelection'), {
 });
 const Content = dynamic(() => import('@/components/Content'), {
   ssr: false,
-});
+}) as React.ComponentType<{
+  title?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  content?: any;
+}>;
 
 export default function CoursesPage() {
   const { loading: dataLoading, getDataById } = useData();

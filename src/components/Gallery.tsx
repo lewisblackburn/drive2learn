@@ -4,14 +4,14 @@ import React from 'react';
 
 import { cn } from '@/lib/utils';
 
-import NextImage from '@/components/NextImage';
+import ImageWithSkeleton from '@/components/image-with-skeleton';
 
 import { Image as ImageType } from '@/app/hooks/useImages';
 import { useSupabase } from '@/app/hooks/useSupabase';
 
 interface GalleryProps {
   images: ImageType[];
-  onDelete: (id: number, image: string) => void; // New prop for handling delete
+  onDelete: (id: number, image: string) => void;
   className?: string;
 }
 
@@ -39,18 +39,16 @@ export const Gallery: React.FC<GalleryProps> = ({
           : '';
 
         return (
-          <div
-            key={image.id}
-            className='relative w-full h-[500px] pb-[100%] group'
-          >
-            <NextImage
+          <div key={image.id} className='relative w-full aspect-[4/5] group'>
+            <ImageWithSkeleton
               src={filepath}
               alt={`Image ${image.id}`}
-              layout='fill' // Make the image fill the parent container
-              objectFit='cover' // Ensure the image covers the entire area
-              classNames={{
-                image: `rounded-lg transition-all duration-100 ${canDelete ? 'group-hover:brightness-[25%] cursor-pointer' : ''}`,
-              }}
+              fill
+              wrapperClassName='absolute inset-0'
+              imageClassName={cn(
+                'rounded-lg transition-all duration-100 object-cover',
+                canDelete ? 'group-hover:brightness-[25%] cursor-pointer' : '',
+              )}
               onClick={
                 canDelete ? () => onDelete(image.id, image.image) : undefined
               }
@@ -60,7 +58,7 @@ export const Gallery: React.FC<GalleryProps> = ({
                 className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-red-500 w-12 h-12 opacity-0 group-hover:opacity-100 transition-opacity duration-200'
                 onClick={(e) => {
                   if (canDelete) {
-                    e.stopPropagation(); // Prevent image click event
+                    e.stopPropagation();
                     onDelete(image.id, image.image);
                   }
                 }}

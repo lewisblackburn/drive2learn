@@ -3,7 +3,6 @@
 import EditorJS, { OutputData } from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import NestedList from '@editorjs/nested-list';
-import dynamic from 'next/dynamic';
 import React, { useEffect, useRef } from 'react';
 
 import '@/styles/editor.css';
@@ -55,4 +54,4 @@ const Content = ({ title, content }: ContentProps) => {
   );
 };
 
-export default dynamic(() => Promise.resolve(Content), { ssr: false });
+export default Content;
