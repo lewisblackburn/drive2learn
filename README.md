@@ -2,16 +2,6 @@
 
 Welcome to the Drive2Learn repository! This project is a fully-featured car driving course website developed for a client to advertise their driving school business. The site offers a smooth user experience, secure payment processing, and real-time database interaction.
 
-## Table of Contents
-
-- [Features](#features)
-- [Technologies Used](#technologies-used)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
-
 ## Features
 
 - **Responsive Design**: Built with Next.js to ensure a seamless experience across all devices.
