@@ -16,35 +16,35 @@ const testimonials = [
   {
     name: 'Zain, Stoke',
     role: 'Driving Instructor',
-    avatar: '/images/avatars/avatar-1.webp',
+    avatar: '/images/avatars/avatar-4.webp',
     content:
       'I initially contacted Alex for support with my ADI Part 2 test, and thanks to his guidance and expertise, I was able to pass with confidence. I then continued by training with him for the ADI Part 3 test, which I passed first time \n Alex has been consistently supportive throughout the entire process - always approachable, knowledgeable, and generous with his time. His clam and professional approach made a real difference.',
   },
   {
     name: 'Rachel, Nottingham',
     role: 'Driving Instructor',
-    avatar: '/images/avatars/avatar-2.webp',
+    avatar: '/images/avatars/avatar-7.webp',
     content:
       'Worked with Drive 2 Learn for 6 months during my sponsorship with them. Alex and the team really did go the extra mile to make sure I was ready for my Part 3. In the end, I passed first time. I have been reccomending them to everyone. Thank you again Alex and team.',
   },
   {
     name: 'Steve, Hull',
     role: 'Driving Instructor',
-    avatar: '/images/avatars/avatar-3.webp',
+    avatar: '/images/avatars/avatar-5.webp',
     content:
       'I was really impressed with Alex and how much knowledge and expertise he has. I have been an instructor for 9 years now and just had my first standards check. I was so nervous that I wanted extra training to prepare. I only spent 6 hours with Alex and in that short time, I learned so much. With out doubt, I will be doing more training with Alex in the future.',
   },
   {
     name: 'Mohammed, Leeds',
     role: 'Driving Instructor',
-    avatar: '/images/avatars/avatar-4.webp',
+    avatar: '/images/avatars/avatar-2.webp',
     content:
       "Thank you Alex so much for your help. I don't mind saying that I have failed my Part 3, three times and when I had to go round again... Alex and Drive 2 Learn got me through the Part 3 first time. I wish I went with you the first time. Highly recommend.",
   },
   {
     name: 'Faye, Lincoln',
     role: 'Driving Instructor',
-    avatar: '/images/avatars/avatar-5.webp',
+    avatar: '/images/avatars/avatar-3.webp',
     content:
       'I have been working with Drive 2 Learn for 5 years now. I go out with Alex now and again to be the best I can be and keep my standards high. I honestly love working with Alex, he is a true professional, very grounded and just an emotionally intelligent Instructor Trainer.',
   },
