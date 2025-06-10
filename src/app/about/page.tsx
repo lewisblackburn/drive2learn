@@ -4,9 +4,7 @@ import '@/lib/env';
 
 import { createClient } from '@/lib/supabase/server';
 
-import Banner from '@/components/Banner';
 import Footer from '@/components/Footer';
-import Navbar from '@/components/Navbar';
 import PageHeader from '@/components/PageHeader';
 import { Recruitment } from '@/components/Recruitment';
 import StudentReviews from '@/components/StudentReviews';
@@ -28,11 +26,6 @@ export default async function AboutPage() {
 
   return (
     <main className='flex flex-col min-h-screen'>
-      <header>
-        <Banner />
-        <Navbar />
-      </header>
-
       <section>
         <PageHeader
           title='About Us'

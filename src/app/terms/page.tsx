@@ -4,9 +4,7 @@ import dynamic from 'next/dynamic';
 import * as React from 'react';
 import '@/lib/env';
 
-import Banner from '@/components/Banner';
 import Footer from '@/components/Footer';
-import Navbar from '@/components/Navbar';
 import PageHeader from '@/components/PageHeader';
 import PageLoader from '@/components/PageLoader';
 
@@ -28,11 +26,6 @@ export default function TermsPage() {
 
   return (
     <main className='flex flex-col min-h-screen'>
-      <header>
-        <Banner />
-        <Navbar />
-      </header>
-
       <section>
         <PageHeader
           title='Terms and Conditions'

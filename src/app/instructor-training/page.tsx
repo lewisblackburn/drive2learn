@@ -16,20 +16,14 @@ import {
 import * as React from 'react';
 import '@/lib/env';
 
-import Banner from '@/components/Banner';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import InstructorReviews from '@/components/InstructorReviews';
-import Navbar from '@/components/Navbar';
 import PageHeader from '@/components/PageHeader';
 
 export default function InstructorTrainingPage() {
   return (
     <main className='flex flex-col h-screen justify-between'>
-      <header>
-        <Banner />
-        <Navbar />
-      </header>
       {/* mb-auto needed for bottom footer */}
       <section className='mb-auto'>
         <PageHeader

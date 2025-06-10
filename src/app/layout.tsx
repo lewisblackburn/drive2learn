@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { Inter as FontSans } from 'next/font/google';
+import { Poppins as FontSans } from 'next/font/google';
 import * as React from 'react';
 
 import '@/styles/globals.css';
@@ -8,12 +8,14 @@ import '@/styles/colors.css';
 
 import { cn } from '@/lib/utils';
 
+import Header from '@/components/Header';
 import { Toaster } from '@/components/ui/toaster';
 
 import { siteConfig } from '@/constant/config';
 
 const fontSans = FontSans({
   subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
   variable: '--font-sans',
 });
 
@@ -72,6 +74,7 @@ export default function RootLayout({
           fontSans.variable,
         )}
       >
+        <Header />
         {children}
         <Toaster />
       </body>
