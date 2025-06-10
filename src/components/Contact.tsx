@@ -54,12 +54,14 @@ const Contact = () => {
         variant: 'default',
       });
       form.reset();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'Failed to send your message. Please try again later.';
       toast({
         title: 'Something went wrong',
-        description:
-          error?.message ||
-          'Failed to send your message. Please try again later.',
+        description: errorMessage,
         variant: 'destructive',
       });
     } finally {

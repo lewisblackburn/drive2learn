@@ -240,7 +240,6 @@ export const ServiceEditCards = () => {
               addService({
                 title: 'New Service',
                 description: 'New Description',
-                priceId: 'New Price ID',
                 price: 'New Price',
                 points: 'Point 1, Point 2, Point 3, Point 4',
               });

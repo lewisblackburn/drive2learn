@@ -18,7 +18,6 @@ export interface Service {
 export interface NewService {
   title: string;
   description: string;
-  priceId: string;
   price: string;
   points: string;
 }
