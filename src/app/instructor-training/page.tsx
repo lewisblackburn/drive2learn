@@ -43,9 +43,9 @@ export default function InstructorTrainingPage() {
 
 const featuresOne = [
   {
-    name: 'Personalized 1-on-1 Coaching',
+    name: 'Personalised 1-on-1 Coaching',
     description:
-      'Our program offers personalized 1-on-1 coaching to ensure each trainee gets tailored guidance. This approach helps address individual strengths and weaknesses, providing customized study plans and immediate feedback for maximized potential.',
+      'Our program offers personalised 1-on-1 coaching to ensure each trainee gets tailored guidance. This approach helps address individual strengths and weaknesses, providing customised study plans and immediate feedback for maximised potential.',
     icon: BookHeart,
   },
   {
@@ -55,9 +55,9 @@ const featuresOne = [
     icon: ClockIcon,
   },
   {
-    name: 'Organized Study Groups',
+    name: 'Organised Study Groups',
     description:
-      'Our organized study groups promote collaborative learning. These groups help trainees share knowledge, discuss complex topics, and prepare for assessments together, fostering a sense of community and mutual support.',
+      'Our organised study groups promote collaborative learning. These groups help trainees share knowledge, discuss complex topics, and prepare for assessments together, fostering a sense of community and mutual support.',
     icon: Users,
   },
   {

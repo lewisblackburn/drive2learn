@@ -262,7 +262,7 @@ Preferences:
               <InfoIcon className='h-4 w-4 text-primary' />
               <AlertDescription className='font-medium'>
                 Our base price is £40 per hour. Select your preferences below to
-                customize your course.
+                customise your course.
               </AlertDescription>
             </Alert>
 
