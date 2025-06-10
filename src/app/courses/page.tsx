@@ -54,6 +54,7 @@ export default function CoursesPage() {
         <PageHeader
           title='Choose Your Course'
           description='Pick a course that suits you.'
+          image='https://images.unsplash.com/photo-1525130413817-d45c1d127c42?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1920&q=60&&sat=-100'
         />
         <div className='relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8'>
           <div className='container mx-auto px-4 py-8'>
