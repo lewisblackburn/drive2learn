@@ -162,21 +162,18 @@ export const Courses = () => {
                         <div className='p-5 flex-grow'>
                           <h1 className='font-bold text-lg'>{course.title}</h1>
                           <h2 className='font-semibold text-md my-2'>
-                            {course.hours} - £{course.price}
+                            {course.hours}
                           </h2>
                           <p className='text-secondary-foreground/60 font-medium mb-4'>
                             {course.description}
                           </p>
                         </div>
-                        <div className='p-5 mt-auto flex justify-between items-center'>
-                          <p className='text-secondary-foreground/60 font-medium'>
-                            Deposit: £{course.deposit}
-                          </p>
+                        <div className='p-5 mt-auto flex justify-end items-center'>
                           <Link
                             href={`/courses?id=${course.id}`}
                             className='text-primary font-medium flex items-center'
                           >
-                            Find Out More
+                            Book Now
                             <ArrowRight className='ml-1 h-4 w-4' />
                           </Link>
                         </div>

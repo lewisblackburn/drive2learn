@@ -6,6 +6,9 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { sendContactForm } from '@/lib/api';
+
+import Spinner from '@/components/Spinner';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -24,22 +27,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useToast } from '@/components/ui/use-toast';
 
 // Form validation schema using Zod
 const FormSchema = z.object({
   course: z.string().nonempty({ message: 'Please select a course.' }),
   intensive: z.boolean().optional(),
-  // transmission: z.enum(['manual', 'automatic'], {
-  //   required_error: 'Please select a transmission type.',
-  // }),
+  ownCar: z.boolean().optional(),
+  name: z.string().nonempty({ message: 'Please enter your name.' }),
+  phone: z.string().nonempty({ message: 'Please enter your phone number.' }),
 });
 
 interface Course {
   id: string;
   title: string;
   price: number;
-  manualPriceId: string;
-  automaticPriceId: string;
   description: string;
   hours: number;
   deposit: number;
@@ -52,6 +54,8 @@ interface CourseSelectionProps {
 export default function CourseSelection({ courses }: CourseSelectionProps) {
   const searchParams = useSearchParams();
   const courseId = searchParams.get('id') ?? courses[0].id;
+  const { toast } = useToast();
+  const [loading, setLoading] = React.useState(false);
 
   const modifiedCourses = courses.map((course) => {
     const hoursString = course.hours;
@@ -75,31 +79,101 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
     defaultValues: {
       course: initialCourse || '',
       intensive: false,
-      // transmission: 'manual',
+      ownCar: false,
+      name: '',
+      phone: '',
     },
   });
 
-  // const selectedTransmission = form.watch('transmission');
   const selectedCourse = form.watch('course');
+  const isIntensive = form.watch('intensive');
+  const isOwnCar = form.watch('ownCar');
   const currentCourse = modifiedCourses.find(
     (course) => course.title === selectedCourse,
   );
 
-  // Determine the correct priceId based on the selected transmission type
-  // const priceId =
-  //   selectedTransmission === 'automatic'
-  //     ? currentCourse?.automaticPriceId
-  //     : currentCourse?.manualPriceId;
-  const priceId = currentCourse?.manualPriceId;
+  const calculatePrice = (basePrice: number) => {
+    let finalPrice = basePrice;
+    if (isIntensive) finalPrice += 5;
+    if (isOwnCar) finalPrice -= 5;
+    return finalPrice;
+  };
+
+  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    setLoading(true);
+    try {
+      const message = `
+Course: ${data.course}
+Intensive Course: ${data.intensive ? 'Yes (+£5)' : 'No'}
+Own Car: ${data.ownCar ? 'Yes (-£5)' : 'No'}
+Hours: ${currentCourse?.hours}
+
+Customer Details:
+Name: ${data.name}
+Phone: ${data.phone}
+      `;
+
+      const result = await sendContactForm({
+        subject: "Drive2Learn's Course Booking",
+        name: data.name,
+        email: 'bookings@drive2learn.co.uk',
+        phone: data.phone,
+        message,
+      });
+
+      toast({
+        title: result.message,
+      });
+
+      form.reset();
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to send booking request. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Form {...form}>
       <form
-        action='/api/checkout'
-        method='POST'
+        onSubmit={form.handleSubmit(onSubmit)}
         className='w-full sm:w-2/3 space-y-6'
       >
-        <input type='hidden' name='priceId' value={priceId ?? ''} />
+        <FormField
+          control={form.control}
+          name='name'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Your Name</FormLabel>
+              <FormControl>
+                <Input placeholder='Enter your name' {...field} />
+              </FormControl>
+              <FormDescription>Please enter your full name.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name='phone'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Your Phone Number</FormLabel>
+              <FormControl>
+                <Input placeholder='Enter your phone number' {...field} />
+              </FormControl>
+              <FormDescription>
+                We'll contact you on this number to confirm your booking.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
@@ -117,11 +191,6 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
                   {modifiedCourses.map((course) => (
                     <SelectItem key={course.id} value={course.title}>
                       {course.title}
-                      {/* (£ */}
-                      {/* {selectedTransmission === 'automatic' */}
-                      {/*   ? Number(course.automaticPrice).toFixed(2) */}
-                      {/*   : Number(course.manualPrice).toFixed(2)} */}
-                      {/* ) */}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -134,73 +203,63 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
           )}
         />
 
-        {/* Intensive Course Checkbox */}
-        <FormField
-          control={form.control}
-          name='intensive'
-          render={({ field }) => (
-            <FormItem>
-              <div className='flex space-x-2 items-center'>
-                <FormControl>
-                  <Input
-                    type='checkbox'
-                    id='intensive'
-                    checked={field.value}
-                    onChange={field.onChange}
-                    className='peer h-4 w-4 accent-primary text-primary focus:ring-primary border-gray-300 rounded'
-                  />
-                </FormControl>
-                <FormLabel htmlFor='intensive'>Intensive Course</FormLabel>
-              </div>
-              <FormDescription>
-                Select this option to book an intensive course.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className='flex flex-col space-y-4'>
+          <FormField
+            control={form.control}
+            name='intensive'
+            render={({ field }) => (
+              <FormItem>
+                <div className='flex space-x-2 items-center'>
+                  <FormControl>
+                    <Input
+                      type='checkbox'
+                      id='intensive'
+                      checked={field.value}
+                      onChange={field.onChange}
+                      className='peer h-4 w-4 accent-primary text-primary focus:ring-primary border-gray-300 rounded'
+                    />
+                  </FormControl>
+                  <FormLabel htmlFor='intensive'>
+                    Intensive Course (+£5)
+                  </FormLabel>
+                </div>
+                <FormDescription>
+                  Select this option to book an intensive course.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        {/* Transmission Type Radio Buttons */}
-        {/* <FormField */}
-        {/*   control={form.control} */}
-        {/*   name='transmission' */}
-        {/*   render={({ field }) => ( */}
-        {/*     <FormItem> */}
-        {/*       <FormLabel>Transmission</FormLabel> */}
-        {/*       <div className='flex space-x-4'> */}
-        {/*         <div className='flex items-center space-x-2'> */}
-        {/*           <FormControl> */}
-        {/*             <Input */}
-        {/*               type='radio' */}
-        {/*               id='manual' */}
-        {/*               value='manual' */}
-        {/*               checked={field.value === 'manual'} */}
-        {/*               onChange={field.onChange} */}
-        {/*               className='peer h-4 w-4 accent-primary text-primary focus:ring-primary border-gray-300 rounded' */}
-        {/*             /> */}
-        {/*           </FormControl> */}
-        {/*           <FormLabel htmlFor='manual'>Manual</FormLabel> */}
-        {/*         </div> */}
-        {/*         <div className='flex items-center space-x-2'> */}
-        {/*           <FormControl> */}
-        {/*             <Input */}
-        {/*               type='radio' */}
-        {/*               id='automatic' */}
-        {/*               value='automatic' */}
-        {/*               checked={field.value === 'automatic'} */}
-        {/*               onChange={field.onChange} */}
-        {/*               className='peer h-4 w-4 accent-primary text-primary focus:ring-primary border-gray-300 rounded' */}
-        {/*             /> */}
-        {/*           </FormControl> */}
-        {/*           <FormLabel htmlFor='automatic'>Automatic (+£5)</FormLabel> */}
-        {/*         </div> */}
-        {/*       </div> */}
-        {/*       <FormMessage /> */}
-        {/*     </FormItem> */}
-        {/*   )} */}
-        {/* /> */}
+          <FormField
+            control={form.control}
+            name='ownCar'
+            render={({ field }) => (
+              <FormItem>
+                <div className='flex space-x-2 items-center'>
+                  <FormControl>
+                    <Input
+                      type='checkbox'
+                      id='ownCar'
+                      checked={field.value}
+                      onChange={field.onChange}
+                      className='peer h-4 w-4 accent-primary text-primary focus:ring-primary border-gray-300 rounded'
+                    />
+                  </FormControl>
+                  <FormLabel htmlFor='ownCar'>
+                    Using Your Own Car (-£5)
+                  </FormLabel>
+                </div>
+                <FormDescription>
+                  Select this option if you'll be using your own car for the
+                  lessons.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
-        {/* Course Description and Details */}
         <p>
           {currentCourse?.description}
           <br />
@@ -209,22 +268,12 @@ export default function CourseSelection({ courses }: CourseSelectionProps) {
             <p>
               <b>Hours</b>: {currentCourse?.hours}
             </p>
-            <p>
-              <b>Deposit</b>: £{/* {selectedTransmission === 'automatic' */}
-              {/*   ? (Number(currentCourse?.deposit) + 5).toFixed(2) */}
-              {/*   : Number(currentCourse?.deposit).toFixed(2)} */}
-              {Number(currentCourse?.deposit).toFixed(2)}
-            </p>
           </div>
         </p>
 
-        <p className='text-sm text-red-600 font-medium'>
-          Please call us or message to double-check availability before making a
-          booking.
-        </p>
-
-        {/* Submit Button */}
-        <Button type='submit'>Make a Deposit</Button>
+        <Button type='submit' disabled={loading}>
+          {loading ? <Spinner className='text-white' /> : 'Request Booking'}
+        </Button>
       </form>
     </Form>
   );

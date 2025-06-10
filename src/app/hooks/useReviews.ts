@@ -36,6 +36,40 @@ export const useReviews = (
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
+  const getRandomReviews = async (limit = 5) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      let query = supabase
+        .from('reviews')
+        .select('*')
+        .order('random()', { ascending: true })
+        .limit(limit);
+
+      if (reviewType) {
+        query = query.eq('type', reviewType);
+      }
+
+      const { data, error: fetchError } = await query;
+
+      if (fetchError) throw fetchError;
+
+      if (data) {
+        setReviews(data);
+      }
+    } catch (err) {
+      setError('Failed to fetch random reviews. Please try again later.');
+      toast({
+        title: 'Error',
+        description: String(err),
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const searchReviews = async (query: string) => {
     setLoading(true);
     setError(null);
@@ -45,7 +79,6 @@ export const useReviews = (
       const { data, error: fetchError } = await supabase
         .from('reviews')
         .select('*')
-        // .textSearch('name', query, { type: 'websearch', config: 'english' });
         .or(`name.ilike.%${query}%,description.ilike.%${query}%`);
 
       if (fetchError) throw fetchError;
@@ -214,5 +247,6 @@ export const useReviews = (
     deleteReview,
     searchReviews,
     fetchReviews,
+    getRandomReviews,
   };
 };

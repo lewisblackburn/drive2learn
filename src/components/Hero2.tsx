@@ -1,4 +1,10 @@
-import { Award, Clock, DollarSign, MoveRight, Shield } from 'lucide-react';
+import {
+  Award,
+  Clock,
+  MoveRight,
+  PoundSterlingIcon,
+  Shield,
+} from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -62,7 +68,7 @@ export default function Hero2() {
                 Flexible Hours
               </li>
               <li className='flex items-center gap-2.5 whitespace-nowrap'>
-                <DollarSign className='text-primary size-5' />
+                <PoundSterlingIcon className='text-primary size-5' />
                 Competitive Rates
               </li>
               <li className='flex items-center gap-2.5 whitespace-nowrap'>
