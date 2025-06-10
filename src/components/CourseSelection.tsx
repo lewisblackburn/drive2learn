@@ -291,7 +291,9 @@ Preferences:
                   <div className='space-y-1 leading-none'>
                     <FormLabel>Use Own Car (-£5/hour)</FormLabel>
                     <FormDescription>
-                      Select if you want to use your own car for lessons
+                      Select if you want to use your own car for lessons. Our
+                      instructors are insured to teach in any car as long as you
+                      have insurance.
                     </FormDescription>
                   </div>
                 </FormItem>
@@ -307,7 +309,9 @@ Preferences:
                 Back
               </Button>
               <Button type='button' onClick={nextStep} className='w-full'>
-                Next
+                {formValues.isIntensive || formValues.useOwnCar
+                  ? 'Next'
+                  : 'Skip'}
               </Button>
             </div>
           </div>

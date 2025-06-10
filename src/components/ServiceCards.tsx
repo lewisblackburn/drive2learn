@@ -102,7 +102,7 @@ export const ServiceCards = () => {
                             description={service.description}
                             price={service.price}
                             type={service.title}
-                            buttonText='Read More'
+                            buttonText='Book Now'
                             buttonLink={
                               service.priceId
                                 ? `/services?id=${service.id}`

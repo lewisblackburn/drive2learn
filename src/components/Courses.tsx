@@ -203,7 +203,10 @@ export const Courses = () => {
                                   )}
                                 </p>
                               </div>
-                              <div className='p-5 mt-auto flex justify-end items-center'>
+                              <div className='p-5 mt-auto flex justify-between items-center'>
+                                <p className='text-base text-muted-foreground'>
+                                  From £35/hr
+                                </p>
                                 <Link
                                   href={`/courses?id=${course.id}`}
                                   className='text-primary font-medium flex items-center'
