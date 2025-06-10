@@ -10,15 +10,15 @@ import {
 } from '@react-email/components';
 import * as React from 'react';
 
-interface CourseBookingEmailProps {
+interface CourseBookingRequestEmailProps {
   name: string;
   phone: string;
   email: string;
   message: string;
 }
 
-export const CourseBookingEmail: React.FC<
-  Readonly<CourseBookingEmailProps>
+export const CourseBookingRequestEmail: React.FC<
+  Readonly<CourseBookingRequestEmailProps>
 > = ({ name, phone, email, message }) => (
   <Html>
     <Head />
@@ -65,53 +65,7 @@ export const CourseBookingEmail: React.FC<
   </Html>
 );
 
-export const CourseBookingConfirmationEmail: React.FC<
-  Readonly<CourseBookingEmailProps>
-> = ({ name, message }) => (
-  <Html>
-    <Head />
-    <Preview>Your Course Booking Request</Preview>
-    <Body style={main}>
-      <Container style={container}>
-        <Section style={box}>
-          <Text style={paragraph}>Hi {name},</Text>
-          <Text style={paragraph}>
-            Thank you for your course booking request. We have received your
-            details and will contact you shortly to confirm your booking.
-          </Text>
-          <Hr style={hr} />
-          <Text style={paragraph}>
-            <strong>Your Booking Details:</strong>
-          </Text>
-          <Text style={paragraph}>
-            <strong>Course:</strong>{' '}
-            {message.split('\n')[2].replace('Course: ', '')}
-            <br />
-            <strong>Hours:</strong>{' '}
-            {message.split('\n')[3].replace('Hours: ', '')}
-          </Text>
-          <Text style={paragraph}>
-            <strong>Your Preferences:</strong>
-            <br />
-            {message.split('\n')[7].replace('- ', '• ')}
-            <br />
-            {message.split('\n')[8].replace('- ', '• ')}
-          </Text>
-          <Hr style={hr} />
-          <Text style={paragraph}>
-            If you have any questions, please don't hesitate to contact us.
-          </Text>
-          <Text style={footer}>
-            Drive 2 Learn, The Business Village, Innovation Way, Barnsley, South
-            Yorkshire. S75 1JL.
-          </Text>
-        </Section>
-      </Container>
-    </Body>
-  </Html>
-);
-
-export default CourseBookingEmail;
+export default CourseBookingRequestEmail;
 
 const main = {
   backgroundColor: '#f6f9fc',

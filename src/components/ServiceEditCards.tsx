@@ -46,7 +46,6 @@ import { Service, useServices } from '@/app/hooks/useServices';
 const editServiceSchema = z.object({
   title: z.string(),
   description: z.string(),
-  priceId: z.string(),
   price: z.string(),
   points: z.string(),
 });
@@ -109,7 +108,6 @@ export const ServiceEditCards = () => {
     defaultValues: {
       title: selectedService?.title ?? '',
       description: selectedService?.description ?? '',
-      priceId: selectedService?.priceId ?? '',
       price: selectedService?.price ?? '',
       points: selectedService?.points ?? '',
     },
@@ -119,7 +117,6 @@ export const ServiceEditCards = () => {
     methods.reset({
       title: selectedService?.title ?? '',
       description: selectedService?.description ?? '',
-      priceId: selectedService?.priceId ?? '',
       price: selectedService?.price ?? '',
       points: selectedService?.points ?? '',
     });
@@ -182,22 +179,6 @@ export const ServiceEditCards = () => {
                         </FormControl>
                         <FormDescription>
                           Provide a detailed description of the service
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={methods.control}
-                    name='priceId'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Price ID</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          Enter the Stripe price ID for the service
                         </FormDescription>
                         <FormMessage />
                       </FormItem>

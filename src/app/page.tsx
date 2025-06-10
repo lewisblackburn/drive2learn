@@ -16,16 +16,20 @@ import Testimonials2 from '@/components/Testimonials2';
 export default function HomePage() {
   return (
     <main className='min-h-screen'>
-      <section>
+      <section className='space-y-24 md:space-y-48'>
         <Hero2 />
         <ReviewsCarousel />
         <Courses />
         <ServiceCards />
         <Contact />
         <Hours />
-        <LogoCloud />
-        <LogoCloud2 />
-        <Testimonials2 />
+        <div>
+          <LogoCloud />
+          <LogoCloud2 />
+        </div>
+        <div className='!pb-24'>
+          <Testimonials2 />
+        </div>
       </section>
       <Footer />
     </main>

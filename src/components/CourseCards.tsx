@@ -46,10 +46,8 @@ import { Course, useCourses } from '@/app/hooks/useCourses';
 
 const editCourseSchema = z.object({
   title: z.string(),
-  hours: z.string(),
   description: z.string(),
-  price: z.string(),
-  deposit: z.string(),
+  hours: z.string(),
 });
 
 export const CourseCards = () => {
@@ -108,20 +106,16 @@ export const CourseCards = () => {
     resolver: zodResolver(editCourseSchema),
     defaultValues: {
       title: selectedCourse?.title ?? '',
-      hours: selectedCourse?.hours ?? '',
       description: selectedCourse?.description ?? '',
-      price: selectedCourse?.price ?? '',
-      deposit: selectedCourse?.deposit ?? '',
+      hours: selectedCourse?.hours ?? '',
     },
   });
 
   useEffect(() => {
     methods.reset({
       title: selectedCourse?.title ?? '',
-      hours: selectedCourse?.hours ?? '',
       description: selectedCourse?.description ?? '',
-      price: selectedCourse?.price ?? '',
-      deposit: selectedCourse?.deposit ?? '',
+      hours: selectedCourse?.hours ?? '',
     });
   }, [selectedCourse, methods]);
 
@@ -184,22 +178,6 @@ export const CourseCards = () => {
               />
               <FormField
                 control={methods.control}
-                name='hours'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Hours</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Specify the number of hours for the course
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={methods.control}
                 name='description'
                 render={({ field }) => (
                   <FormItem>
@@ -216,31 +194,15 @@ export const CourseCards = () => {
               />
               <FormField
                 control={methods.control}
-                name='price'
+                name='hours'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Price</FormLabel>
+                    <FormLabel>Hours</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
                     <FormDescription>
-                      Specify the price of the course
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={methods.control}
-                name='deposit'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Deposit</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Enter the deposit amount required for the course
+                      Specify the number of hours for the course
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -280,10 +242,8 @@ export const CourseCards = () => {
               onClick={() => {
                 addCourse({
                   title: 'New Course',
-                  hours: 'New Hours',
                   description: 'New Description',
-                  price: 'New Price',
-                  deposit: 'New Deposit',
+                  hours: 'New Hours',
                 });
               }}
             >
@@ -353,16 +313,8 @@ export const CourseCard = forwardRef<HTMLDivElement, CourseCardProps>(
         <div className='flex-grow p-6 text-start'>
           <h2 className='text-xl font-bold mb-2'>{course.title}</h2>
           <p className='text-gray-700 mb-4'>{course.description}</p>
-          <div className='flex justify-between items-center mb-4'>
-            <span className='text-gray-600'>{course.hours}</span>
-          </div>
-        </div>
-        <div className='p-6 border-t border-gray-200'>
           <div className='flex items-center justify-between'>
-            <span className='text-gray-600'>Deposit: £{course.deposit}</span>
-            <span className='text-xl font-semibold text-primary'>
-              £{course.price}
-            </span>
+            <span className='text-gray-600'>Hours: {course.hours}</span>
           </div>
         </div>
       </div>

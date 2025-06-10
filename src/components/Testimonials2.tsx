@@ -60,18 +60,18 @@ const testimonials: Testimonial[] = [
 
 export default function Testimonials2() {
   return (
-    <section className='bg-background py-32'>
+    <section className='bg-background !pt-24'>
       <div className='container mx-auto'>
-        <h1 className='text-foreground mb-10 text-center text-3xl font-bold tracking-tighter md:text-4xl lg:text-5xl'>
+        <h1 className='text-foreground mb-4 text-center text-3xl font-bold tracking-tighter md:text-4xl lg:text-5xl'>
           Testimonials
         </h1>
 
-        <Carousel className='mx-auto w-full md:max-w-5xl lg:mt-30'>
+        <Carousel className='mx-auto w-full md:max-w-5xl'>
           <CarouselContent>
             {testimonials.map((currentTestimonial, index) => (
               <CarouselItem key={index}>
                 <DashedCard>
-                  <div className='px-5 py-10 lg:p-20'>
+                  <div className='px-4 py-6 lg:p-12'>
                     <div className='flex items-center justify-center gap-3'>
                       <Avatar className='relative size-12 rounded-full'>
                         <AvatarImage
@@ -92,13 +92,13 @@ export default function Testimonials2() {
             ))}
           </CarouselContent>
           <div className='mt-6 flex items-center justify-center gap-3 lg:mt-24'>
-            <CarouselPrevious className='relative top-0 left-0 translate-y-0 lg:p-6' />
+            <CarouselPrevious className='!static !transform-none lg:size-12 [&>svg]:stroke-black' />
             <div className='relative flex h-10 w-[50px] items-center justify-center overflow-hidden lg:w-[200px]'>
               <LineHorizontal className='absolute left-0 clear-both' />
             </div>
             <CarouselNext
               variant='default'
-              className='relative top-0 left-0 translate-y-0 lg:p-6'
+              className='!static !transform-none lg:size-12 [&>svg]:stroke-white'
             />
           </div>
         </Carousel>

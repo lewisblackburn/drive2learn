@@ -1,15 +1,13 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSearchParams } from 'next/navigation';
-import * as React from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { sendContactForm } from '@/lib/api';
-
 import Spinner from '@/components/Spinner';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
@@ -20,112 +18,143 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
-
-// Form validation schema using Zod
-const FormSchema = z.object({
-  course: z.string().nonempty({ message: 'Please select a course.' }),
-  intensive: z.boolean().optional(),
-  ownCar: z.boolean().optional(),
-  name: z.string().nonempty({ message: 'Please enter your name.' }),
-  phone: z.string().nonempty({ message: 'Please enter your phone number.' }),
-});
 
 interface Course {
   id: string;
   title: string;
-  price: number;
   description: string;
-  hours: number;
-  deposit: number;
+  hours: string;
 }
 
-interface CourseSelectionProps {
-  courses: Course[];
-}
+const formSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  phoneNumber: z.string().min(10, 'Please enter a valid phone number'),
+  email: z.string().email('Please enter a valid email address'),
+  isIntensive: z.boolean().default(false),
+  useOwnCar: z.boolean().default(false),
+  selectedCourseId: z
+    .union([z.string(), z.number()])
+    .refine((val) => String(val).length > 0, {
+      message: 'Please select a course',
+    }),
+});
 
-export default function CourseSelection({ courses }: CourseSelectionProps) {
-  const searchParams = useSearchParams();
-  const courseId = searchParams.get('id') ?? courses[0].id;
+export const CourseSelection = ({ courses }: { courses: Course[] }) => {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  const [loading, setLoading] = React.useState(false);
 
-  const modifiedCourses = courses.map((course) => {
-    const hoursString = course.hours;
-    // @ts-expect-error - We are sure that the match method will return a string
-    const parsedHours = parseInt(hoursString.match(/\d+/)?.[0] ?? '0', 10);
-
-    const additionalCost = 5 * Number(parsedHours);
-    return {
-      ...course,
-      manualPrice: course.price,
-      automaticPrice: Number(course.price) + Number(additionalCost),
-    };
-  });
-
-  const initialCourse = modifiedCourses.find(
-    (course) => parseInt(course.id, 10) === parseInt(courseId, 10),
-  )?.title;
-
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
-      course: initialCourse || '',
-      intensive: false,
-      ownCar: false,
       name: '',
-      phone: '',
+      phoneNumber: '',
+      email: '',
+      isIntensive: false,
+      useOwnCar: false,
     },
+    mode: 'onChange',
   });
 
-  const selectedCourse = form.watch('course');
-  const isIntensive = form.watch('intensive');
-  const isOwnCar = form.watch('ownCar');
-  const currentCourse = modifiedCourses.find(
-    (course) => course.title === selectedCourse,
-  );
-
-  const calculatePrice = (basePrice: number) => {
+  const calculatePricePerHour = (isIntensive: boolean, useOwnCar: boolean) => {
+    const basePrice = 40;
     let finalPrice = basePrice;
-    if (isIntensive) finalPrice += 5;
-    if (isOwnCar) finalPrice -= 5;
+
+    if (isIntensive) {
+      finalPrice += 5;
+    }
+
+    if (useOwnCar) {
+      finalPrice -= 5;
+    }
+
     return finalPrice;
   };
 
-  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    setLoading(true);
+  const handleCourseSelect = (course: Course) => {
+    setSelectedCourse(course);
+    form.setValue('selectedCourseId', String(course.id), {
+      shouldValidate: true,
+    });
+  };
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (!selectedCourse) {
+      toast({
+        title: 'Error',
+        description: 'Please select a course first',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
+      const finalPricePerHour = calculatePricePerHour(
+        values.isIntensive,
+        values.useOwnCar,
+      );
+
       const message = `
-Course: ${data.course}
-Intensive Course: ${data.intensive ? 'Yes (+£5)' : 'No'}
-Own Car: ${data.ownCar ? 'Yes (-£5)' : 'No'}
-Hours: ${currentCourse?.hours}
+Booking Details:
 
-Customer Details:
-Name: ${data.name}
-Phone: ${data.phone}
-      `;
+Course: ${selectedCourse.title}
+Hours: ${selectedCourse.hours}
+Description: ${selectedCourse.description}
+Final Price per Hour: £${finalPricePerHour}
 
-      const result = await sendContactForm({
-        subject: "Drive2Learn's Course Booking",
-        name: data.name,
-        email: 'bookings@drive2learn.co.uk',
-        phone: data.phone,
-        message,
+Preferences:
+- Intensive Course: ${values.isIntensive ? 'Yes (+£5/hour)' : 'No'}
+- Use Own Car: ${values.useOwnCar ? 'Yes (-£5/hour)' : 'No'}
+      `.trim();
+
+      const bookingResponse = await fetch('/api/course-booking', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: values.name,
+          phone: values.phoneNumber,
+          email: values.email,
+          message,
+        }),
       });
 
+      if (!bookingResponse.ok) {
+        throw new Error('Failed to send booking request');
+      }
+
+      const confirmationResponse = await fetch(
+        '/api/course-booking-confirmation',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: values.name,
+            phone: values.phoneNumber,
+            email: values.email,
+            message,
+          }),
+        },
+      );
+
+      if (!confirmationResponse.ok) {
+        throw new Error('Failed to send confirmation email');
+      }
+
       toast({
-        title: result.message,
+        title: 'Booking Request Sent!',
+        description: "We'll contact you shortly to confirm your booking.",
       });
 
       form.reset();
+      setSelectedCourse(null);
+      setCurrentStep(1);
     } catch (error) {
       toast({
         title: 'Error',
@@ -133,148 +162,221 @@ Phone: ${data.phone}
         variant: 'destructive',
       });
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
+
+  const nextStep = async () => {
+    if (currentStep === 1) {
+      const result = await form.trigger(['name', 'phoneNumber', 'email']);
+      if (!result) return;
+    }
+    setCurrentStep((prev) => prev + 1);
+  };
+
+  const prevStep = () => {
+    setCurrentStep((prev) => prev - 1);
+  };
+
+  // Watch form values to update pricing display
+  const formValues = form.watch();
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className='w-full sm:w-2/3 space-y-6'
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const isValid = await form.trigger();
+
+          if (!isValid) {
+            toast({
+              title: 'Validation Error',
+              description: 'Please fill in all required fields correctly',
+              variant: 'destructive',
+            });
+            return;
+          }
+
+          await onSubmit(form.getValues());
+        }}
+        className='space-y-8'
       >
-        <FormField
-          control={form.control}
-          name='name'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Your Name</FormLabel>
-              <FormControl>
-                <Input placeholder='Enter your name' {...field} />
-              </FormControl>
-              <FormDescription>Please enter your full name.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name='phone'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Your Phone Number</FormLabel>
-              <FormControl>
-                <Input placeholder='Enter your phone number' {...field} />
-              </FormControl>
-              <FormDescription>
-                We'll contact you on this number to confirm your booking.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name='course'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Course Selection</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder='Select a course to book' />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {modifiedCourses.map((course) => (
-                    <SelectItem key={course.id} value={course.title}>
-                      {course.title}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormDescription>
-                You can change your course selection above.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <div className='flex flex-col space-y-4'>
-          <FormField
-            control={form.control}
-            name='intensive'
-            render={({ field }) => (
-              <FormItem>
-                <div className='flex space-x-2 items-center'>
+        {currentStep === 1 && (
+          <div className='space-y-6'>
+            <h2 className='text-2xl font-semibold'>Personal Information</h2>
+            <FormField
+              control={form.control}
+              name='name'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Full Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder='Enter your full name' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='email'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email Address</FormLabel>
                   <FormControl>
                     <Input
-                      type='checkbox'
-                      id='intensive'
-                      checked={field.value}
-                      onChange={field.onChange}
-                      className='peer h-4 w-4 accent-primary text-primary focus:ring-primary border-gray-300 rounded'
+                      placeholder='Enter your email address'
+                      type='email'
+                      {...field}
                     />
                   </FormControl>
-                  <FormLabel htmlFor='intensive'>
-                    Intensive Course (+£5)
-                  </FormLabel>
-                </div>
-                <FormDescription>
-                  Select this option to book an intensive course.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name='ownCar'
-            render={({ field }) => (
-              <FormItem>
-                <div className='flex space-x-2 items-center'>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='phoneNumber'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone Number</FormLabel>
                   <FormControl>
-                    <Input
-                      type='checkbox'
-                      id='ownCar'
-                      checked={field.value}
-                      onChange={field.onChange}
-                      className='peer h-4 w-4 accent-primary text-primary focus:ring-primary border-gray-300 rounded'
-                    />
+                    <Input placeholder='Enter your phone number' {...field} />
                   </FormControl>
-                  <FormLabel htmlFor='ownCar'>
-                    Using Your Own Car (-£5)
-                  </FormLabel>
-                </div>
-                <FormDescription>
-                  Select this option if you'll be using your own car for the
-                  lessons.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <p>
-          {currentCourse?.description}
-          <br />
-          <br />
-          <div className='flex flex-col space-y-1'>
-            <p>
-              <b>Hours</b>: {currentCourse?.hours}
-            </p>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type='button' onClick={nextStep} className='w-full'>
+              Next
+            </Button>
           </div>
-        </p>
+        )}
 
-        <Button type='submit' disabled={loading}>
-          {loading ? <Spinner className='text-white' /> : 'Request Booking'}
-        </Button>
+        {currentStep === 2 && (
+          <div className='space-y-6'>
+            <h2 className='text-2xl font-semibold'>Course Preferences</h2>
+
+            <FormField
+              control={form.control}
+              name='isIntensive'
+              render={({ field }) => (
+                <FormItem className='flex flex-row items-start space-x-3 space-y-0'>
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className='space-y-1 leading-none'>
+                    <FormLabel>Intensive Course (+£5/hour)</FormLabel>
+                    <FormDescription>
+                      Select if you prefer an intensive learning schedule
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='useOwnCar'
+              render={({ field }) => (
+                <FormItem className='flex flex-row items-start space-x-3 space-y-0'>
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className='space-y-1 leading-none'>
+                    <FormLabel>Use Own Car (-£5/hour)</FormLabel>
+                    <FormDescription>
+                      Select if you want to use your own car for lessons
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
+            <div className='flex gap-4'>
+              <Button
+                type='button'
+                onClick={prevStep}
+                variant='outline'
+                className='w-full'
+              >
+                Back
+              </Button>
+              <Button type='button' onClick={nextStep} className='w-full'>
+                Next
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {currentStep === 3 && (
+          <div className='space-y-6'>
+            <h2 className='text-2xl font-semibold'>Select Your Course</h2>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+              {courses.map((course) => {
+                const pricePerHour = calculatePricePerHour(
+                  formValues.isIntensive,
+                  formValues.useOwnCar,
+                );
+                return (
+                  <div
+                    key={course.id}
+                    className={`p-6 rounded-lg border cursor-pointer transition-all flex flex-col h-full ${
+                      selectedCourse?.id === course.id
+                        ? 'border-primary bg-primary/5'
+                        : 'border-gray-200 hover:border-primary/50'
+                    }`}
+                    onClick={() => handleCourseSelect(course)}
+                  >
+                    <h3 className='text-xl font-semibold mb-2'>
+                      {course.title}
+                    </h3>
+                    <p className='text-gray-600 mb-4 flex-grow'>
+                      {course.description}
+                    </p>
+                    <div className='flex justify-between items-center mt-auto'>
+                      <span className='text-gray-600'>{course.hours}</span>
+                      <span className='text-sm font-medium text-primary'>
+                        £{pricePerHour}/hour
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className='flex gap-4'>
+              <Button
+                type='button'
+                onClick={prevStep}
+                variant='outline'
+                className='w-full'
+              >
+                Back
+              </Button>
+              <Button
+                type='submit'
+                className='w-full'
+                disabled={!selectedCourse || isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <Spinner className='mr-2' />
+                    Sending Request...
+                  </>
+                ) : (
+                  'Request Booking'
+                )}
+              </Button>
+            </div>
+          </div>
+        )}
       </form>
     </Form>
   );
-}
+};
+
+export default CourseSelection;

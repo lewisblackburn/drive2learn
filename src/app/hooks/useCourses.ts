@@ -15,18 +15,13 @@ export interface Course {
   title: string;
   hours: string;
   description: string;
-  manualPriceId: string;
-  automaticPriceId: string;
-  price: string;
-  deposit: string;
   order: number;
 }
+
 export interface NewCourse {
   title: string;
   hours: string;
   description: string;
-  price: string;
-  deposit: string;
 }
 
 export const useCourses = () => {

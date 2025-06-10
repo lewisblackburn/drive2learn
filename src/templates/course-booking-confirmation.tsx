@@ -10,63 +10,15 @@ import {
 } from '@react-email/components';
 import * as React from 'react';
 
-interface CourseBookingEmailProps {
+interface CourseBookingConfirmationEmailProps {
   name: string;
   phone: string;
   email: string;
   message: string;
 }
 
-export const CourseBookingEmail: React.FC<
-  Readonly<CourseBookingEmailProps>
-> = ({ name, phone, email, message }) => (
-  <Html>
-    <Head />
-    <Preview>New Course Booking Request!</Preview>
-    <Body style={main}>
-      <Container style={container}>
-        <Section style={box}>
-          <Text style={paragraph}>
-            You have received a new course booking request:
-          </Text>
-          <Text style={paragraph}>
-            <strong>Name:</strong> {name}
-            <br />
-            <strong>Phone:</strong> {phone}
-            <br />
-            <strong>Email:</strong> {email}
-          </Text>
-          <Hr style={hr} />
-          <Text style={paragraph}>
-            <strong>Booking Details:</strong>
-          </Text>
-          <Text style={paragraph}>
-            <strong>Course:</strong>{' '}
-            {message.split('\n')[2].replace('Course: ', '')}
-            <br />
-            <strong>Hours:</strong>{' '}
-            {message.split('\n')[3].replace('Hours: ', '')}
-          </Text>
-          <Text style={paragraph}>
-            <strong>Preferences:</strong>
-            <br />
-            {message.split('\n')[7].replace('- ', '• ')}
-            <br />
-            {message.split('\n')[8].replace('- ', '• ')}
-          </Text>
-          <Hr style={hr} />
-          <Text style={footer}>
-            Drive 2 Learn, The Business Village, Innovation Way, Barnsley, South
-            Yorkshire. S75 1JL.
-          </Text>
-        </Section>
-      </Container>
-    </Body>
-  </Html>
-);
-
 export const CourseBookingConfirmationEmail: React.FC<
-  Readonly<CourseBookingEmailProps>
+  Readonly<CourseBookingConfirmationEmailProps>
 > = ({ name, message }) => (
   <Html>
     <Head />
@@ -111,7 +63,7 @@ export const CourseBookingConfirmationEmail: React.FC<
   </Html>
 );
 
-export default CourseBookingEmail;
+export default CourseBookingConfirmationEmail;
 
 const main = {
   backgroundColor: '#f6f9fc',

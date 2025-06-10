@@ -10,10 +10,6 @@ import {
 } from '@react-email/components';
 import * as React from 'react';
 
-// import { siteConfig } from '@/constant/config';
-
-// const baseUrl = siteConfig.url ?? '';
-
 interface ContactEmailProps {
   name: string;
   email: string;
@@ -21,48 +17,45 @@ interface ContactEmailProps {
   message: string;
 }
 
-export const ContactEmail: React.FC<Readonly<ContactEmailProps>> = ({
+export default function ContactEmail({
   name,
   email,
   phone,
   message,
-}) => (
-  <Html>
-    <Head />
-    <Preview>You have a new enquiry!</Preview>
-    <Body style={main}>
-      <Container style={container}>
-        <Section style={box}>
-          {/* <Img
-            src={`${baseUrl}/images/logo.svg`}
-            width='100'
-            height='100'
-            alt='Drive 2 Learn'
-          />
-          <Hr style={hr} /> */}
-          <Text style={paragraph}>You have received a new enquiry:</Text>
-          <Text style={paragraph}>
-            <strong>Name:</strong> {name}
-            <br />
-            <strong>Email:</strong> {email}
-            <br />
-            <strong>Phone:</strong> {phone}
-          </Text>
-          <Hr style={hr} />
-          <Text style={paragraph}>Here's the message they sent:</Text>
-          <Text style={paragraph}>{message}</Text>
-          <Hr style={hr} />
-          <Text style={footer}>
-            Drive 2 Learn, The Business Village, Innovation Way, Barnsley, South
-            Yorkshire. S75 1JL.
-          </Text>
-        </Section>
-      </Container>
-    </Body>
-  </Html>
-);
-
-export default ContactEmail;
+}: ContactEmailProps) {
+  return (
+    <Html>
+      <Head />
+      <Preview>New Contact Form Submission from {name}</Preview>
+      <Body style={main}>
+        <Container style={container}>
+          <Section style={box}>
+            <Text style={paragraph}>
+              You have received a new contact form submission:
+            </Text>
+            <Text style={paragraph}>
+              <strong>Name:</strong> {name}
+              <br />
+              <strong>Email:</strong> {email}
+              <br />
+              <strong>Phone:</strong> {phone}
+            </Text>
+            <Hr style={hr} />
+            <Text style={paragraph}>
+              <strong>Message:</strong>
+            </Text>
+            <Text style={paragraph}>{message}</Text>
+            <Hr style={hr} />
+            <Text style={footer}>
+              Drive 2 Learn, The Business Village, Innovation Way, Barnsley,
+              South Yorkshire. S75 1JL.
+            </Text>
+          </Section>
+        </Container>
+      </Body>
+    </Html>
+  );
+}
 
 const main = {
   backgroundColor: '#f6f9fc',
@@ -88,7 +81,6 @@ const hr = {
 
 const paragraph = {
   color: '#525f7f',
-
   fontSize: '16px',
   lineHeight: '24px',
   textAlign: 'left' as const,

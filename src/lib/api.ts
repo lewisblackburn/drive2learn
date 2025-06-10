@@ -7,7 +7,7 @@ export const sendContactForm = async (data: {
   message: string;
 }) => {
   try {
-    const response = await fetch('/api/send', {
+    const response = await fetch('/api/contact', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -26,5 +26,6 @@ export const sendContactForm = async (data: {
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Error sending contact form:', error);
+    throw error;
   }
 };

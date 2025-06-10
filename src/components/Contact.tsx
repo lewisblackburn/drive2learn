@@ -1,43 +1,70 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
+import { zodResolver } from '@hookform/resolvers/zod';
 import { MessageCircleMore } from 'lucide-react';
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 import { sendContactForm } from '@/lib/api';
 
 import Spinner from '@/components/Spinner';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
+
+const formSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Please enter a valid email address'),
+  phone: z.string().min(10, 'Please enter a valid phone number'),
+  message: z.string().min(10, 'Message must be at least 10 characters'),
+});
+
+type FormData = z.infer<typeof formSchema>;
 
 const Contact = () => {
   const { toast } = useToast();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = React.useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      phone: '',
+      message: '',
+    },
+  });
+
+  const onSubmit = async (data: FormData) => {
     setLoading(true);
-    // @ts-ignore
-    const name = e.target[0].value;
-    // @ts-ignore
-    const email = e.target[1].value;
-    // @ts-ignore
-    const phone = e.target[2].value;
-    // @ts-ignore
-    const message = e.target[3].value;
-
-    const result = await sendContactForm({
-      subject: "Drive2Learn's Contact Form",
-      name,
-      email,
-      phone,
-      message,
-    });
-
-    toast({
-      title: result.message,
-    });
-
-    setLoading(false);
-    const form = e.target as HTMLFormElement;
-    form.reset();
+    try {
+      const result = await sendContactForm({
+        subject: "Drive2Learn's Contact Form",
+        ...data,
+      });
+      toast({
+        title: 'Message sent!',
+        description:
+          result.message ||
+          'We have received your message and will get back to you soon.',
+        variant: 'default',
+      });
+      form.reset();
+    } catch (error: any) {
+      toast({
+        title: 'Something went wrong',
+        description:
+          error?.message ||
+          'Failed to send your message. Please try again later.',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -169,46 +196,95 @@ const Contact = () => {
             </div>
             <div className='w-full px-4 lg:w-1/2 xl:w-5/12'>
               <div className='relative rounded-lg bg-white p-8 shadow-lg dark:bg-dark-2 sm:p-12'>
-                <form
-                  method='post'
-                  onSubmit={handleSubmit}
-                  encType='text/plain'
-                >
-                  <ContactInputBox
-                    type='text'
-                    name='name'
-                    placeholder='Your Name'
-                  />
-                  <ContactInputBox
-                    type='text'
-                    name='email'
-                    placeholder='Your Email'
-                  />
-                  <ContactInputBox
-                    type='text'
-                    name='phone'
-                    placeholder='Your Phone'
-                  />
-                  <ContactTextArea
-                    row='6'
-                    placeholder='Your Message'
-                    name='message'
-                    defaultValue=''
-                  />
-                  <div>
-                    <button
-                      type='submit'
-                      className='grid place-items-center w-full rounded text-center border border-primary bg-primary p-3 text-white transition hover:bg-opacity-90'
-                      disabled={loading}
-                    >
-                      {loading ? (
-                        <Spinner className='text-white' />
-                      ) : (
-                        <span>Send Message</span>
+                <Form {...form}>
+                  <form
+                    method='post'
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    encType='text/plain'
+                  >
+                    <FormField
+                      control={form.control}
+                      name='name'
+                      render={({ field }) => (
+                        <FormItem className='mb-6'>
+                          <FormControl>
+                            <input
+                              type='text'
+                              placeholder='Your Name'
+                              className='w-full rounded border border-stroke px-[14px] py-3 text-base text-body-color outline-none focus:border-primary dark:border-dark-3 dark:bg-dark dark:text-dark-6'
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage className='mt-2' />
+                        </FormItem>
                       )}
-                    </button>
-                  </div>
-                </form>
+                    />
+                    <FormField
+                      control={form.control}
+                      name='email'
+                      render={({ field }) => (
+                        <FormItem className='mb-6'>
+                          <FormControl>
+                            <input
+                              type='text'
+                              placeholder='Your Email'
+                              className='w-full rounded border border-stroke px-[14px] py-3 text-base text-body-color outline-none focus:border-primary dark:border-dark-3 dark:bg-dark dark:text-dark-6'
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage className='mt-2' />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name='phone'
+                      render={({ field }) => (
+                        <FormItem className='mb-6'>
+                          <FormControl>
+                            <input
+                              type='text'
+                              placeholder='Your Phone'
+                              className='w-full rounded border border-stroke px-[14px] py-3 text-base text-body-color outline-none focus:border-primary dark:border-dark-3 dark:bg-dark dark:text-dark-6'
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage className='mt-2' />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name='message'
+                      render={({ field }) => (
+                        <FormItem className='mb-6'>
+                          <FormControl>
+                            <textarea
+                              rows={6}
+                              placeholder='Your Message'
+                              className='w-full resize-none rounded border border-stroke px-[14px] py-3 text-base text-body-color outline-none focus:border-primary dark:border-dark-3 dark:bg-dark dark:text-dark-6'
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage className='mt-2' />
+                        </FormItem>
+                      )}
+                    />
+                    <div>
+                      <button
+                        type='submit'
+                        className='grid place-items-center w-full rounded text-center border border-primary bg-primary p-3 text-white transition hover:bg-opacity-90'
+                        disabled={loading}
+                      >
+                        {loading ? (
+                          <Spinner className='text-white' />
+                        ) : (
+                          <span>Send Message</span>
+                        )}
+                      </button>
+                    </div>
+                  </form>
+                </Form>
                 <div>
                   <span className='absolute -right-9 -top-10 z-[-1]'>
                     <svg
@@ -1027,54 +1103,3 @@ const Contact = () => {
 };
 
 export default Contact;
-
-const ContactTextArea = ({
-  row,
-  placeholder,
-  name,
-  defaultValue,
-}: {
-  row: string | number;
-  placeholder: string;
-  name: string;
-  defaultValue: string;
-}) => {
-  return (
-    <>
-      <div className='mb-6'>
-        <textarea
-          rows={parseInt(row.toString())}
-          placeholder={placeholder}
-          name={name}
-          className='w-full resize-none rounded border border-stroke px-[14px] py-3 text-base text-body-color outline-none focus:border-primary dark:border-dark-3 dark:bg-dark dark:text-dark-6'
-          defaultValue={defaultValue}
-          required
-        />
-      </div>
-    </>
-  );
-};
-
-const ContactInputBox = ({
-  type,
-  placeholder,
-  name,
-}: {
-  type: string;
-  placeholder: string;
-  name: string;
-}) => {
-  return (
-    <>
-      <div className='mb-6'>
-        <input
-          type={type}
-          placeholder={placeholder}
-          name={name}
-          className='w-full rounded border border-stroke px-[14px] py-3 text-base text-body-color outline-none focus:border-primary dark:border-dark-3 dark:bg-dark dark:text-dark-6'
-          required
-        />
-      </div>
-    </>
-  );
-};

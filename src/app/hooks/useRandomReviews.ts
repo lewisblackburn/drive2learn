@@ -42,7 +42,15 @@ export const useRandomReviews = (reviewType?: ReviewType) => {
       if (fetchError) throw fetchError;
 
       if (data) {
-        setReviews(data);
+        const randomizedReviews = [...data];
+        for (let i = randomizedReviews.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [randomizedReviews[i], randomizedReviews[j]] = [
+            randomizedReviews[j],
+            randomizedReviews[i],
+          ];
+        }
+        setReviews(randomizedReviews);
       }
     } catch (err) {
       setError('Failed to fetch random reviews. Please try again later.');
