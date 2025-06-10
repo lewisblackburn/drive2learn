@@ -1,11 +1,13 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { InfoIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import Spinner from '@/components/Spinner';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -256,49 +258,59 @@ Preferences:
         {currentStep === 2 && (
           <div className='space-y-6'>
             <h2 className='text-2xl font-semibold'>Course Preferences</h2>
+            <Alert className='!grid-cols-[auto_1fr] !gap-x-2 bg-primary/5 border-primary/20 text-primary/90'>
+              <InfoIcon className='h-4 w-4 text-primary' />
+              <AlertDescription className='font-medium'>
+                Our base price is £40 per hour. Select your preferences below to
+                customize your course.
+              </AlertDescription>
+            </Alert>
 
-            <FormField
-              control={form.control}
-              name='isIntensive'
-              render={({ field }) => (
-                <FormItem className='flex flex-row items-start space-x-3 space-y-0'>
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className='space-y-1 leading-none'>
-                    <FormLabel>Intensive Course (+£5/hour)</FormLabel>
-                    <FormDescription>
-                      Select if you prefer an intensive learning schedule
-                    </FormDescription>
-                  </div>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='useOwnCar'
-              render={({ field }) => (
-                <FormItem className='flex flex-row items-start space-x-3 space-y-0'>
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className='space-y-1 leading-none'>
-                    <FormLabel>Use Own Car (-£5/hour)</FormLabel>
-                    <FormDescription>
-                      Select if you want to use your own car for lessons. Our
-                      instructors are insured to teach in any car as long as you
-                      have insurance.
-                    </FormDescription>
-                  </div>
-                </FormItem>
-              )}
-            />
+            <div className='space-y-4'>
+              <FormField
+                control={form.control}
+                name='isIntensive'
+                render={({ field }) => (
+                  <FormItem className='flex flex-row items-start space-x-3 space-y-0 rounded-lg border p-4'>
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className='space-y-1 leading-none'>
+                      <FormLabel>Intensive Course (+£5/hour)</FormLabel>
+                      <FormDescription>
+                        Select if you prefer an intensive learning schedule.
+                      </FormDescription>
+                    </div>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='useOwnCar'
+                render={({ field }) => (
+                  <FormItem className='flex flex-row items-start space-x-3 space-y-0 rounded-lg border p-4'>
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className='space-y-1 leading-none'>
+                      <FormLabel>Use Own Car (-£5/hour)</FormLabel>
+                      <FormDescription>
+                        Select if you want to use your own car for lessons. Our
+                        instructors are insured to teach in any car as long as
+                        you have insurance.
+                      </FormDescription>
+                    </div>
+                  </FormItem>
+                )}
+              />
+            </div>
+
             <div className='flex gap-4'>
               <Button
                 type='button'
