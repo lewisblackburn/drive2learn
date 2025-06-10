@@ -205,7 +205,7 @@ export const Courses = () => {
                               </div>
                               <div className='p-5 mt-auto flex justify-between items-center'>
                                 <p className='text-base text-muted-foreground'>
-                                  From £35/hr
+                                  From £40/hr
                                 </p>
                                 <Link
                                   href={`/courses?id=${course.id}`}
