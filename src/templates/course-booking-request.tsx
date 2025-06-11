@@ -46,13 +46,15 @@ export const CourseBookingRequestEmail: React.FC<
             <br />
             <strong>Hours:</strong>{' '}
             {message.split('\n')[3].replace('Hours: ', '')}
-          </Text>
-          <Text style={paragraph}>
-            <strong>Preferences:</strong>
             <br />
-            {message.split('\n')[7].replace('- ', '• ')}
+            <strong>Price per Hour:</strong>{' '}
+            {message.split('\n')[5].replace('Final Price per Hour: ', '')}
             <br />
-            {message.split('\n')[8].replace('- ', '• ')}
+            <strong>Intensive Course:</strong>{' '}
+            {message.split('\n')[6].replace('Intensive Course: ', '')}
+            <br />
+            <strong>Use Own Car:</strong>{' '}
+            {message.split('\n')[7].replace('Use Own Car: ', '')}
           </Text>
           <Hr style={hr} />
           <Text style={footer}>

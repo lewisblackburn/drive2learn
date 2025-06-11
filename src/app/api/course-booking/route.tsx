@@ -11,7 +11,8 @@ export async function POST(request: Request) {
 
     await resend.emails.send({
       from: 'Drive 2 Learn <info@drive2learn.co.uk>',
-      to: 'info@drive2learn.co.uk',
+      // to: 'info@drive2learn.co.uk',
+      to: 'lewisblackburn10@gmail.com',
       subject: 'New Course Booking Request',
       react: CourseBookingRequestEmail({
         name,

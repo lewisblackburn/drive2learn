@@ -106,10 +106,8 @@ Course: ${selectedCourse.title}
 Hours: ${selectedCourse.hours}
 Description: ${selectedCourse.description}
 Final Price per Hour: £${finalPricePerHour}
-
-Preferences:
-- Intensive Course: ${values.isIntensive ? 'Yes (+£5/hour)' : 'No'}
-- Use Own Car: ${values.useOwnCar ? 'Yes (-£5/hour)' : 'No'}
+Intensive Course: ${values.isIntensive ? 'Yes (+£5/hour)' : 'No'}
+Use Own Car: ${values.useOwnCar ? 'Yes (-£5/hour)' : 'No'}
       `.trim();
 
       const bookingResponse = await fetch('/api/course-booking', {
