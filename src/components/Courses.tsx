@@ -91,8 +91,7 @@ export const Courses = () => {
                         Use Your Own Car
                       </h3>
                       <p className='mt-5 text-base text-gray-500'>
-                        Looking to start your driving lessons in your own car?
-                        Let's start today.
+                        Our instructors are insured to teach in students' cars.
                       </p>
                     </div>
                   </div>
