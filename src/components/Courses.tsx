@@ -88,10 +88,10 @@ export const Courses = () => {
                         </span>
                       </div>
                       <h3 className='mt-8 text-lg font-medium text-gray-900 tracking-tight'>
-                        Manual Cars
+                        Use Your Own Car
                       </h3>
                       <p className='mt-5 text-base text-gray-500'>
-                        Looking to start your driving lessons in a manual car?
+                        Looking to start your driving lessons in your own car?
                         Let's start today.
                       </p>
                     </div>
