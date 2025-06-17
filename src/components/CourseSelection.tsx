@@ -33,6 +33,7 @@ const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   phoneNumber: z.string().min(10, 'Please enter a valid phone number'),
   email: z.string().email('Please enter a valid email address'),
+  postcode: z.string().min(5, 'Please enter a valid postcode'),
   isIntensive: z.boolean().default(false),
   useOwnCar: z.boolean().default(false),
   selectedCourseId: z
@@ -54,6 +55,7 @@ export const CourseSelection = ({ courses }: { courses: Course[] }) => {
       name: '',
       phoneNumber: '',
       email: '',
+      postcode: '',
       isIntensive: false,
       useOwnCar: false,
     },
@@ -108,6 +110,7 @@ Description: ${selectedCourse.description}
 Final Price per Hour: £${finalPricePerHour}
 Intensive Course: ${values.isIntensive ? 'Yes (+£5/hour)' : 'No'}
 Use Own Car: ${values.useOwnCar ? 'Yes (-£5/hour)' : 'No'}
+Postcode: ${values.postcode}
       `.trim();
 
       const bookingResponse = await fetch('/api/course-booking', {
@@ -242,6 +245,19 @@ Use Own Car: ${values.useOwnCar ? 'Yes (-£5/hour)' : 'No'}
                   <FormLabel>Phone Number</FormLabel>
                   <FormControl>
                     <Input placeholder='Enter your phone number' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='postcode'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Postcode</FormLabel>
+                  <FormControl>
+                    <Input placeholder='Enter your postcode' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

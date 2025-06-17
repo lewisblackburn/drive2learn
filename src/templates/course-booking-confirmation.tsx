@@ -53,6 +53,9 @@ export const CourseBookingConfirmationEmail: React.FC<
             <br />
             <strong>Use Own Car:</strong>{' '}
             {message.split('\n')[7].replace('Use Own Car: ', '')}
+            <br />
+            <strong>Postcode:</strong>{' '}
+            {message.split('\n')[8].replace('Postcode: ', '')}
           </Text>
           <Hr style={hr} />
           <Text style={paragraph}>
