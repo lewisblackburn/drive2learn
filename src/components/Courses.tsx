@@ -203,7 +203,7 @@ export const Courses = () => {
                                 </p>
                               </div>
                               <div className='p-5 mt-auto flex justify-between items-center'>
-                                <span className='text-base font-semibold text-black'>
+                                <span className='text-[18px] font-semibold text-black'>
                                   From £40/hr
                                 </span>
                                 <Link
