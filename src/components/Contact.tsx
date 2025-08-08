@@ -194,6 +194,53 @@ const Contact = () => {
                     </p>
                   </div>
                 </div>
+
+                <div className='mb-8 flex w-full max-w-[450px]'>
+                  <div className='mr-6 flex h-[60px] w-full max-w-[60px] items-center justify-center overflow-hidden rounded bg-primary/5 text-primary sm:h-[70px] sm:max-w-[70px]'>
+                    <svg
+                      width='32'
+                      height='32'
+                      viewBox='0 0 32 32'
+                      fill='none'
+                      xmlns='http://www.w3.org/2000/svg'
+                    >
+                      <path
+                        d='M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm0 26C9.373 28 4 22.627 4 16S9.373 4 16 4s12 5.373 12 12-5.373 12-12 12z'
+                        fill='currentColor'
+                      />
+                      <path
+                        d='M16 8v8l6 6'
+                        stroke='currentColor'
+                        strokeWidth='2'
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        fill='none'
+                      />
+                    </svg>
+                  </div>
+                  <div className='w-full'>
+                    <h4 className='mb-1 text-xl font-bold text-dark dark:text-white'>
+                      Hours of Operation
+                    </h4>
+                    <div className='space-y-3 sm:space-y-1'>
+                      <p className='text-base text-body-color dark:text-dark-6'>
+                        <span className='block sm:inline text-dark dark:text-white'>
+                          Monday - Friday:
+                        </span>
+                        <span className='block sm:inline'>
+                          {' '}
+                          9:00am - 5:00pm
+                        </span>
+                      </p>
+                      <p className='text-base text-body-color dark:text-dark-6'>
+                        <span className='block sm:inline text-dark dark:text-white'>
+                          Saturday - Sunday:
+                        </span>
+                        <span className='block sm:inline'> Closed</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div className='w-full px-4 lg:w-1/2 xl:w-5/12'>

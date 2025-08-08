@@ -7,7 +7,6 @@ import Contact from '@/components/Contact';
 import { Courses } from '@/components/Courses';
 import Footer from '@/components/Footer';
 import Hero2 from '@/components/Hero2';
-import { Hours } from '@/components/Hours';
 import LogoCloud, { LogoCloud2 } from '@/components/LogoCloud';
 import { ReviewsCarousel } from '@/components/ReviewsCarousel';
 import { ServiceCards } from '@/components/ServiceCards';
@@ -22,7 +21,6 @@ export default function HomePage() {
         <Courses />
         <ServiceCards />
         <Contact />
-        <Hours />
         <div>
           <LogoCloud />
           <LogoCloud2 />
