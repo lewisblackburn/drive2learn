@@ -57,6 +57,7 @@ export default function Hero2() {
               </Button>
             </Link>
           </div>
+
           <div className='mt-10 lg:mt-12'>
             <ul className='flex flex-wrap justify-center gap-6 text-sm text-white/90 lg:text-base'>
               <li className='flex items-center gap-2.5 whitespace-nowrap'>

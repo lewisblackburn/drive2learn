@@ -39,6 +39,11 @@ export const siteConfig = {
           description: 'Find out where we operate',
         },
         {
+          title: 'Social Media Wall',
+          href: '/social-media-wall',
+          description: 'See our latest social media posts',
+        },
+        {
           title: 'Terms and Conditions',
           href: '/terms',
           description: 'Read our terms and conditions',
@@ -91,6 +96,10 @@ export const siteConfig = {
     {
       title: 'About',
       href: '/about',
+    },
+    {
+      title: 'Social Media Wall',
+      href: '/social-media-wall',
     },
     {
       title: 'Courses',
