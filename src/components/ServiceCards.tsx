@@ -150,7 +150,7 @@ const ServiceCard = ({
           <span className='mb-3 block text-lg font-semibold text-primary'>
             {type}
           </span>
-          <h2 className='mb-5 text-4xl font-bold text-dark'>{price}</h2>
+          <h2 className='mb-5 text-[42px] font-bold text-dark'>{price}</h2>
           <p className='mb-8 border-b border-stroke pb-8 text-base text-body-color'>
             {description}
           </p>
