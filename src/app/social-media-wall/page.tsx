@@ -48,8 +48,13 @@ export default function SocialMediaWallPage() {
         <div
           className='fb-post'
           data-href={url}
-          data-width='350'
-          style={{ maxWidth: '350px', margin: '0 auto' }}
+          data-width='auto'
+          style={{
+            maxWidth: '350px',
+            width: '100%',
+            margin: '0 auto',
+            display: 'block',
+          }}
         ></div>
       );
     }
@@ -66,6 +71,8 @@ export default function SocialMediaWallPage() {
             padding: 0,
             maxWidth: '350px',
             width: '100%',
+            boxSizing: 'border-box',
+            display: 'block',
           }}
         ></blockquote>
       );
@@ -77,7 +84,12 @@ export default function SocialMediaWallPage() {
           className='tiktok-embed'
           cite={url}
           data-video-id={videoId}
-          style={{ maxWidth: '350px', width: '100%', margin: '0 auto' }}
+          style={{
+            maxWidth: '350px',
+            width: '100%',
+            margin: '0 auto',
+            display: 'block',
+          }}
         >
           <section></section>
         </blockquote>
@@ -87,25 +99,43 @@ export default function SocialMediaWallPage() {
   };
 
   return (
-    <main className='flex flex-col min-h-screen'>
-      <section className='mb-auto'>
-        <PageHeader
-          title='Social Media Wall'
-          description='Stay connected with Drive 2 Learn on Social Media'
-          image='/images/headers/3.jpg'
-        />
+    <>
+      <style>{`
+        @media (max-width: 640px) {
+          .fb-post,
+          .instagram-media,
+          .tiktok-embed {
+            width: 100% !important;
+            max-width: 100% !important;
+          }
+        }
+      `}</style>
+      <main className='flex flex-col min-h-screen'>
+        <section className='mb-auto'>
+          <PageHeader
+            title='Social Media Wall'
+            description='Stay connected with Drive 2 Learn on Social Media'
+            image='/images/headers/3.jpg'
+          />
 
-        <div className='relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8'>
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center'>
-            {posts.map((url, idx) => (
-              <div key={idx} className='w-full flex justify-center'>
-                {renderEmbed(url)}
-              </div>
-            ))}
+          <div className='relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center'>
+              {posts.map((url, idx) => (
+                <div
+                  key={idx}
+                  className='w-full flex justify-center px-2 sm:px-0'
+                  style={{ maxWidth: '350px', width: '100%' }}
+                >
+                  <div style={{ margin: '0 auto', width: '100%' }}>
+                    {renderEmbed(url)}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
-      <Footer />
-    </main>
+        </section>
+        <Footer />
+      </main>
+    </>
   );
 }
