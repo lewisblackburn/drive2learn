@@ -90,33 +90,33 @@ export const ServiceCards = () => {
                 {loading
                   ? placeholderCards
                   : services.map((service, index) => {
-                      const isActive = index % 2 === 0;
+                    const isActive = index % 2 === 0;
 
-                      return (
-                        <CarouselItem
-                          key={index}
-                          className='pl-4 basis-[85%] sm:basis-[45%] lg:basis-[33.333%] flex items-center'
+                    return (
+                      <CarouselItem
+                        key={index}
+                        className='pl-4 basis-[85%] sm:basis-[45%] lg:basis-[33.333%] flex items-center'
+                      >
+                        <ServiceCard
+                          key={service.id}
+                          description={service.description}
+                          price={service.price}
+                          type={service.title}
+                          buttonText='Book Now'
+                          buttonLink={
+                            service.priceId
+                              ? `/services?id=${service.id}`
+                              : '/#contact'
+                          }
+                          active={isActive}
                         >
-                          <ServiceCard
-                            key={service.id}
-                            description={service.description}
-                            price={service.price}
-                            type={service.title}
-                            buttonText='Book Now'
-                            buttonLink={
-                              service.priceId
-                                ? `/services?id=${service.id}`
-                                : '/#contact'
-                            }
-                            active={isActive}
-                          >
-                            {service.points.split(',').map((list: string) => (
-                              <List key={list}>{list}</List>
-                            ))}
-                          </ServiceCard>
-                        </CarouselItem>
-                      );
-                    })}
+                          {service.points.split(',').map((list: string) => (
+                            <List key={list}>{list}</List>
+                          ))}
+                        </ServiceCard>
+                      </CarouselItem>
+                    );
+                  })}
               </CarouselContent>
             </Carousel>
           </div>
@@ -150,7 +150,7 @@ const ServiceCard = ({
           <span className='mb-3 block text-lg font-semibold text-primary'>
             {type}
           </span>
-          <h2 className='mb-5 text-[42px] font-bold text-dark'>{price}</h2>
+          <h2 className='mb-5 text-4xl leading-2 font-bold text-dark'>{price}</h2>
           <p className='mb-8 border-b border-stroke pb-8 text-base text-body-color'>
             {description}
           </p>
@@ -159,11 +159,10 @@ const ServiceCard = ({
 
         <Link
           href={buttonLink}
-          className={`mt-auto block w-full rounded-md border ${
-            active
-              ? 'border-primary bg-primary p-3 text-center text-base font-medium text-white transition hover:bg-opacity-90'
-              : 'border-stroke bg-transparent p-3 text-center text-base font-medium text-primary transition hover:border-primary hover:bg-primary hover:text-white'
-          }`}
+          className={`mt-auto block w-full rounded-md border ${active
+            ? 'border-primary bg-primary p-3 text-center text-base font-medium text-white transition hover:bg-opacity-90'
+            : 'border-stroke bg-transparent p-3 text-center text-base font-medium text-primary transition hover:border-primary hover:bg-primary hover:text-white'
+            }`}
         >
           {buttonText}
         </Link>
